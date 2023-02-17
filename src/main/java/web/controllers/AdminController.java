@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import service.api.IAdminService;
@@ -21,27 +22,29 @@ import java.util.UUID;
 @RequestMapping("/api/v1/users")
 public class AdminController {
 
-    private final IAdminService userService;
+    private final IAdminService adminService;
 
-    public AdminController(IAdminService userService) {
-        this.userService = userService;
+    public AdminController(IAdminService adminService) {
+        this.adminService = adminService;
     }
 
     @GetMapping(path = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public PageUserDto get(@PathVariable(name = "uuid") UUID uuid) {
-        return userService.get(uuid);
+        return adminService.get(uuid);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public PageUsersDto getAll() {
-        return userService.getAll();
+    public PageUsersDto getAll(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "size", required = false, defaultValue = "20") int size) {
+        return adminService.getAll(page, size);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void add(@RequestBody UserDto user) {
-        userService.add(user);
+        adminService.add(user);
     }
 
     @PutMapping(path = "{uuid}/dt_update/{dt_update}",
@@ -49,6 +52,6 @@ public class AdminController {
     public void update(@PathVariable(name = "uuid") UUID uuid,
                        @PathVariable(name = "dt_update") LocalDateTime dtUpdate,
                        @RequestBody UserDto user) {
-        userService.update(uuid, dtUpdate, user);
+        adminService.update(uuid, dtUpdate, user);
     }
 }
