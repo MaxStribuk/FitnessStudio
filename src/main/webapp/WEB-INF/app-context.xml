@@ -20,17 +20,24 @@
     <mvc:annotation-driven/>
     <util:properties id="propertyConfiguration" location="classpath:application.properties"/>
 
-    <!--initialize connect to DB
+    <!--initialize connect to DB-->
 
     <bean id="entityManagerFactory" class="javax.persistence.Persistence"
           factory-method="createEntityManagerFactory"
           destroy-method="close">
-        <constructor-arg name="persistenceUnitName" value="org.hibernate.voting.jpa"/>
+        <constructor-arg name="persistenceUnitName" value="FitnessStudio.jpa"/>
         <constructor-arg name="properties" ref="propertyConfiguration"/>
     </bean>
 
-       <bean id="connectionManager" class="dao.util.ConnectionManager">
-        <constructor-arg name="entityManagerFactory" ref="entityManagerFactory"/>
+    <!--
+    <bean id="connectionManager" class="dao.util.ConnectionManager">
+          <constructor-arg name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
     -->
+
+    <!--initialize service-->
+
+    <bean id="userService" class="service.impl.UserService"/>
+    <bean id="adminService" class="service.impl.AdminService"/>
+
 </beans>

@@ -15,7 +15,6 @@ import service.api.IUserService;
 
 import java.util.UUID;
 
-
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
