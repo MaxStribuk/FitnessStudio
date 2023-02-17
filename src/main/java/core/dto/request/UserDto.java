@@ -34,6 +34,9 @@ public class UserDto implements Serializable {
         return password;
     }
 
+    public UserDto() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
