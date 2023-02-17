@@ -28,10 +28,9 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping(path = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public PageUserDto get(@PathVariable(name = "uuid") UUID uuid) {
-        return adminService.get(uuid);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void add(@RequestBody UserDto user) {
+        adminService.add(user);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,9 +41,10 @@ public class AdminController {
         return adminService.getAll(page, size);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void add(@RequestBody UserDto user) {
-        adminService.add(user);
+    @GetMapping(path = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public PageUserDto get(@PathVariable(name = "uuid") UUID uuid) {
+        return adminService.get(uuid);
     }
 
     @PutMapping(path = "{uuid}/dt_update/{dt_update}",
