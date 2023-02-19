@@ -15,7 +15,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void verification(UUID verification) {
+    public void verification(UUID verification, String mail) {
 
     }
 

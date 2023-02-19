@@ -10,7 +10,7 @@ public interface IUserService {
 
     void add(UserRegistrarionDto user);
 
-    void verification(UUID verification);
+    void verification(UUID verification, String mail);
 
     void login(UserLoginDto user);
 

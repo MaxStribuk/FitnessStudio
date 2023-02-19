@@ -31,8 +31,9 @@ public class UserController {
     }
 
     @GetMapping(path = "/verification")
-    public void verification(@RequestParam(name = "code") UUID verification) {
-        userService.verification(verification);
+    public void verification(@RequestParam(name = "code") UUID verification,
+                             @RequestParam(name = "mail") String mail) {
+        userService.verification(verification, mail);
     }
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)

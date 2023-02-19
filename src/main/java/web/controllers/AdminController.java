@@ -1,6 +1,6 @@
 package web.controllers;
 
-import core.dto.request.UserDto;
+import core.dto.request.UserCreateDto;
 import core.dto.response.PageUserDto;
 import core.dto.response.PageUsersDto;
 import org.springframework.http.MediaType;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import service.api.IAdminService;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -29,7 +28,7 @@ public class AdminController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void add(@RequestBody UserDto user) {
+    public void add(@RequestBody UserCreateDto user) {
         adminService.add(user);
     }
 
@@ -50,8 +49,8 @@ public class AdminController {
     @PutMapping(path = "{uuid}/dt_update/{dt_update}",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable(name = "uuid") UUID uuid,
-                       @PathVariable(name = "dt_update") LocalDateTime dtUpdate,
-                       @RequestBody UserDto user) {
+                       @PathVariable(name = "dt_update") int dtUpdate,
+                       @RequestBody UserCreateDto user) {
         adminService.update(uuid, dtUpdate, user);
     }
 }

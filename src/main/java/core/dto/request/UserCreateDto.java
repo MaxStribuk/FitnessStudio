@@ -6,7 +6,7 @@ import core.dto.UserStatus;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class UserDto implements Serializable {
+public class UserCreateDto implements Serializable {
 
     private String mail;
     private String fio;
@@ -34,19 +34,19 @@ public class UserDto implements Serializable {
         return password;
     }
 
-    public UserDto() {
+    public UserCreateDto() {
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserDto userDto = (UserDto) o;
-        return Objects.equals(mail, userDto.mail)
-                && Objects.equals(fio, userDto.fio)
-                && role == userDto.role
-                && status == userDto.status
-                && Objects.equals(password, userDto.password);
+        UserCreateDto userCreateDto = (UserCreateDto) o;
+        return Objects.equals(mail, userCreateDto.mail)
+                && Objects.equals(fio, userCreateDto.fio)
+                && role == userCreateDto.role
+                && status == userCreateDto.status
+                && Objects.equals(password, userCreateDto.password);
     }
 
     @Override
