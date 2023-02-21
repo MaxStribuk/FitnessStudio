@@ -3,6 +3,8 @@ package web.controllers;
 import core.dto.request.UserCreateDto;
 import core.dto.response.PageUserDto;
 import core.dto.response.PageUsersDto;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +39,8 @@ public class AdminController {
     public PageUsersDto getAll(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "size", required = false, defaultValue = "20") int size) {
-        return adminService.getAll(page, size);
+        Pageable pageable = PageRequest.of(page, size);
+        return adminService.getAll(pageable);
     }
 
     @GetMapping(path = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
