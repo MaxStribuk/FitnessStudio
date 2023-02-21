@@ -1,21 +1,37 @@
 package core.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+@JsonPropertyOrder({"number", "size", "total_pages", "total_elements",
+        "first", "number_of_elements", "last", "content"})
 public class PageUsersDto implements Serializable {
 
     private int number;
+
     private int size;
+
+    @JsonProperty("total_pages")
     private int totalPages;
-    private int totalElements;
+
+    @JsonProperty("total_elements")
+    private long totalElements;
+
     private boolean first;
+
+    @JsonProperty("number_of_elements")
     private int numberElements;
+
     private boolean last;
+
+    @JsonProperty("content")
     private List<PageUserDto> users;
 
-    public PageUsersDto(int number, int size, int totalPages, int totalElements,
+    public PageUsersDto(int number, int size, int totalPages, long totalElements,
                         boolean first, int numberElements, boolean last, List<PageUserDto> users) {
         this.number = number;
         this.size = size;
@@ -39,7 +55,7 @@ public class PageUsersDto implements Serializable {
         return totalPages;
     }
 
-    public int getTotalElements() {
+    public long getTotalElements() {
         return totalElements;
     }
 

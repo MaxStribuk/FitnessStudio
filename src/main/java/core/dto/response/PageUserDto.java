@@ -1,17 +1,26 @@
 package core.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import core.dto.UserRole;
 import core.dto.UserStatus;
+import web.util.serializers.DateSerializer;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+@JsonPropertyOrder({"uuid", "dt_create", "dt_update", "mail", "fio", "role", "status"})
 public class PageUserDto implements Serializable {
 
     private UUID uuid;
+    @JsonSerialize(using = DateSerializer.class)
+    @JsonProperty("dt_create")
     private LocalDateTime dtCreate;
+    @JsonSerialize(using = DateSerializer.class)
+    @JsonProperty("dt_update")
     private LocalDateTime dtUpdate;
     private String mail;
     private String fio;

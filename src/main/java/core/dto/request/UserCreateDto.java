@@ -14,6 +14,9 @@ public class UserCreateDto implements Serializable {
     private UserStatus status;
     private String password;
 
+    public UserCreateDto() {
+    }
+
     public String getMail() {
         return mail;
     }
@@ -32,9 +35,6 @@ public class UserCreateDto implements Serializable {
 
     public String getPassword() {
         return password;
-    }
-
-    public UserCreateDto() {
     }
 
     @Override
