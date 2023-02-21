@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="
@@ -13,12 +13,17 @@
         http://www.springframework.org/schema/mvc
         https://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/util
-        https://www.springframework.org/schema/util/spring-util.xsd">
+        https://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/data/jpa
+        https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <context:annotation-config/>
     <context:component-scan base-package="web"/>
     <mvc:annotation-driven/>
     <util:properties id="propertyConfiguration" location="classpath:application.properties"/>
+    <jpa:repositories base-package="dao.api"
+                      transaction-manager-ref="transactionManager"
+                      entity-manager-factory-ref="entityManagerFactory"/>
 
     <!--initialize connect to DB-->
 
@@ -29,15 +34,26 @@
         <constructor-arg name="properties" ref="propertyConfiguration"/>
     </bean>
 
-    <!--
-    <bean id="connectionManager" class="dao.util.ConnectionManager">
-          <constructor-arg name="entityManagerFactory" ref="entityManagerFactory"/>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <constructor-arg name="emf" ref="entityManagerFactory"/>
     </bean>
-    -->
+
+    <!--initialize converters-->
+
+    <bean id="userCreateDtoEntityConverter" class="service.converters.UserCreateDtoEntityConverter"/>
+    <bean id="userEntityPageDtoConverter" class="web.converters.UserEntityPageDtoConverter"/>
+    <bean id="usersEntityPagesDtoConverter" class="web.converters.UsersEntityPagesDtoConverter">
+        <constructor-arg name="userEntityPageDtoConverter" ref="userEntityPageDtoConverter"/>
+    </bean>
 
     <!--initialize service-->
 
     <bean id="userService" class="service.impl.UserService"/>
-    <bean id="adminService" class="service.impl.AdminService"/>
+
+    <bean id="adminService" class="service.impl.AdminService">
+        <constructor-arg name="adminDao" ref="IAdminDao"/>
+        <constructor-arg name="userCreateDtoEntityConverter" ref="userCreateDtoEntityConverter"/>
+        <constructor-arg name="userEntityPageDtoConverter" ref="userEntityPageDtoConverter"/>
+    </bean>
 
 </beans>
