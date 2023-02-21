@@ -2,32 +2,38 @@ package dao.entity;
 
 import core.dto.UserRole;
 import core.dto.UserStatus;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "fitness", schema = "app")
+@Table(name = "users", schema = "app")
 public class UserEntity implements Serializable {
 
     @Id
     @GeneratedValue()
     @Type(type = "pg-uuid")
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "uuid", nullable = false, length = 36)
     private UUID uuid;
 
     @Column(name = "dt_create", nullable = false)
+    @CreationTimestamp
     private LocalDateTime dtCreate;
 
     @Column(name = "dt_update", nullable = false)
+    @Version
     private LocalDateTime dtUpdate;
 
     @Column(name = "mail", nullable = false)
@@ -37,13 +43,30 @@ public class UserEntity implements Serializable {
     private String fio;
 
     @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserStatus status;
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    public UserEntity() {
+    }
+
+    public UserEntity(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, String mail,
+                      String fio, UserRole role, UserStatus status, String password) {
+        this.uuid = uuid;
+        this.dtCreate = dtCreate;
+        this.dtUpdate = dtUpdate;
+        this.mail = mail;
+        this.fio = fio;
+        this.role = role;
+        this.status = status;
+        this.password = password;
+    }
 
     public UUID getUuid() {
         return uuid;
@@ -77,14 +100,6 @@ public class UserEntity implements Serializable {
         return password;
     }
 
-    public void setDtCreate(LocalDateTime dtCreate) {
-        this.dtCreate = dtCreate;
-    }
-
-    public void setDtUpdate(LocalDateTime dtUpdate) {
-        this.dtUpdate = dtUpdate;
-    }
-
     public void setMail(String mail) {
         this.mail = mail;
     }
@@ -103,9 +118,6 @@ public class UserEntity implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public UserEntity() {
     }
 
     @Override

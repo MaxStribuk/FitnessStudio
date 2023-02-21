@@ -4,5 +4,7 @@
              version="2.0">
     <persistence-unit name="FitnessStudio.jpa">
 
+        <class>dao.entity.UserEntity</class>
+
     </persistence-unit>
 </persistence>
