@@ -50,7 +50,7 @@
     <bean id="userService" class="service.impl.UserService"/>
 
     <bean id="adminService" class="service.impl.AdminService">
-        <constructor-arg name="adminDao" ref="IAdminDao"/>
+        <constructor-arg name="adminRepository" ref="IAdminRepository"/>
         <constructor-arg name="userCreateDtoEntityConverter" ref="userCreateDtoEntityConverter"/>
         <constructor-arg name="userEntityPageDtoConverter" ref="userEntityPageDtoConverter"/>
         <constructor-arg name="entityPageDtoConverter" ref="entityPageDtoConverter"/>
