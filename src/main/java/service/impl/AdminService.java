@@ -2,13 +2,14 @@ package service.impl;
 
 import core.dto.request.UserCreateDto;
 import core.dto.response.PageUserDto;
-import core.dto.response.PageUsersDto;
+import core.dto.response.PageDto;
 import dao.api.IAdminDao;
 import dao.entity.UserEntity;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import service.api.IAdminService;
+import service.api.IConverter;
 
 import java.time.ZoneOffset;
 import java.util.Optional;
@@ -19,16 +20,16 @@ public class AdminService implements IAdminService {
     private final IAdminDao adminDao;
     private final Converter<UserCreateDto, UserEntity> userCreateDtoEntityConverter;
     private final Converter<UserEntity, PageUserDto> userEntityPageDtoConverter;
-    private final Converter<Page<UserEntity>, PageUsersDto> usersEntityPagesDtoConverter;
+    private final IConverter<UserEntity, PageUserDto> entityPageDtoConverter;
 
     public AdminService(IAdminDao adminDao,
                         Converter<UserCreateDto, UserEntity> userCreateDtoEntityConverter,
                         Converter<UserEntity, PageUserDto> userEntityPageDtoConverter,
-                        Converter<Page<UserEntity>, PageUsersDto> usersEntityPagesDtoConverter) {
+                        IConverter<UserEntity, PageUserDto> entityPageDtoConverter) {
         this.adminDao = adminDao;
         this.userCreateDtoEntityConverter = userCreateDtoEntityConverter;
         this.userEntityPageDtoConverter = userEntityPageDtoConverter;
-        this.usersEntityPagesDtoConverter = usersEntityPagesDtoConverter;
+        this.entityPageDtoConverter = entityPageDtoConverter;
     }
 
     @Override
@@ -38,9 +39,9 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public PageUsersDto getAll(Pageable pageable) {
+    public PageDto<PageUserDto> getAll(Pageable pageable) {
         Page<UserEntity> users = adminDao.findAll(pageable);
-        return usersEntityPagesDtoConverter.convert(users);
+        return entityPageDtoConverter.convert(users, userEntityPageDtoConverter);
     }
 
     @Override

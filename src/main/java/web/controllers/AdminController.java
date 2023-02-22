@@ -2,7 +2,7 @@ package web.controllers;
 
 import core.dto.request.UserCreateDto;
 import core.dto.response.PageUserDto;
-import core.dto.response.PageUsersDto;
+import core.dto.response.PageDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -36,7 +36,7 @@ public class AdminController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public PageUsersDto getAll(
+    public PageDto<PageUserDto> getAll(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "size", required = false, defaultValue = "20") int size) {
         Pageable pageable = PageRequest.of(page, size);

@@ -2,7 +2,7 @@ package service.api;
 
 import core.dto.request.UserCreateDto;
 import core.dto.response.PageUserDto;
-import core.dto.response.PageUsersDto;
+import core.dto.response.PageDto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;
@@ -11,7 +11,7 @@ public interface IAdminService {
 
     void add(UserCreateDto user);
 
-    PageUsersDto getAll(Pageable pageable);
+    PageDto<PageUserDto> getAll(Pageable pageable);
 
     PageUserDto get(UUID uuid);
 

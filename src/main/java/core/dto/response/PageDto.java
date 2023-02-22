@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @JsonPropertyOrder({"number", "size", "total_pages", "total_elements",
         "first", "number_of_elements", "last", "content"})
-public class PageUsersDto implements Serializable {
+public class PageDto<T> implements Serializable {
 
     private int number;
 
@@ -28,11 +28,10 @@ public class PageUsersDto implements Serializable {
 
     private boolean last;
 
-    @JsonProperty("content")
-    private List<PageUserDto> users;
+    private List<T> content;
 
-    public PageUsersDto(int number, int size, int totalPages, long totalElements,
-                        boolean first, int numberElements, boolean last, List<PageUserDto> users) {
+    public PageDto(int number, int size, int totalPages, long totalElements,
+                   boolean first, int numberElements, boolean last, List<T> content) {
         this.number = number;
         this.size = size;
         this.totalPages = totalPages;
@@ -40,7 +39,7 @@ public class PageUsersDto implements Serializable {
         this.first = first;
         this.numberElements = numberElements;
         this.last = last;
-        this.users = users;
+        this.content = content;
     }
 
     public int getNumber() {
@@ -71,34 +70,34 @@ public class PageUsersDto implements Serializable {
         return last;
     }
 
-    public List<PageUserDto> getUsers() {
-        return users;
+    public List<T> getContent() {
+        return content;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PageUsersDto that = (PageUsersDto) o;
-        return number == that.number
-                && size == that.size
-                && totalPages == that.totalPages
-                && totalElements == that.totalElements
-                && first == that.first
-                && numberElements == that.numberElements
-                && last == that.last
-                && Objects.equals(users, that.users);
+        PageDto<?> pageDto = (PageDto<?>) o;
+        return number == pageDto.number
+                && size == pageDto.size
+                && totalPages == pageDto.totalPages
+                && totalElements == pageDto.totalElements
+                && first == pageDto.first
+                && numberElements == pageDto.numberElements
+                && last == pageDto.last
+                && Objects.equals(content, pageDto.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(number, size, totalPages,
-                totalElements, first, numberElements, last, users);
+        return Objects.hash(number, size, totalPages, totalElements,
+                first, numberElements, last, content);
     }
 
     @Override
     public String toString() {
-        return "PageUsersDto{" +
+        return "PageDto{" +
                 "number=" + number +
                 ", size=" + size +
                 ", totalPages=" + totalPages +
@@ -106,7 +105,7 @@ public class PageUsersDto implements Serializable {
                 ", first=" + first +
                 ", numberElements=" + numberElements +
                 ", last=" + last +
-                ", users=" + users +
+                ", content=" + content +
                 '}';
     }
 }

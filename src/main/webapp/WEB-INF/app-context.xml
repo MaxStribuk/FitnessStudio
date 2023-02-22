@@ -42,8 +42,7 @@
 
     <bean id="userCreateDtoEntityConverter" class="service.converters.UserCreateDtoEntityConverter"/>
     <bean id="userEntityPageDtoConverter" class="web.converters.UserEntityPageDtoConverter"/>
-    <bean id="usersEntityPagesDtoConverter" class="web.converters.UsersEntityPagesDtoConverter">
-        <constructor-arg name="userEntityPageDtoConverter" ref="userEntityPageDtoConverter"/>
+    <bean id="entityPageDtoConverter" class="web.converters.EntityPageDtoConverter">
     </bean>
 
     <!--initialize service-->
@@ -54,6 +53,7 @@
         <constructor-arg name="adminDao" ref="IAdminDao"/>
         <constructor-arg name="userCreateDtoEntityConverter" ref="userCreateDtoEntityConverter"/>
         <constructor-arg name="userEntityPageDtoConverter" ref="userEntityPageDtoConverter"/>
+        <constructor-arg name="entityPageDtoConverter" ref="entityPageDtoConverter"/>
     </bean>
 
 </beans>
