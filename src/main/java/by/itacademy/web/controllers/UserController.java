@@ -2,6 +2,7 @@ package by.itacademy.web.controllers;
 
 import by.itacademy.core.dto.request.UserLoginDto;
 import by.itacademy.core.dto.request.UserRegistrarionDto;
+import by.itacademy.core.dto.request.UserVerificationDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,9 +32,9 @@ public class UserController {
     }
 
     @GetMapping(path = "/verification")
-    public void verification(@RequestParam(name = "code") UUID verification,
+    public void verification(@RequestParam(name = "code") UUID uuid,
                              @RequestParam(name = "mail") String mail) {
-        userService.verification(verification, mail);
+        userService.verification(new UserVerificationDto(uuid, mail));
     }
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)

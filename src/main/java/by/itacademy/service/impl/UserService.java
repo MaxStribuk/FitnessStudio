@@ -2,22 +2,32 @@ package by.itacademy.service.impl;
 
 import by.itacademy.core.dto.request.UserLoginDto;
 import by.itacademy.core.dto.request.UserRegistrarionDto;
+import by.itacademy.core.dto.request.UserVerificationDto;
 import by.itacademy.core.dto.response.PageUserDto;
+import by.itacademy.dao.api.IUserRepository;
+import by.itacademy.dao.entity.UserEntity;
 import by.itacademy.service.api.IUserService;
-import org.springframework.stereotype.Service;
+import org.springframework.core.convert.converter.Converter;
 
-import java.util.UUID;
-
-@Service
 public class UserService implements IUserService {
 
-    @Override
-    public void add(UserRegistrarionDto user) {
+    private final IUserRepository userRepository;
+    private final Converter<UserRegistrarionDto, UserEntity> userRegistrarionDtoEntityConverter;
 
+    public UserService(IUserRepository userRepository,
+                       Converter<UserRegistrarionDto, UserEntity> userRegistrarionDtoEntityConverter) {
+        this.userRepository = userRepository;
+        this.userRegistrarionDtoEntityConverter = userRegistrarionDtoEntityConverter;
     }
 
     @Override
-    public void verification(UUID verification, String mail) {
+    public void add(UserRegistrarionDto user) {
+        UserEntity userEntity = userRegistrarionDtoEntityConverter.convert(user);
+        userRepository.save(userEntity);
+    }
+
+    @Override
+    public void verification(UserVerificationDto user) {
 
     }
 
