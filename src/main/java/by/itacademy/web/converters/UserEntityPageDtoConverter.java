@@ -4,9 +4,7 @@ import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.dao.entity.UserEntity;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 
-@Component
 public class UserEntityPageDtoConverter implements Converter<UserEntity, PageUserDto> {
 
     @Override

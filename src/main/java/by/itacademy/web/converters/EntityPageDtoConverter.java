@@ -7,11 +7,9 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.lang.NonNull;
 import by.itacademy.service.api.IConverter;
-import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
-@Component
 public class EntityPageDtoConverter implements IConverter<UserEntity, PageUserDto> {
 
     @Override

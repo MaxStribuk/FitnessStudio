@@ -10,13 +10,11 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import by.itacademy.service.api.IAdminService;
-import org.springframework.stereotype.Service;
 
 import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
 public class AdminService implements IAdminService {
 
     private final IAdminRepository adminRepository;
