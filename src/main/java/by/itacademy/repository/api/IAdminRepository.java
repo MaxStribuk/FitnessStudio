@@ -1,6 +1,6 @@
-package by.itacademy.dao.api;
+package by.itacademy.repository.api;
 
-import by.itacademy.dao.entity.UserEntity;
+import by.itacademy.repository.entity.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;

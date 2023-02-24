@@ -1,4 +1,4 @@
 @NonNullApi
-package by.itacademy.dao.api;
+package by.itacademy.repository.api;
 
 import org.springframework.lang.NonNullApi;

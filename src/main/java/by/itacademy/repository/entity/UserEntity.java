@@ -1,4 +1,4 @@
-package by.itacademy.dao.entity;
+package by.itacademy.repository.entity;
 
 import by.itacademy.core.dto.UserRole;
 import by.itacademy.core.dto.UserStatus;

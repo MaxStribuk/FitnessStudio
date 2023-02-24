@@ -3,9 +3,11 @@ package by.itacademy.config;
 import by.itacademy.core.dto.request.UserCreateDto;
 import by.itacademy.core.dto.request.UserRegistrarionDto;
 import by.itacademy.core.dto.response.PageUserDto;
-import by.itacademy.dao.entity.UserEntity;
+import by.itacademy.repository.entity.MailEntity;
+import by.itacademy.repository.entity.UserEntity;
 import by.itacademy.service.api.IConverter;
 import by.itacademy.service.converters.UserCreateDtoEntityConverter;
+import by.itacademy.service.converters.UserEntityMailEntityConverter;
 import by.itacademy.service.converters.UserRegistrarionDtoEntityConverter;
 import by.itacademy.web.converters.EntityPageDtoConverter;
 import by.itacademy.web.converters.UserEntityPageDtoConverter;
@@ -31,7 +33,13 @@ public class ConvertersConfig {
         return new EntityPageDtoConverter();
     }
 
-    @Bean Converter<UserEntity, PageUserDto> userEntityPageDtoConverter() {
+    @Bean
+    public Converter<UserEntity, PageUserDto> userEntityPageDtoConverter() {
         return new UserEntityPageDtoConverter();
+    }
+
+    @Bean
+    public Converter<UserEntity, MailEntity> userEntityMailEntityConverter() {
+        return new UserEntityMailEntityConverter();
     }
 }

@@ -1,7 +1,7 @@
 package by.itacademy.service.converters;
 
 import by.itacademy.core.dto.request.UserCreateDto;
-import by.itacademy.dao.entity.UserEntity;
+import by.itacademy.repository.entity.UserEntity;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 
@@ -11,7 +11,6 @@ import java.util.UUID;
 public class UserCreateDtoEntityConverter implements Converter<UserCreateDto, UserEntity> {
 
     @Override
-    @NonNull
     public UserEntity convert(@NonNull UserCreateDto user) {
         LocalDateTime currentDateTime = LocalDateTime.now();
         return new UserEntity(
