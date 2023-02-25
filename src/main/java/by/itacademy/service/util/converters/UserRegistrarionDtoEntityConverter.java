@@ -1,4 +1,4 @@
-package by.itacademy.service.converters;
+package by.itacademy.service.util.converters;
 
 import by.itacademy.core.dto.UserRole;
 import by.itacademy.core.dto.UserStatus;

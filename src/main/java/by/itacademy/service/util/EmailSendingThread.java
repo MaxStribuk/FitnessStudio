@@ -18,7 +18,7 @@ public class EmailSendingThread implements Runnable {
     private final IMailRepository mailRepository;
     private final ISenderService senderService;
     private static final long PAUSE_SENDING_EMAIL = 60L;
-    private static final long MILLISECONDS_TO_SEND_EMAIL = 100L;
+    private static final long MILLISECONDS_TO_SEND_EMAIL = 300L;
 
     public EmailSendingThread(ScheduledExecutorService executorService,
                               IMailRepository mailRepository,
@@ -56,7 +56,6 @@ public class EmailSendingThread implements Runnable {
                         throw new RuntimeException(e);
                     } catch (MessagingException e) {
                         mail.setStatus(MailStatus.WAITING);
-                        mail.setDepartures(email.getDepartures() + 1);
                         throw new RuntimeException(e);
                     } finally {
                         mailRepository.save(mail);

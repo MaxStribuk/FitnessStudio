@@ -1,4 +1,4 @@
-package by.itacademy.service.converters;
+package by.itacademy.service.util.converters;
 
 import by.itacademy.repository.entity.MailStatus;
 import by.itacademy.repository.entity.MailEntity;

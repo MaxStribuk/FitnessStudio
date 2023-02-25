@@ -1,4 +1,4 @@
-package by.itacademy.service.converters;
+package by.itacademy.service.util.converters;
 
 import by.itacademy.core.dto.request.UserCreateDto;
 import by.itacademy.repository.entity.UserEntity;

@@ -1,4 +1,4 @@
-package by.itacademy.web.converters;
+package by.itacademy.service.util.converters;
 
 import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.repository.entity.UserEntity;
