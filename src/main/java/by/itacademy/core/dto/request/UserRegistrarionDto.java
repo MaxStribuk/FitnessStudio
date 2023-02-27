@@ -1,12 +1,23 @@
 package by.itacademy.core.dto.request;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class UserRegistrarionDto implements Serializable {
 
+    @Email(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+            message = "invalid email")
+    @NotBlank(message = "email cannot be empty")
     private String mail;
+
+    @NotBlank(message = "name cannot be empty")
     private String fio;
+
+    @NotBlank(message = "password cannot be empty")
+    @Size(min = 5, message = "password must contain at least 5 characters")
     private String password;
 
     public UserRegistrarionDto() {

@@ -8,6 +8,11 @@ public class MultipleErrorDto implements Serializable {
     private String logref;
     private List<ErrorDto> errors;
 
+    public MultipleErrorDto(String logref, List<ErrorDto> errors) {
+        this.logref = logref;
+        this.errors = errors;
+    }
+
     public MultipleErrorDto() {
     }
 

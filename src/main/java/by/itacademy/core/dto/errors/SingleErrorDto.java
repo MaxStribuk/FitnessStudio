@@ -10,6 +10,11 @@ public class SingleErrorDto implements Serializable {
     public SingleErrorDto() {
     }
 
+    public SingleErrorDto(String logref, String message) {
+        this.logref = logref;
+        this.message = message;
+    }
+
     public String getLogref() {
         return logref;
     }

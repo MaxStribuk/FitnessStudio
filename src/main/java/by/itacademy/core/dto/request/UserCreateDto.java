@@ -2,16 +2,37 @@ package by.itacademy.core.dto.request;
 
 import by.itacademy.core.dto.UserRole;
 import by.itacademy.core.dto.UserStatus;
+import by.itacademy.service.util.validators.Enum;
+import by.itacademy.web.util.deserializers.UserRoleDeserializer;
+import by.itacademy.web.util.deserializers.UserStatusDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class UserCreateDto implements Serializable {
 
+    @Email(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+            message = "invalid email")
+    @NotBlank(message = "email cannot be empty")
     private String mail;
+
+    @NotBlank(message = "name cannot be empty")
     private String fio;
+
+    @Enum(clazz = UserRole.class, message = "unknown role")
+    @JsonDeserialize(using = UserRoleDeserializer.class)
     private UserRole role;
+
+    @Enum(clazz = UserStatus.class, message = "unknown status")
+    @JsonDeserialize(using = UserStatusDeserializer.class)
     private UserStatus status;
+
+    @NotBlank(message = "password cannot be empty")
+    @Size(min = 5, message = "password must contain at least 5 characters")
     private String password;
 
     public UserCreateDto() {

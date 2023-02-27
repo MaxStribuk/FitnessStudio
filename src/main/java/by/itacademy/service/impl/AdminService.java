@@ -3,6 +3,8 @@ package by.itacademy.service.impl;
 import by.itacademy.core.dto.request.UserCreateDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.core.dto.response.PageDto;
+import by.itacademy.core.exceptions.EntityNotFoundException;
+import by.itacademy.core.exceptions.InvalidVersionException;
 import by.itacademy.repository.api.IAdminRepository;
 import by.itacademy.repository.entity.UserEntity;
 import by.itacademy.service.api.IConverter;
@@ -47,16 +49,18 @@ public class AdminService implements IAdminService {
     @Override
     public PageUserDto get(UUID uuid) {
         Optional<UserEntity> userEntityOptional = adminRepository.findById(uuid);
-        UserEntity userEntity = userEntityOptional.orElseThrow(IllegalArgumentException::new);
+        UserEntity userEntity = userEntityOptional.orElseThrow(
+                () -> new EntityNotFoundException("user with uuid " + uuid + " not found"));
         return userEntityPageDtoConverter.convert(userEntity);
     }
 
     @Override
     public void update(UUID uuid, int dtUpdate, UserCreateDto user) {
         Optional<UserEntity> userEntityOptional = adminRepository.findById(uuid);
-        UserEntity userEntity = userEntityOptional.orElseThrow(IllegalArgumentException::new);
+        UserEntity userEntity = userEntityOptional.orElseThrow(
+                () -> new EntityNotFoundException("user with uuid " + uuid + " not found"));
         if (dtUpdate != userEntity.getDtUpdate().toEpochSecond(ZoneOffset.UTC)) {
-            throw new IllegalArgumentException();
+            throw new InvalidVersionException("invalid dtUpdate");
         }
         update(userEntity, user);
         adminRepository.save(userEntity);

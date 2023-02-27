@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import by.itacademy.service.api.IUserService;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@Validated
 public class UserController {
 
     private final IUserService userService;
@@ -36,14 +39,18 @@ public class UserController {
     }
 
     @GetMapping(path = "/verification")
-    public ResponseEntity<?> verification(@RequestParam(name = "code") UUID uuid,
-                             @RequestParam(name = "mail") String mail) {
+    public ResponseEntity<?> verification(
+            @RequestParam(name = "code") UUID uuid,
+            @RequestParam(name = "mail")
+            @Email(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+                    message = "invalid email")
+            @NotBlank(message = "email cannot be empty") String mail) {
         userService.verification(new UserVerificationDto(uuid, mail));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> login(@RequestBody UserLoginDto user) {
+    public ResponseEntity<?> login(@RequestBody @Validated UserLoginDto user) {
         userService.login(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }

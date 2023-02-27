@@ -10,6 +10,11 @@ public class ErrorDto implements Serializable {
     public ErrorDto() {
     }
 
+    public ErrorDto(String field, String message) {
+        this.field = field;
+        this.message = message;
+    }
+
     public String getField() {
         return field;
     }
