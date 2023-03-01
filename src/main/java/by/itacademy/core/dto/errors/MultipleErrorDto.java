@@ -13,9 +13,6 @@ public class MultipleErrorDto implements Serializable {
         this.errors = errors;
     }
 
-    public MultipleErrorDto() {
-    }
-
     public String getLogref() {
         return logref;
     }

@@ -7,9 +7,6 @@ public class ErrorDto implements Serializable {
     private String field;
     private String message;
 
-    public ErrorDto() {
-    }
-
     public ErrorDto(String field, String message) {
         this.field = field;
         this.message = message;

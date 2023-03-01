@@ -40,11 +40,12 @@ public class UserController {
 
     @GetMapping(path = "/verification")
     public ResponseEntity<?> verification(
-            @RequestParam(name = "code") UUID uuid,
+            @RequestParam(name = "code") String code,
             @RequestParam(name = "mail")
             @Email(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
                     message = "invalid email")
             @NotBlank(message = "email cannot be empty") String mail) {
+        UUID uuid = UUID.fromString(code);
         userService.verification(new UserVerificationDto(uuid, mail));
         return new ResponseEntity<>(HttpStatus.OK);
     }

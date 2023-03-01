@@ -4,18 +4,11 @@ import by.itacademy.core.dto.request.UserCreateDto;
 import by.itacademy.repository.entity.UserEntity;
 import org.springframework.core.convert.converter.Converter;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-public class UserCreateDtoEntityConverter implements Converter<UserCreateDto, UserEntity> {
+public class UserEntityCreationDtoConverter implements Converter<UserEntity, UserCreateDto> {
 
     @Override
-    public UserEntity convert(UserCreateDto user) {
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        return new UserEntity(
-                UUID.randomUUID(),
-                currentDateTime,
-                currentDateTime,
+    public UserCreateDto convert(UserEntity user) {
+        return new UserCreateDto(
                 user.getMail(),
                 user.getFio(),
                 user.getRole(),

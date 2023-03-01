@@ -1,6 +1,6 @@
 package by.itacademy.repository.api;
 
-import by.itacademy.repository.entity.MailStatus;
+import by.itacademy.core.enums.MailStatus;
 import by.itacademy.repository.entity.MailEntity;
 import org.springframework.data.repository.Repository;
 

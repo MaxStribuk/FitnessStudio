@@ -8,25 +8,25 @@ import by.itacademy.repository.api.IUserRepository;
 import by.itacademy.repository.entity.UserEntity;
 import by.itacademy.service.api.ISenderService;
 import by.itacademy.service.api.IUserService;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 
 public class UserService implements IUserService {
 
     private final IUserRepository userRepository;
     private final ISenderService senderService;
-    private final Converter<UserRegistrarionDto, UserEntity> userRegistrarionDtoEntityConverter;
+    private final ConversionService conversionService;
 
     public UserService(IUserRepository userRepository,
-                       Converter<UserRegistrarionDto, UserEntity> userRegistrarionDtoEntityConverter,
-                       ISenderService senderService) {
+                       ISenderService senderService,
+                       ConversionService conversionService) {
         this.userRepository = userRepository;
-        this.userRegistrarionDtoEntityConverter = userRegistrarionDtoEntityConverter;
         this.senderService = senderService;
+        this.conversionService = conversionService;
     }
 
     @Override
     public void add(UserRegistrarionDto user) {
-        UserEntity userEntity = userRegistrarionDtoEntityConverter.convert(user);
+        UserEntity userEntity = conversionService.convert(user, UserEntity.class);
         userEntity = userRepository.save(userEntity);
         senderService.addVerificationMail(userEntity);
     }

@@ -1,4 +1,4 @@
-package by.itacademy.repository.entity;
+package by.itacademy.core.enums;
 
 public enum MailStatus {
 

@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import by.itacademy.service.api.IAdminService;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.util.UUID;
 
 @RestController
@@ -42,34 +42,38 @@ public class AdminController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<PageDto<PageUserDto>> getAll(
             @RequestParam(name = "page", required = false, defaultValue = "0")
             @PositiveOrZero(message = "page must be greater than or equal to 0") int page,
             @RequestParam(name = "size", required = false, defaultValue = "20")
-            @PositiveOrZero(message = "size must be greater than or equal to 0") int size) {
+            @Positive(message = "size must be greater than 0") int size) {
         Pageable pageable = PageRequest.of(page, size);
+        PageDto<PageUserDto> pageUsers = adminService.getAll(pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(adminService.getAll(pageable));
+                .body(pageUsers);
     }
 
     @GetMapping(path = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<PageUserDto> get(
-            @PathVariable(name = "uuid") UUID uuid) {
+            @PathVariable(name = "uuid")
+            @Size(min = 36, max = 36, message = "invalid uuid") String id) {
+        UUID uuid = UUID.fromString(id);
+        PageUserDto pageUser = adminService.get(uuid);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(adminService.get(uuid));
+                .body(pageUser);
     }
 
     @PutMapping(path = "{uuid}/dt_update/{dt_update}",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(
-            @PathVariable(name = "uuid") UUID uuid,
+            @PathVariable(name = "uuid")
+            @Size(min = 36, max = 36, message = "invalid uuid") String id,
             @PathVariable(name = "dt_update")
-            @Positive(message = "size must be greater than 0") int dtUpdate,
+            @Positive(message = "size must be greater than 0") long dtUpdate,
             @Validated @RequestBody UserCreateDto user) {
+        UUID uuid = UUID.fromString(id);
         adminService.update(uuid, dtUpdate, user);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -1,14 +1,13 @@
 package by.itacademy.config;
 
 import by.itacademy.repository.api.IMailRepository;
-import by.itacademy.repository.entity.MailEntity;
-import by.itacademy.repository.entity.UserEntity;
+import by.itacademy.service.api.IAdminService;
 import by.itacademy.service.api.ISenderService;
 import by.itacademy.service.impl.MailSenderService;
 import by.itacademy.web.listeners.MailSendLoaderListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import java.util.concurrent.Executors;
@@ -22,16 +21,18 @@ public class SenderServiceConfig {
     @Bean
     public ISenderService mailSenderService(
             IMailRepository mailRepository,
+            IAdminService adminService,
             JavaMailSender mailSender,
             freemarker.template.Configuration freemarkerConfig,
             ScheduledExecutorService executorService,
-            Converter<UserEntity, MailEntity> userEntityMailEntityConverter) {
+            ConversionService conversionService) {
         return new MailSenderService(
                 mailRepository,
+                adminService,
                 mailSender,
                 freemarkerConfig,
                 executorService,
-                userEntityMailEntityConverter);
+                conversionService);
     }
 
     @Bean

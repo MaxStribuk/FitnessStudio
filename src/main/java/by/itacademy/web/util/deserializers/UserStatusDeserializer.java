@@ -1,6 +1,6 @@
 package by.itacademy.web.util.deserializers;
 
-import by.itacademy.core.dto.UserStatus;
+import by.itacademy.core.enums.UserStatus;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

@@ -1,7 +1,7 @@
 package by.itacademy.core.dto.response;
 
-import by.itacademy.core.dto.UserRole;
-import by.itacademy.core.dto.UserStatus;
+import by.itacademy.core.enums.UserRole;
+import by.itacademy.core.enums.UserStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

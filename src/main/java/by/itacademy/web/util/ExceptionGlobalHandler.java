@@ -3,10 +3,13 @@ package by.itacademy.web.util;
 import by.itacademy.core.dto.errors.ErrorDto;
 import by.itacademy.core.dto.errors.MultipleErrorDto;
 import by.itacademy.core.dto.errors.SingleErrorDto;
+import by.itacademy.core.enums.ErrorType;
+import by.itacademy.core.exceptions.DtoNullPointerException;
 import by.itacademy.core.exceptions.EntityNotFoundException;
 import by.itacademy.core.exceptions.InvalidVersionException;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,8 +26,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ExceptionGlobalHandler {
 
-    private final static String TYPE_ERROR = "error";
-    private final static String TYPE_STRUCTURED_ERROR = "structured_error";
     private final static String DEFAULT_USER_ERROR_MESSAGE =
             "The request contains invalid data. Change the request and send it again";
     private final static String DEFAULT_SERVER_ERROR_MESSAGE =
@@ -34,6 +35,7 @@ public class ExceptionGlobalHandler {
     @ExceptionHandler()
     public ResponseEntity<MultipleErrorDto> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException e) {
+
         List<ErrorDto> errors = e.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -41,71 +43,66 @@ public class ExceptionGlobalHandler {
                         fieldError.getField(),
                         fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
-        MultipleErrorDto multipleError = new MultipleErrorDto(TYPE_STRUCTURED_ERROR, errors);
+        MultipleErrorDto multipleError = new MultipleErrorDto(
+                ErrorType.STRUCTURED_ERROR.toString(),
+                errors);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(multipleError);
     }
 
-    @ExceptionHandler({MethodArgumentTypeMismatchException.class,
-            HttpMessageNotReadableException.class,
-            UnexpectedTypeException.class})
-    public ResponseEntity<List<SingleErrorDto>> handleDefaultUserError() {
-
-        SingleErrorDto singleError = new SingleErrorDto(TYPE_ERROR, DEFAULT_USER_ERROR_MESSAGE);
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(List.of(singleError));
-    }
-
     @ExceptionHandler
-    public ResponseEntity<List<SingleErrorDto>> handlePSQLException(DataIntegrityViolationException e) {
+    public ResponseEntity<List<SingleErrorDto>> handleDataIntegrityViolationException(
+            DataIntegrityViolationException e) {
+
         Throwable rootCause = NestedExceptionUtils.getMostSpecificCause(e);
         String message = rootCause.getMessage();
-        SingleErrorDto singleError = new SingleErrorDto(TYPE_ERROR, message);
+        SingleErrorDto singleError = new SingleErrorDto(
+                ErrorType.ERROR.toString(),
+                message);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(List.of(singleError));
     }
 
-    @ExceptionHandler()
-    public ResponseEntity<MultipleErrorDto> handleConstraintViolationException(
-            ConstraintViolationException e
-    ) {
-        final List<ErrorDto> errors = e.getConstraintViolations()
-                .stream()
-                .map(
-                        error -> new ErrorDto(
-                                getField(error.getPropertyPath().toString()),
-                                error.getMessage()))
-                .collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new MultipleErrorDto(TYPE_STRUCTURED_ERROR, errors));
+    @ExceptionHandler(
+            {MethodArgumentTypeMismatchException.class,
+                    HttpMessageNotReadableException.class,
+                    UnexpectedTypeException.class,
+                    InvalidDataAccessApiUsageException.class,
+                    ConstraintViolationException.class})
+    public ResponseEntity<List<SingleErrorDto>> handleDefaultUserError() {
+
+        SingleErrorDto singleError = new SingleErrorDto(
+                ErrorType.ERROR.toString(),
+                DEFAULT_USER_ERROR_MESSAGE);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(List.of(singleError));
     }
 
-    @ExceptionHandler({InvalidVersionException.class,
-            EntityNotFoundException.class})
-    public ResponseEntity<List<SingleErrorDto>> handlePathVariableException(
-            InvalidVersionException e
-    ) {
-        SingleErrorDto error = new SingleErrorDto(TYPE_ERROR, e.getMessage());
+    @ExceptionHandler(
+            {InvalidVersionException.class,
+                    EntityNotFoundException.class,
+                    DtoNullPointerException.class})
+    public ResponseEntity<List<SingleErrorDto>> handleInvalidDataException(
+            RuntimeException e) {
+
+        SingleErrorDto error = new SingleErrorDto(
+                ErrorType.ERROR.toString(),
+                e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(List.of(error));
     }
 
     @ExceptionHandler()
-    public ResponseEntity<List<ErrorDto>> handleServerException(RuntimeException e) {
-        ErrorDto error = new ErrorDto(TYPE_ERROR, DEFAULT_SERVER_ERROR_MESSAGE);
+    public ResponseEntity<List<SingleErrorDto>> handleServerException(
+            RuntimeException e) {
+
+        SingleErrorDto error = new SingleErrorDto(
+                ErrorType.ERROR.toString(),
+                DEFAULT_SERVER_ERROR_MESSAGE);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(List.of(error));
-    }
-
-    private String getField(String path) {
-        if (path.contains(".")) {
-            String[] split = path.split("\\.");
-            return split[split.length - 1];
-        } else {
-            return path;
-        }
     }
 }

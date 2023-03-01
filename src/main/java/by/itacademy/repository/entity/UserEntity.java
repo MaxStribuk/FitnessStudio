@@ -1,7 +1,7 @@
 package by.itacademy.repository.entity;
 
-import by.itacademy.core.dto.UserRole;
-import by.itacademy.core.dto.UserStatus;
+import by.itacademy.core.enums.UserRole;
+import by.itacademy.core.enums.UserStatus;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 

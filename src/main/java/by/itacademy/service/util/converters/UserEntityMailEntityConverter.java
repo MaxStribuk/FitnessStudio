@@ -1,6 +1,6 @@
 package by.itacademy.service.util.converters;
 
-import by.itacademy.repository.entity.MailStatus;
+import by.itacademy.core.enums.MailStatus;
 import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.repository.entity.UserEntity;
 import org.springframework.core.convert.converter.Converter;

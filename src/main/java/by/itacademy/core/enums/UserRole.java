@@ -1,4 +1,4 @@
-package by.itacademy.core.dto;
+package by.itacademy.core.enums;
 
 public enum UserRole {
 

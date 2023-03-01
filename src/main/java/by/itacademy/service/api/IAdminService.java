@@ -15,5 +15,5 @@ public interface IAdminService {
 
     PageUserDto get(UUID uuid);
 
-    void update(UUID uuid, int dtUpdate, UserCreateDto user);
+    void update(UUID uuid, long dtUpdate, UserCreateDto user);
 }

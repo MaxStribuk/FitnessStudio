@@ -11,7 +11,9 @@ public interface ISenderService {
 
     void stop();
 
+    void addVerificationMail(UserEntity user);
+
     void send(MailEntity mail) throws MessagingException;
 
-    void addVerificationMail(UserEntity user);
+    void deactivateUser(UserEntity user);
 }

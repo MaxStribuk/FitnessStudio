@@ -1,7 +1,7 @@
 package by.itacademy.service.util.converters;
 
-import by.itacademy.core.dto.UserRole;
-import by.itacademy.core.dto.UserStatus;
+import by.itacademy.core.enums.UserRole;
+import by.itacademy.core.enums.UserStatus;
 import by.itacademy.core.dto.request.UserRegistrarionDto;
 import by.itacademy.repository.entity.UserEntity;
 import org.springframework.core.convert.converter.Converter;

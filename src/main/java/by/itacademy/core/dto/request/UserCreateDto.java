@@ -1,15 +1,15 @@
 package by.itacademy.core.dto.request;
 
-import by.itacademy.core.dto.UserRole;
-import by.itacademy.core.dto.UserStatus;
+import by.itacademy.core.enums.UserRole;
+import by.itacademy.core.enums.UserStatus;
 import by.itacademy.service.util.validators.Enum;
 import by.itacademy.web.util.deserializers.UserRoleDeserializer;
 import by.itacademy.web.util.deserializers.UserStatusDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -32,10 +32,19 @@ public class UserCreateDto implements Serializable {
     private UserStatus status;
 
     @NotBlank(message = "password cannot be empty")
-    @Size(min = 5, message = "password must contain at least 5 characters")
+    @Min(value = 5, message = "password must contain at least 5 characters")
     private String password;
 
     public UserCreateDto() {
+    }
+
+    public UserCreateDto(String mail, String fio,
+                         UserRole role, UserStatus status, String password) {
+        this.mail = mail;
+        this.fio = fio;
+        this.role = role;
+        this.status = status;
+        this.password = password;
     }
 
     public String getMail() {

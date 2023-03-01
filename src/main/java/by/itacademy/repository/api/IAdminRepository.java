@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface IAdminRepository extends Repository<UserEntity, UUID> {
 
-    void save(UserEntity user);
+    <S extends UserEntity> S save(S entity);
 
     Optional<UserEntity> findById(UUID uuid);
 

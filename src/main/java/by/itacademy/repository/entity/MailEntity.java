@@ -1,5 +1,6 @@
 package by.itacademy.repository.entity;
 
+import by.itacademy.core.enums.MailStatus;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 

@@ -1,7 +1,7 @@
 package by.itacademy.service.util;
 
 import by.itacademy.repository.api.IMailRepository;
-import by.itacademy.repository.entity.MailStatus;
+import by.itacademy.core.enums.MailStatus;
 import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.service.api.ISenderService;
 import org.springframework.mail.MailSendException;
@@ -49,6 +49,7 @@ public class EmailSendingThread implements Runnable {
                         for (Exception exception : exceptions) {
                             if (exception instanceof SendFailedException) {
                                 mail.setStatus(MailStatus.ERROR);
+                                senderService.deactivateUser(mail.getUser());
                                 throw new RuntimeException(e);
                             }
                         }
