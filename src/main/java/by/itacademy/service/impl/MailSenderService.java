@@ -21,6 +21,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -33,10 +34,13 @@ public class MailSenderService implements ISenderService {
     private final ScheduledExecutorService executorService;
     private final ConversionService conversionService;
     private static final String SUBJECT_VERIFICATION = "Email address verification";
+    private static final String SUBJECT_REGISTRATION = "Registration successfully completed";
     private static final int MAX_SENDS_VERIFICATION_MAIL = 2;
+    private static final int MAX_SENDS_REGISTRATION_MAIL = 3;
     private static final long INTERVAL_BETWEEN_SHIPMENTS = 10L;
     private static final String MAIL_TEXT_TYPE = "text/html; charset=utf-8";
-    private static final String MAIL_TEMPLATE_FILE_NAME = "mail-template.ftl";
+    private static final String VERIFICATION_MAIL_TEMPLATE_FILE_NAME = "verification-mail.ftl";
+    private static final String REGISTRATION_SUCCESS_MAIL_TEMPLATE_FILE_NAME = "registration-mail.ftl";
     private static final String MAIL_PARAM_USER_NAME = "name";
     private static final String MAIL_PARAM_MAIL_ADDRESS = "mail";
     private static final String MAIL_PARAM_CODE = "code";
@@ -79,6 +83,14 @@ public class MailSenderService implements ISenderService {
     }
 
     @Override
+    public void addRegistrationCompleteMail(UserEntity user) {
+        MailEntity registrationCompleteMail = conversionService.convert(user, MailEntity.class);
+        registrationCompleteMail.setSubject(SUBJECT_REGISTRATION);
+        registrationCompleteMail.setDepartures(MAX_SENDS_REGISTRATION_MAIL);
+        mailRepository.save(registrationCompleteMail);
+    }
+
+    @Override
     public void send(MailEntity mail) throws MessagingException {
 
         MimeMessage message = mailSender.createMimeMessage();
@@ -91,6 +103,7 @@ public class MailSenderService implements ISenderService {
         mailSender.send(message);
     }
 
+    @Override
     public void deactivateUser(UserEntity user){
         user.setStatus(UserStatus.DEACTIVATED);
         adminService.update(
@@ -99,16 +112,52 @@ public class MailSenderService implements ISenderService {
                 conversionService.convert(user, UserCreateDto.class));
     }
 
+    @Override
+    public MailEntity getMail(UserEntity user, UUID verificationCode) {
+        return mailRepository.findByUserAndVerificationCode(user, verificationCode);
+    }
+
     private String createTemplateText(MailEntity mail) {
+        String subject = mail.getSubject();
+        String templateText = null;
+        switch (subject) {
+            case SUBJECT_VERIFICATION: {
+                templateText = createVerificationText(mail);
+                break;
+            }
+            case SUBJECT_REGISTRATION: {
+                templateText = createRegistrationText(mail);
+                break;
+            }
+        }
+        return templateText;
+    }
+
+    private String createVerificationText(MailEntity mail) {
         try {
-            Template template = freemarkerConfig.getTemplate(MAIL_TEMPLATE_FILE_NAME);
+            Template template = freemarkerConfig.getTemplate(
+                    VERIFICATION_MAIL_TEMPLATE_FILE_NAME);
             Properties properties = new Properties();
             properties.put(MAIL_PARAM_USER_NAME, mail.getUser().getFio());
             properties.put(MAIL_PARAM_CODE, mail.getVerificationCode());
             properties.put(MAIL_PARAM_MAIL_ADDRESS, mail.getUser().getMail());
             return FreeMarkerTemplateUtils.processTemplateIntoString(template, properties);
         } catch (IOException | TemplateException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("template with name " +
+                    VERIFICATION_MAIL_TEMPLATE_FILE_NAME + " not found");
+        }
+    }
+
+    private String createRegistrationText(MailEntity mail) {
+        try {
+            Template template = freemarkerConfig.getTemplate(
+                    REGISTRATION_SUCCESS_MAIL_TEMPLATE_FILE_NAME);
+            Properties properties = new Properties();
+            properties.put(MAIL_PARAM_USER_NAME, mail.getUser().getFio());
+            return FreeMarkerTemplateUtils.processTemplateIntoString(template, properties);
+        } catch (IOException | TemplateException e) {
+            throw new RuntimeException("template with name " +
+                    REGISTRATION_SUCCESS_MAIL_TEMPLATE_FILE_NAME + " not found");
         }
     }
 }

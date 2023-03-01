@@ -7,6 +7,7 @@ import by.itacademy.core.enums.ErrorType;
 import by.itacademy.core.exceptions.DtoNullPointerException;
 import by.itacademy.core.exceptions.EntityNotFoundException;
 import by.itacademy.core.exceptions.InvalidVersionException;
+import by.itacademy.core.exceptions.VerificationException;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -84,7 +85,8 @@ public class ExceptionGlobalHandler {
     @ExceptionHandler(
             {InvalidVersionException.class,
                     EntityNotFoundException.class,
-                    DtoNullPointerException.class})
+                    DtoNullPointerException.class,
+                    VerificationException.class})
     public ResponseEntity<List<SingleErrorDto>> handleInvalidDataException(
             RuntimeException e) {
 

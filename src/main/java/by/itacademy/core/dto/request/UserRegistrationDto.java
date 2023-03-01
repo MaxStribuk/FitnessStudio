@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class UserRegistrarionDto implements Serializable {
+public class UserRegistrationDto implements Serializable {
 
     @Email(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
             message = "invalid email")
@@ -20,7 +20,7 @@ public class UserRegistrarionDto implements Serializable {
     @Size(min = 5, message = "password must contain at least 5 characters")
     private String password;
 
-    public UserRegistrarionDto() {
+    public UserRegistrationDto() {
     }
 
     public String getMail() {
@@ -39,7 +39,7 @@ public class UserRegistrarionDto implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserRegistrarionDto that = (UserRegistrarionDto) o;
+        UserRegistrationDto that = (UserRegistrationDto) o;
         return Objects.equals(mail, that.mail)
                 && Objects.equals(fio, that.fio)
                 && Objects.equals(password, that.password);

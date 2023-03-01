@@ -11,7 +11,7 @@
         <h3>Hello, ${name}</h3><p>
             You registered an account on FitnessApp, before being able to use your account<p>
             you need to verify that this is your email address by clicking here:
-                <a href="http://localhost:8080/api/v1/users/verification?code=${code}&mail=${mail}">link</a>.
+            <a href="http://localhost:8080/api/v1/users/verification?code=${code}&mail=${mail}">link</a>.
 
         <h4>Sincerely, FitnessApp developers.</h4>
     </body>

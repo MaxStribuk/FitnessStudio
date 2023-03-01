@@ -1,14 +1,20 @@
 package by.itacademy.service.impl;
 
 import by.itacademy.core.dto.request.UserLoginDto;
-import by.itacademy.core.dto.request.UserRegistrarionDto;
+import by.itacademy.core.dto.request.UserRegistrationDto;
 import by.itacademy.core.dto.request.UserVerificationDto;
 import by.itacademy.core.dto.response.PageUserDto;
+import by.itacademy.core.enums.UserStatus;
+import by.itacademy.core.exceptions.DtoNullPointerException;
+import by.itacademy.core.exceptions.VerificationException;
 import by.itacademy.repository.api.IUserRepository;
+import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.repository.entity.UserEntity;
 import by.itacademy.service.api.ISenderService;
 import by.itacademy.service.api.IUserService;
 import org.springframework.core.convert.ConversionService;
+
+import java.util.Optional;
 
 public class UserService implements IUserService {
 
@@ -25,7 +31,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void add(UserRegistrarionDto user) {
+    public void add(UserRegistrationDto user) {
+        if (user == null) {
+            throw new DtoNullPointerException("userRegistrationDto must not be null");
+        }
         UserEntity userEntity = conversionService.convert(user, UserEntity.class);
         userEntity = userRepository.save(userEntity);
         senderService.addVerificationMail(userEntity);
@@ -33,12 +42,27 @@ public class UserService implements IUserService {
 
     @Override
     public void verification(UserVerificationDto user) {
-
+        if (user == null) {
+            throw new DtoNullPointerException("userVerificationDto must not be null");
+        }
+        Optional<UserEntity> userEntityOptional = userRepository.findByMail(user.getMail());
+        UserEntity userEntity = userEntityOptional.orElseThrow(
+                () -> new VerificationException("verification error"));
+        MailEntity mail = senderService.getMail(userEntity, user.getUuid());
+        if (mail == null) {
+            throw new VerificationException("verification error");
+        } else {
+            userEntity.setStatus(UserStatus.ACTIVATED);
+            userRepository.save(userEntity);
+            senderService.addRegistrationCompleteMail(userEntity);
+        }
     }
 
     @Override
     public void login(UserLoginDto user) {
-
+        if (user == null) {
+            throw new DtoNullPointerException("userLoginDto must not be null");
+        }
     }
 
     @Override

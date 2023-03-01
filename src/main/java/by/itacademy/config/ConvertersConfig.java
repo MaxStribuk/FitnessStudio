@@ -1,7 +1,7 @@
 package by.itacademy.config;
 
 import by.itacademy.core.dto.request.UserCreateDto;
-import by.itacademy.core.dto.request.UserRegistrarionDto;
+import by.itacademy.core.dto.request.UserRegistrationDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.repository.entity.UserEntity;
@@ -30,7 +30,7 @@ public class ConvertersConfig  {
     }
 
     @Bean
-    public Converter<UserRegistrarionDto, UserEntity> userRegistrarionDtoEntityConverter() {
+    public Converter<UserRegistrationDto, UserEntity> userRegistrarionDtoEntityConverter() {
         return new UserRegistrarionDtoEntityConverter();
     }
 

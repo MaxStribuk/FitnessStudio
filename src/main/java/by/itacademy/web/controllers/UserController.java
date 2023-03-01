@@ -1,7 +1,7 @@
 package by.itacademy.web.controllers;
 
 import by.itacademy.core.dto.request.UserLoginDto;
-import by.itacademy.core.dto.request.UserRegistrarionDto;
+import by.itacademy.core.dto.request.UserRegistrationDto;
 import by.itacademy.core.dto.request.UserVerificationDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import org.springframework.http.HttpStatus;
@@ -19,6 +19,7 @@ import by.itacademy.service.api.IUserService;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.UUID;
 
 @RestController
@@ -33,14 +34,15 @@ public class UserController {
     }
 
     @PostMapping(path = "/registration", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> add(@RequestBody @Validated UserRegistrarionDto user) {
+    public ResponseEntity<?> add(@RequestBody @Validated UserRegistrationDto user) {
         userService.add(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/verification")
     public ResponseEntity<?> verification(
-            @RequestParam(name = "code") String code,
+            @RequestParam(name = "code")
+            @Size(min = 36, max = 36, message = "invalid code") String code,
             @RequestParam(name = "mail")
             @Email(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
                     message = "invalid email")
