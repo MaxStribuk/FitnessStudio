@@ -24,15 +24,15 @@ public class AdminService implements IAdminService {
     private final IAdminRepository adminRepository;
     private final ConversionService conversionService;
     private final Converter<UserEntity, PageUserDto> userEntityPageDtoConverter;
-    private final IConverter<UserEntity, PageUserDto> entityPageDtoConverter;
+    private final IConverter<UserEntity, PageUserDto> entityPagesDtoConverter;
 
     public AdminService(IAdminRepository adminRepository,
                         Converter<UserEntity, PageUserDto> userEntityPageDtoConverter,
-                        IConverter<UserEntity, PageUserDto> entityPageDtoConverter,
+                        IConverter<UserEntity, PageUserDto> entityPagesDtoConverter,
                         ConversionService conversionService) {
         this.adminRepository = adminRepository;
         this.userEntityPageDtoConverter = userEntityPageDtoConverter;
-        this.entityPageDtoConverter = entityPageDtoConverter;
+        this.entityPagesDtoConverter = entityPagesDtoConverter;
         this.conversionService = conversionService;
     }
 
@@ -51,7 +51,7 @@ public class AdminService implements IAdminService {
             throw new NullPointerException("pageable must be not null");
         }
         Page<UserEntity> users = adminRepository.findAll(pageable);
-        return entityPageDtoConverter.convert(users, userEntityPageDtoConverter);
+        return entityPagesDtoConverter.convert(users, userEntityPageDtoConverter);
     }
 
     @Override

@@ -15,13 +15,14 @@ import org.springframework.core.convert.converter.Converter;
 public class AdminServiceConfig {
 
     @Bean
-    public IAdminService adminService(IAdminRepository adminRepository,
-                                      Converter<UserEntity, PageUserDto> userEntityPageDtoConverter,
-                                      IConverter<UserEntity, PageUserDto> entityPageDtoConverter,
-                                      ConversionService conversionService) {
+    public IAdminService adminService(
+            IAdminRepository adminRepository,
+            Converter<UserEntity, PageUserDto> userEntityPageDtoConverter,
+            IConverter<UserEntity, PageUserDto> entityPagesDtoConverter,
+            ConversionService conversionService) {
         return new AdminService(adminRepository,
                 userEntityPageDtoConverter,
-                entityPageDtoConverter,
+                entityPagesDtoConverter,
                 conversionService);
     }
 }
