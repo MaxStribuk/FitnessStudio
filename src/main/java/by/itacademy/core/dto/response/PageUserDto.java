@@ -16,15 +16,21 @@ import java.util.UUID;
 public class PageUserDto implements Serializable {
 
     private UUID uuid;
+
     @JsonSerialize(using = DateSerializer.class)
     @JsonProperty("dt_create")
     private LocalDateTime dtCreate;
+
     @JsonSerialize(using = DateSerializer.class)
     @JsonProperty("dt_update")
     private LocalDateTime dtUpdate;
+
     private String mail;
+
     private String fio;
+
     private UserRole role;
+
     private UserStatus status;
 
     public PageUserDto(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate,
