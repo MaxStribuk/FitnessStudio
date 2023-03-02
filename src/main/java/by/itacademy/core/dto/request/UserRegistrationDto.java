@@ -52,7 +52,7 @@ public class UserRegistrationDto implements Serializable {
 
     @Override
     public String toString() {
-        return "UserRegistrarionDto{" +
+        return "UserRegistrationDto{" +
                 "mail='" + mail + '\'' +
                 ", fio='" + fio + '\'' +
                 '}';
