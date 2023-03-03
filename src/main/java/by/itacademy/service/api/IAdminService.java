@@ -5,6 +5,7 @@ import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.core.dto.response.PageDto;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface IAdminService {
@@ -15,5 +16,5 @@ public interface IAdminService {
 
     PageUserDto get(UUID uuid);
 
-    void update(UUID uuid, long dtUpdate, UserCreateDto user);
+    void update(UUID uuid, LocalDateTime dtUpdate, UserCreateDto user);
 }

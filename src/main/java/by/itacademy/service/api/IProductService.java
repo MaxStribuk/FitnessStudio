@@ -5,6 +5,7 @@ import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageProductDto;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface IProductService {
@@ -13,5 +14,5 @@ public interface IProductService {
 
     PageDto<PageProductDto> getAll(Pageable pageable);
 
-    void update(UUID uuid, long dtUpdate, ProductCreateDto product);
+    void update(UUID uuid, LocalDateTime dtUpdate, ProductCreateDto product);
 }
