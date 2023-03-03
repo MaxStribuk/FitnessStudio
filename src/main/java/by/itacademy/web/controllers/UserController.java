@@ -19,7 +19,7 @@ import by.itacademy.service.api.IUserService;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 @RestController
@@ -42,7 +42,8 @@ public class UserController {
     @GetMapping(path = "/verification")
     public ResponseEntity<?> verification(
             @RequestParam(name = "code")
-            @Size(min = 36, max = 36, message = "invalid code") String code,
+            @Pattern(regexp = "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[89abAB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}",
+                    message = "invalid code") String code,
             @RequestParam(name = "mail")
             @Email(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
                     message = "invalid email")

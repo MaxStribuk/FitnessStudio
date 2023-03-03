@@ -19,7 +19,6 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
-import java.time.ZoneOffset;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
@@ -77,6 +76,8 @@ public class MailSenderService implements ISenderService {
     @Override
     public void addVerificationMail(UserEntity user) {
         MailEntity verificationMail = conversionService.convert(user, MailEntity.class);
+        UUID uuid = UUID.randomUUID();
+        verificationMail.setVerificationCode(uuid);
         verificationMail.setSubject(SUBJECT_VERIFICATION);
         verificationMail.setDepartures(MAX_SENDS_VERIFICATION_MAIL);
         mailRepository.save(verificationMail);
@@ -85,6 +86,8 @@ public class MailSenderService implements ISenderService {
     @Override
     public void addRegistrationCompleteMail(UserEntity user) {
         MailEntity registrationCompleteMail = conversionService.convert(user, MailEntity.class);
+        UUID uuid = UUID.randomUUID();
+        registrationCompleteMail.setVerificationCode(uuid);
         registrationCompleteMail.setSubject(SUBJECT_REGISTRATION);
         registrationCompleteMail.setDepartures(MAX_SENDS_REGISTRATION_MAIL);
         mailRepository.save(registrationCompleteMail);
@@ -104,11 +107,11 @@ public class MailSenderService implements ISenderService {
     }
 
     @Override
-    public void deactivateUser(UserEntity user){
+    public void deactivateUser(UserEntity user) {
         user.setStatus(UserStatus.DEACTIVATED);
         adminService.update(
                 user.getUuid(),
-                user.getDtUpdate().toEpochSecond(ZoneOffset.UTC),
+                user.getDtUpdate(),
                 conversionService.convert(user, UserCreateDto.class));
     }
 

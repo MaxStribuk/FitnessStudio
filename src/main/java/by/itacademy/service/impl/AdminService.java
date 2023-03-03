@@ -8,14 +8,12 @@ import by.itacademy.core.exceptions.EntityNotFoundException;
 import by.itacademy.core.exceptions.InvalidVersionException;
 import by.itacademy.repository.api.IAdminRepository;
 import by.itacademy.repository.entity.UserEntity;
-import by.itacademy.service.api.IConverter;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import by.itacademy.service.api.IAdminService;
 
-import java.time.ZoneOffset;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,16 +21,10 @@ public class AdminService implements IAdminService {
 
     private final IAdminRepository adminRepository;
     private final ConversionService conversionService;
-    private final Converter<UserEntity, PageUserDto> userEntityPageDtoConverter;
-    private final IConverter<UserEntity, PageUserDto> entityPagesDtoConverter;
 
     public AdminService(IAdminRepository adminRepository,
-                        Converter<UserEntity, PageUserDto> userEntityPageDtoConverter,
-                        IConverter<UserEntity, PageUserDto> entityPagesDtoConverter,
                         ConversionService conversionService) {
         this.adminRepository = adminRepository;
-        this.userEntityPageDtoConverter = userEntityPageDtoConverter;
-        this.entityPagesDtoConverter = entityPagesDtoConverter;
         this.conversionService = conversionService;
     }
 
@@ -51,7 +43,7 @@ public class AdminService implements IAdminService {
             throw new NullPointerException("pageable must be not null");
         }
         Page<UserEntity> users = adminRepository.findAll(pageable);
-        return entityPagesDtoConverter.convert(users, userEntityPageDtoConverter);
+        return conversionService.convert(users, PageDto.class);
     }
 
     @Override
@@ -66,7 +58,7 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public void update(UUID uuid, long dtUpdate, UserCreateDto user) {
+    public void update(UUID uuid, LocalDateTime dtUpdate, UserCreateDto user) {
         if (uuid == null) {
             throw new EntityNotFoundException("invalid uuid");
         }
@@ -76,7 +68,7 @@ public class AdminService implements IAdminService {
         Optional<UserEntity> userEntityOptional = adminRepository.findById(uuid);
         UserEntity userEntity = userEntityOptional.orElseThrow(
                 () -> new EntityNotFoundException("user with uuid " + uuid + " not found"));
-        if (dtUpdate != userEntity.getDtUpdate().toEpochSecond(ZoneOffset.UTC)) {
+        if (dtUpdate != userEntity.getDtUpdate()) {
             throw new InvalidVersionException("invalid dtUpdate");
         }
         update(userEntity, user);

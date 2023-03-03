@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -58,9 +60,10 @@ public class ProductController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(
             @PathVariable(name = "uuid")
-            @Size(min = 36, max = 36, message = "invalid uuid") String id,
+            @Pattern(regexp = "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[89abAB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}",
+                    message = "invalid uuid") String id,
             @PathVariable(name = "dt_update")
-            @Positive(message = "size must be greater than 0") long dtUpdate,
+            @Past(message = "invalid dtUpdate") LocalDateTime dtUpdate,
             @Validated @RequestBody ProductCreateDto product) {
         UUID uuid = UUID.fromString(id);
         productService.update(uuid, dtUpdate, product);
