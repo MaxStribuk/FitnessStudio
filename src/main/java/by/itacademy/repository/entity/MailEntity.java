@@ -58,13 +58,8 @@ public class MailEntity implements Serializable {
     public MailEntity() {
     }
 
-    public MailEntity(UUID uuid, UserEntity user, LocalDateTime dtCreate,
-                      LocalDateTime dtUpdate, UUID verificationCode, MailStatus status) {
-        this.uuid = uuid;
+    public MailEntity(UserEntity user, MailStatus status) {
         this.user = user;
-        this.dtCreate = dtCreate;
-        this.dtUpdate = dtUpdate;
-        this.verificationCode = verificationCode;
         this.status = status;
     }
 
@@ -110,6 +105,10 @@ public class MailEntity implements Serializable {
 
     public void setStatus(MailStatus status) {
         this.status = status;
+    }
+
+    public void setVerificationCode(UUID verificationCode) {
+        this.verificationCode = verificationCode;
     }
 
     @Override
