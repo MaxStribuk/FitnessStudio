@@ -58,7 +58,7 @@ public class ProductService implements IProductService {
         Optional<ProductEntity> productEntityOptional = productRepository.findById(uuid);
         ProductEntity productEntity = productEntityOptional.orElseThrow(
                 () -> new EntityNotFoundException("product with uuid " + uuid + " not found"));
-        if (dtUpdate != productEntity.getDtUpdate()) {
+        if (!dtUpdate.isEqual(productEntity.getDtUpdate())) {
             throw new InvalidVersionException("invalid dtUpdate");
         }
         update(productEntity, product);

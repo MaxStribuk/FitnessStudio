@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
@@ -59,13 +58,10 @@ public class RecipeController {
     @PutMapping(path = "{uuid}/dt_update/{dt_update}",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(
-            @PathVariable(name = "uuid")
-            @Pattern(regexp = "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[89abAB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}",
-                    message = "invalid uuid") String id,
+            @PathVariable(name = "uuid") UUID uuid,
             @PathVariable(name = "dt_update")
             @Past(message = "invalid dtUpdate") LocalDateTime dtUpdate,
             @Validated @RequestBody RecipeCreateDto recipe) {
-        UUID uuid = UUID.fromString(id);
         recipeService.update(uuid, dtUpdate, recipe);
         return new ResponseEntity<>(HttpStatus.OK);
     }

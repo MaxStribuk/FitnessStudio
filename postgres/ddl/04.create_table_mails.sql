@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS app.mails
 (
     uuid uuid NOT NULL,
     user_id uuid NOT NULL,
-    dt_create timestamp without time zone NOT NULL,
-    dt_update timestamp without time zone NOT NULL,
+    dt_create timestamp(3) without time zone NOT NULL,
+    dt_update timestamp(3) without time zone NOT NULL,
     subject text COLLATE pg_catalog."default" NOT NULL,
     departures integer NOT NULL,
     status text COLLATE pg_catalog."default" NOT NULL,

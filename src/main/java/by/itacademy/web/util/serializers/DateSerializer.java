@@ -14,7 +14,7 @@ public class DateSerializer extends JsonSerializer<LocalDateTime> {
     @Override
     public void serialize(LocalDateTime date, JsonGenerator generator, SerializerProvider arg2)
             throws IOException, JsonProcessingException {
-        long epochSecond = date.toEpochSecond(ZoneOffset.UTC);
+        long epochSecond = date.toInstant(ZoneOffset.UTC).toEpochMilli();
         generator.writeNumber(epochSecond);
     }
 }

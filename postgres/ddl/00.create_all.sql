@@ -13,8 +13,8 @@ CREATE SCHEMA IF NOT EXISTS app;
 CREATE TABLE IF NOT EXISTS app.users
 (
     uuid uuid NOT NULL,
-    dt_create timestamp without time zone NOT NULL,
-    dt_update timestamp without time zone NOT NULL,
+    dt_create timestamp(3) without time zone NOT NULL,
+    dt_update timestamp(3) without time zone NOT NULL,
     mail text COLLATE pg_catalog."default" NOT NULL,
     fio text COLLATE pg_catalog."default" NOT NULL,
     role text COLLATE pg_catalog."default" NOT NULL,
@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS app.mails
 (
     uuid uuid NOT NULL,
     user_id uuid NOT NULL,
-    dt_create timestamp without time zone NOT NULL,
-    dt_update timestamp without time zone NOT NULL,
+    dt_create timestamp(3) without time zone NOT NULL,
+    dt_update timestamp(3) without time zone NOT NULL,
     subject text COLLATE pg_catalog."default" NOT NULL,
     departures integer NOT NULL,
     status text COLLATE pg_catalog."default" NOT NULL,
@@ -54,8 +54,8 @@ ALTER TABLE IF EXISTS app.mails
 CREATE TABLE IF NOT EXISTS app.products
 (
     uuid uuid NOT NULL,
-    dt_create timestamp without time zone NOT NULL,
-    dt_update timestamp without time zone NOT NULL,
+    dt_create timestamp(3) without time zone NOT NULL,
+    dt_update timestamp(3) without time zone NOT NULL,
     title text COLLATE pg_catalog."default" NOT NULL,
     weight integer NOT NULL,
     calories integer NOT NULL,

@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS app.products
 (
     uuid uuid NOT NULL,
-    dt_create timestamp without time zone NOT NULL,
-    dt_update timestamp without time zone NOT NULL,
+    dt_create timestamp(3) without time zone NOT NULL,
+    dt_update timestamp(3) without time zone NOT NULL,
     title text COLLATE pg_catalog."default" NOT NULL,
     weight integer NOT NULL,
     calories integer NOT NULL,

@@ -13,6 +13,7 @@ import by.itacademy.service.util.converters.EntityPageDtoConverter;
 import by.itacademy.service.util.converters.ProductCreateDtoEntityConverter;
 import by.itacademy.service.util.converters.ProductEntityPageDtoConverter;
 import by.itacademy.service.util.converters.StringLocalDateTimeConverter;
+import by.itacademy.service.util.converters.StringUuidConverter;
 import by.itacademy.service.util.converters.UserCreateDtoEntityConverter;
 import by.itacademy.service.util.converters.UserEntityCreationDtoConverter;
 import by.itacademy.service.util.converters.UserEntityMailEntityConverter;
@@ -24,6 +25,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Configuration
 public class ConvertersConfig  {
@@ -78,5 +80,10 @@ public class ConvertersConfig  {
     @Bean
     public Converter<String, LocalDateTime> stringLocalDateTimeConverter() {
         return new StringLocalDateTimeConverter();
+    }
+
+    @Bean
+    public Converter<String, UUID> stringUuidConverter() {
+        return new StringUuidConverter();
     }
 }

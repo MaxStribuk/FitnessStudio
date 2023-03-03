@@ -12,8 +12,8 @@ public class StringLocalDateTimeConverter implements Converter<String, LocalDate
     @Override
     public LocalDateTime convert(String dtUpdate) {
         try {
-            long l = Long.parseLong(dtUpdate);
-            return LocalDateTime.ofInstant(Instant.ofEpochSecond(l), ZoneOffset.UTC);
+            long longDtUpdate = Long.parseLong(dtUpdate);
+            return LocalDateTime.ofInstant(Instant.ofEpochMilli(longDtUpdate), ZoneOffset.UTC);
         } catch (NumberFormatException | DateTimeException e) {
             return null;
         }
