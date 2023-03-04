@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Uuid {
 
-    String message() default "{invalid.uuid}";
+    String message() default "invalid uuid";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

@@ -11,8 +11,12 @@ import java.util.UUID;
 public class UuidDeserializer extends JsonDeserializer<UUID> {
 
     @Override
-    public UUID deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+    public UUID deserialize(JsonParser p, DeserializationContext ctxt)
+            throws IOException, JacksonException {
         String value = p.getText();
+        if (value.length() != 36) {
+            return null;
+        }
         try {
             return UUID.fromString(value);
         } catch (IllegalArgumentException e) {

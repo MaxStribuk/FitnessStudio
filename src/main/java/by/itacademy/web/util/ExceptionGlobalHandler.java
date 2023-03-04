@@ -74,7 +74,7 @@ public class ExceptionGlobalHandler {
                     InvalidDataAccessApiUsageException.class,
                     ConstraintViolationException.class,
                     MissingPathVariableException.class})
-    public ResponseEntity<List<SingleErrorDto>> handleDefaultUserError() {
+    public ResponseEntity<List<SingleErrorDto>> handleDefaultUserError(RuntimeException e) {
 
         SingleErrorDto singleError = new SingleErrorDto(
                 ErrorType.ERROR.toString(),
