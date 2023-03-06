@@ -55,6 +55,9 @@ public class ProductService implements IProductService {
         if (product == null) {
             throw new DtoNullPointerException("productCreateDto must not be null");
         }
+        if (dtUpdate == null) {
+            throw new InvalidVersionException("invalid dtUpdate");
+        }
         Optional<ProductEntity> productEntityOptional = productRepository.findById(uuid);
         ProductEntity productEntity = productEntityOptional.orElseThrow(
                 () -> new EntityNotFoundException("product with uuid " + uuid + " not found"));

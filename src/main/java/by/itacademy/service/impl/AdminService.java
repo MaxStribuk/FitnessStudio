@@ -65,6 +65,9 @@ public class AdminService implements IAdminService {
         if (user == null) {
             throw new DtoNullPointerException("userCreateDto must not be null");
         }
+        if (dtUpdate == null) {
+            throw new InvalidVersionException("invalid dtUpdate");
+        }
         Optional<UserEntity> userEntityOptional = adminRepository.findById(uuid);
         UserEntity userEntity = userEntityOptional.orElseThrow(
                 () -> new EntityNotFoundException("user with uuid " + uuid + " not found"));
