@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -52,9 +53,9 @@ public class RecipeEntity implements Serializable {
     public RecipeEntity() {
     }
 
-    public RecipeEntity(String title, List<IngredientEntity> products) {
+    public RecipeEntity(String title) {
         this.title = title;
-        this.products = products;
+        this.products = new ArrayList<>();
     }
 
     public UUID getUuid() {

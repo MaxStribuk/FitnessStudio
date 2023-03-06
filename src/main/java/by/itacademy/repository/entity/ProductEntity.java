@@ -63,6 +63,20 @@ public class ProductEntity implements Serializable {
         this.carbohydrates = carbohydrates;
     }
 
+    public ProductEntity(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate,
+                         String title, int weight, int calories, double proteins,
+                         double fats, double carbohydrates) {
+        this.uuid = uuid;
+        this.dtCreate = dtCreate;
+        this.dtUpdate = dtUpdate;
+        this.title = title;
+        this.weight = weight;
+        this.calories = calories;
+        this.proteins = proteins;
+        this.fats = fats;
+        this.carbohydrates = carbohydrates;
+    }
+
     public UUID getUuid() {
         return uuid;
     }

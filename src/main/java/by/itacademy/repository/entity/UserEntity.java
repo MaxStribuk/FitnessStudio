@@ -36,7 +36,7 @@ public class UserEntity implements Serializable {
     @Version
     private LocalDateTime dtUpdate;
 
-    @Column(name = "mail", nullable = false)
+    @Column(name = "mail", nullable = false, unique = true)
     private String mail;
 
     @Column(name = "fio", nullable = false)

@@ -36,6 +36,26 @@ public class IngredientEntity {
         this.weight = weight;
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public ProductEntity getProduct() {
+        return product;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setProduct(ProductEntity product) {
+        this.product = product;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
