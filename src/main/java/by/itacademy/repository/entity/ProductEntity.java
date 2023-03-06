@@ -32,7 +32,7 @@ public class ProductEntity implements Serializable {
     @Version
     private LocalDateTime dtUpdate;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, unique = true)
     private String title;
 
     @Column(name = "weight", nullable = false)
