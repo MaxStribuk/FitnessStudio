@@ -70,3 +70,43 @@ CREATE TABLE IF NOT EXISTS app.products
 
 ALTER TABLE IF EXISTS app.products
     OWNER to postgres;
+
+CREATE TABLE IF NOT EXISTS app.ingredients
+(
+    uuid uuid NOT NULL,
+    product_uuid uuid NOT NULL,
+    weight integer NOT NULL,
+    CONSTRAINT ingredients_pkey PRIMARY KEY (uuid)
+)
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS app.ingredients
+    OWNER to postgres;
+
+CREATE TABLE IF NOT EXISTS app.recipes_ingredients
+(
+    recipe_id uuid NOT NULL,
+    ingredient_id uuid NOT NULL,
+    CONSTRAINT recipes_ingredients_pkey PRIMARY KEY (recipe_id, ingredient_id)
+)
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS app.recipes_ingredients
+    OWNER to postgres;
+
+CREATE TABLE IF NOT EXISTS app.recipes
+(
+    uuid uuid NOT NULL,
+    dt_create timestamp(3) without time zone NOT NULL,
+    dt_update timestamp(3) without time zone NOT NULL,
+    title text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT recipes_pkey PRIMARY KEY (uuid),
+    CONSTRAINT recipes_title_key UNIQUE (title)
+)
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS app.recipes
+    OWNER to postgres;
