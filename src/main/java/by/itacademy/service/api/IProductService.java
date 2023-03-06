@@ -15,4 +15,6 @@ public interface IProductService {
     PageDto<PageProductDto> getAll(Pageable pageable);
 
     void update(UUID uuid, LocalDateTime dtUpdate, ProductCreateDto product);
+
+    PageProductDto get(UUID uuid);
 }

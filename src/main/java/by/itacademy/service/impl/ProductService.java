@@ -68,6 +68,17 @@ public class ProductService implements IProductService {
         productRepository.save(productEntity);
     }
 
+    @Override
+    public PageProductDto get(UUID uuid) {
+        if (uuid == null) {
+            throw new EntityNotFoundException("invalid uuid");
+        }
+        Optional<ProductEntity> productEntityOptional = productRepository.findById(uuid);
+        ProductEntity productEntity = productEntityOptional.orElseThrow(
+                () -> new EntityNotFoundException("product with uuid " + uuid + " not found"));
+        return conversionService.convert(productEntity, PageProductDto.class);
+    }
+
     private void update(ProductEntity productEntity, ProductCreateDto product) {
         productEntity.setTitle(product.getTitle());
         productEntity.setWeight(product.getWeight());
