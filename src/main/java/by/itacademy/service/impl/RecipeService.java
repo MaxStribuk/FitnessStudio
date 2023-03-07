@@ -15,6 +15,7 @@ import by.itacademy.repository.entity.RecipeEntity;
 import by.itacademy.service.api.IProductService;
 import by.itacademy.service.api.IRecipeService;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
@@ -51,12 +52,11 @@ public class RecipeService implements IRecipeService {
 
     @Override
     public PageDto<PageRecipeDto> getAll(Pageable pageable) {
-//        if (pageable == null) {
-//            throw new NullPointerException("pageable must be not null");
-//        }
-//        Page<UserEntity> users = adminRepository.findAll(pageable);
-//        return conversionService.convert(users, PageDto.class);
-        return null;
+        if (pageable == null) {
+            throw new NullPointerException("pageable must be not null");
+        }
+        Page<RecipeEntity> recipes = recipeRepository.findAll(pageable);
+        return conversionService.convert(recipes, PageDto.class);
     }
 
     @Override

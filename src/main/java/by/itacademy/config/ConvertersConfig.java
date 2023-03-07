@@ -6,6 +6,7 @@ import by.itacademy.core.dto.request.UserCreateDto;
 import by.itacademy.core.dto.request.UserRegistrationDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageProductDto;
+import by.itacademy.core.dto.response.PageRecipeDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.repository.entity.ProductEntity;
@@ -16,6 +17,7 @@ import by.itacademy.service.util.converters.PageProductDtoEntityConverter;
 import by.itacademy.service.util.converters.ProductCreateDtoEntityConverter;
 import by.itacademy.service.util.converters.ProductEntityPageDtoConverter;
 import by.itacademy.service.util.converters.RecipeCreateDtoEntityConverter;
+import by.itacademy.service.util.converters.RecipeEntityPageDtoConverter;
 import by.itacademy.service.util.converters.StringLocalDateTimeConverter;
 import by.itacademy.service.util.converters.StringUuidConverter;
 import by.itacademy.service.util.converters.UserCreateDtoEntityConverter;
@@ -43,6 +45,12 @@ public class ConvertersConfig  {
     @Bean
     public Converter<Page<ProductEntity>, PageDto<PageProductDto>> productEntityPageDtoConverter(
             Converter<ProductEntity, PageProductDto> converter) {
+        return new EntityPageDtoConverter<>(converter);
+    }
+
+    @Bean
+    public Converter<Page<RecipeEntity>, PageDto<PageRecipeDto>> recipeEntityPageDtoConverter(
+            Converter<RecipeEntity, PageRecipeDto> converter) {
         return new EntityPageDtoConverter<>(converter);
     }
 
@@ -99,5 +107,11 @@ public class ConvertersConfig  {
     @Bean
     public Converter<RecipeCreateDto, RecipeEntity> recipeCreateDtoEntityConverter() {
         return new RecipeCreateDtoEntityConverter();
+    }
+
+    @Bean
+    public Converter<RecipeEntity, PageRecipeDto> recipeEntityPageRecipeDtoConverter(
+            Converter<ProductEntity, PageProductDto> converter) {
+        return new RecipeEntityPageDtoConverter(converter);
     }
 }

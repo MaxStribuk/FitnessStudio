@@ -4,7 +4,6 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -22,7 +21,7 @@ public class IngredientEntity {
     @Column(name = "uuid", nullable = false, length = 36)
     private UUID uuid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     private ProductEntity product;
 
     @Column(name = "weight", nullable = false)

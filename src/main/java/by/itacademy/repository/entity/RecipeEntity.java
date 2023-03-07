@@ -42,7 +42,7 @@ public class RecipeEntity implements Serializable {
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             schema = "app",
             name = "recipes_ingredients",

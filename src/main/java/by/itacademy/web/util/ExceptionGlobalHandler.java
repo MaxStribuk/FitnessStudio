@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import javax.servlet.ServletException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.UnexpectedTypeException;
 import java.util.List;
@@ -74,7 +75,7 @@ public class ExceptionGlobalHandler {
                     InvalidDataAccessApiUsageException.class,
                     ConstraintViolationException.class,
                     MissingPathVariableException.class})
-    public ResponseEntity<List<SingleErrorDto>> handleDefaultUserError(RuntimeException e) {
+    public ResponseEntity<List<SingleErrorDto>> handleDefaultUserError() {
 
         SingleErrorDto singleError = new SingleErrorDto(
                 ErrorType.ERROR.toString(),
@@ -107,6 +108,17 @@ public class ExceptionGlobalHandler {
                 ErrorType.ERROR.toString(),
                 DEFAULT_SERVER_ERROR_MESSAGE);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(List.of(error));
+    }
+
+    @ExceptionHandler()
+    public ResponseEntity<List<SingleErrorDto>> handleServletException(
+            ServletException e) {
+
+        SingleErrorDto error = new SingleErrorDto(
+                ErrorType.ERROR.toString(),
+                e.getMessage());
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .body(List.of(error));
     }
 }
