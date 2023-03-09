@@ -1,27 +1,16 @@
 package by.itacademy.repository.entity;
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import java.util.Objects;
-import java.util.UUID;
 
-@Entity
-@Table(schema = "app", name = "ingredients")
+@Embeddable
 public class IngredientEntity {
 
-    @Id
-    @GeneratedValue()
-    @Type(type = "pg-uuid")
-    @Column(name = "uuid", nullable = false, length = 36)
-    private UUID uuid;
-
-    @ManyToOne()
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
 
     @Column(name = "weight", nullable = false)
@@ -35,24 +24,12 @@ public class IngredientEntity {
         this.weight = weight;
     }
 
-    public UUID getUuid() {
-        return uuid;
-    }
-
     public ProductEntity getProduct() {
         return product;
     }
 
     public int getWeight() {
         return weight;
-    }
-
-    public void setProduct(ProductEntity product) {
-        this.product = product;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
     }
 
     @Override
@@ -71,7 +48,7 @@ public class IngredientEntity {
 
     @Override
     public String toString() {
-        return "ingredients{" +
+        return "IngredientEntity{" +
                 "product=" + product +
                 ", weight=" + weight +
                 '}';

@@ -19,7 +19,9 @@ public class ProductServiceConfig {
     public IProductService productService(
             IProductRepository productRepository,
             ConversionService conversionService,
-            Converter<Page<ProductEntity>, PageDto<PageProductDto>> converter) {
-        return new ProductService(productRepository, conversionService, converter);
+            Converter<Page<ProductEntity>, PageDto<PageProductDto>> productPageDtoConverter) {
+        return new ProductService(productRepository,
+                conversionService,
+                productPageDtoConverter);
     }
 }

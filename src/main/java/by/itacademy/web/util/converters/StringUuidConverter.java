@@ -1,4 +1,4 @@
-package by.itacademy.service.util.converters;
+package by.itacademy.web.util.converters;
 
 import org.springframework.core.convert.converter.Converter;
 

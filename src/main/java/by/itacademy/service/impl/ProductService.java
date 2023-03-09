@@ -22,14 +22,14 @@ public class ProductService implements IProductService {
 
     private final IProductRepository productRepository;
     private final ConversionService conversionService;
-    private final Converter<Page<ProductEntity>, PageDto<PageProductDto>> converter;
+    private final Converter<Page<ProductEntity>, PageDto<PageProductDto>> productPageDtoConverter;
 
     public ProductService(IProductRepository productRepository,
                           ConversionService conversionService,
-                          Converter<Page<ProductEntity>, PageDto<PageProductDto>> converter) {
+                          Converter<Page<ProductEntity>, PageDto<PageProductDto>> productPageDtoConverter) {
         this.productRepository = productRepository;
         this.conversionService = conversionService;
-        this.converter = converter;
+        this.productPageDtoConverter = productPageDtoConverter;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ProductService implements IProductService {
             throw new NullPointerException("pageable must be not null");
         }
         Page<ProductEntity> products = productRepository.findAll(pageable);
-        return converter.convert(products);
+        return productPageDtoConverter.convert(products);
     }
 
     @Override

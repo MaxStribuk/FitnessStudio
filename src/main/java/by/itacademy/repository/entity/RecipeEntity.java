@@ -4,14 +4,13 @@ package by.itacademy.repository.entity;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import java.io.Serializable;
@@ -42,12 +41,9 @@ public class RecipeEntity implements Serializable {
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            schema = "app",
-            name = "recipes_ingredients",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+    @ElementCollection
+    @CollectionTable(schema = "app", name = "recipes_products",
+            joinColumns = @JoinColumn(name = "recipe_id"))
     private List<IngredientEntity> products;
 
     public RecipeEntity() {

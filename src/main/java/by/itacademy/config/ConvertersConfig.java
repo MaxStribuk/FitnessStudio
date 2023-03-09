@@ -18,8 +18,8 @@ import by.itacademy.service.util.converters.ProductCreateDtoEntityConverter;
 import by.itacademy.service.util.converters.ProductEntityPageDtoConverter;
 import by.itacademy.service.util.converters.RecipeCreateDtoEntityConverter;
 import by.itacademy.service.util.converters.RecipeEntityPageDtoConverter;
-import by.itacademy.service.util.converters.StringLocalDateTimeConverter;
-import by.itacademy.service.util.converters.StringUuidConverter;
+import by.itacademy.web.util.converters.StringLocalDateTimeConverter;
+import by.itacademy.web.util.converters.StringUuidConverter;
 import by.itacademy.service.util.converters.UserCreateDtoEntityConverter;
 import by.itacademy.service.util.converters.UserEntityCreationDtoConverter;
 import by.itacademy.service.util.converters.UserEntityMailEntityConverter;
@@ -37,7 +37,7 @@ import java.util.UUID;
 public class ConvertersConfig  {
 
     @Bean
-    public Converter<Page<UserEntity>, PageDto<PageUserDto>> userEntityPageDtoConverter(
+    public Converter<Page<UserEntity>, PageDto<PageUserDto>> userEntityPagesDtoConverter(
             Converter<UserEntity, PageUserDto> converter) {
         return new EntityPageDtoConverter<>(converter);
     }

@@ -71,29 +71,17 @@ CREATE TABLE IF NOT EXISTS app.products
 ALTER TABLE IF EXISTS app.products
     OWNER to postgres;
 
-CREATE TABLE IF NOT EXISTS app.ingredients
-(
-    uuid uuid NOT NULL,
-    product_uuid uuid NOT NULL,
-    weight integer NOT NULL,
-    CONSTRAINT ingredients_pkey PRIMARY KEY (uuid)
-)
-
-    TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS app.ingredients
-    OWNER to postgres;
-
-CREATE TABLE IF NOT EXISTS app.recipes_ingredients
+CREATE TABLE IF NOT EXISTS app.recipes_products
 (
     recipe_id uuid NOT NULL,
-    ingredient_id uuid NOT NULL,
-    CONSTRAINT recipes_ingredients_pkey PRIMARY KEY (recipe_id, ingredient_id)
+    product_id uuid NOT NULL,
+    weight integer NOT NULL,
+    CONSTRAINT recipes_products_pkey PRIMARY KEY (recipe_id, product_id)
 )
 
     TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS app.recipes_ingredients
+ALTER TABLE IF EXISTS app.recipes_products
     OWNER to postgres;
 
 CREATE TABLE IF NOT EXISTS app.recipes
