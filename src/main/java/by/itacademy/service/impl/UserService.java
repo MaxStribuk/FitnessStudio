@@ -5,7 +5,9 @@ import by.itacademy.core.dto.request.UserRegistrationDto;
 import by.itacademy.core.dto.request.UserVerificationDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.core.enums.UserStatus;
+import by.itacademy.core.exceptions.AuthorizationException;
 import by.itacademy.core.exceptions.DtoNullPointerException;
+import by.itacademy.core.exceptions.EntityNotFoundException;
 import by.itacademy.core.exceptions.VerificationException;
 import by.itacademy.repository.api.IUserRepository;
 import by.itacademy.repository.entity.MailEntity;
@@ -62,6 +64,18 @@ public class UserService implements IUserService {
     public void login(UserLoginDto user) {
         if (user == null) {
             throw new DtoNullPointerException("userLoginDto must not be null");
+        }
+        Optional<UserEntity> userEntityOptional = userRepository.findByMail(user.getMail());
+        UserEntity userEntity = userEntityOptional.orElseThrow(
+                () -> new EntityNotFoundException("user with entered email not found"));
+        if (!userEntity.getStatus().equals(UserStatus.ACTIVATED)) {
+            throw new AuthorizationException("user is not active");
+        }
+        if (userEntity.getPassword().equals(user.getPassword())) {
+            //
+        } else {
+            throw new AuthorizationException(
+                    "username and password combination was entered incorrectly");
         }
     }
 

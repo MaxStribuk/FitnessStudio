@@ -4,6 +4,7 @@ import by.itacademy.core.dto.errors.ErrorDto;
 import by.itacademy.core.dto.errors.MultipleErrorDto;
 import by.itacademy.core.dto.errors.SingleErrorDto;
 import by.itacademy.core.enums.ErrorType;
+import by.itacademy.core.exceptions.AuthorizationException;
 import by.itacademy.core.exceptions.DtoNullPointerException;
 import by.itacademy.core.exceptions.EntityNotFoundException;
 import by.itacademy.core.exceptions.InvalidVersionException;
@@ -89,7 +90,8 @@ public class ExceptionGlobalHandler {
             {InvalidVersionException.class,
                     EntityNotFoundException.class,
                     DtoNullPointerException.class,
-                    VerificationException.class})
+                    VerificationException.class,
+                    AuthorizationException.class})
     public ResponseEntity<List<SingleErrorDto>> handleInvalidDataException(
             RuntimeException e) {
 
