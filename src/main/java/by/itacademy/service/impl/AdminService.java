@@ -9,6 +9,7 @@ import by.itacademy.core.exceptions.InvalidVersionException;
 import by.itacademy.repository.api.IAdminRepository;
 import by.itacademy.repository.entity.UserEntity;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import by.itacademy.service.api.IAdminService;
@@ -21,11 +22,14 @@ public class AdminService implements IAdminService {
 
     private final IAdminRepository adminRepository;
     private final ConversionService conversionService;
+    private final Converter<Page<UserEntity>, PageDto<PageUserDto>> userPageDtoConverter;
 
     public AdminService(IAdminRepository adminRepository,
-                        ConversionService conversionService) {
+                        ConversionService conversionService,
+                        Converter<Page<UserEntity>, PageDto<PageUserDto>> userPageDtoConverter) {
         this.adminRepository = adminRepository;
         this.conversionService = conversionService;
+        this.userPageDtoConverter = userPageDtoConverter;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class AdminService implements IAdminService {
             throw new NullPointerException("pageable must be not null");
         }
         Page<UserEntity> users = adminRepository.findAll(pageable);
-        return conversionService.convert(users, PageDto.class);
+        return userPageDtoConverter.convert(users);
     }
 
     @Override
@@ -71,7 +75,7 @@ public class AdminService implements IAdminService {
         Optional<UserEntity> userEntityOptional = adminRepository.findById(uuid);
         UserEntity userEntity = userEntityOptional.orElseThrow(
                 () -> new EntityNotFoundException("user with uuid " + uuid + " not found"));
-        if (dtUpdate != userEntity.getDtUpdate()) {
+        if (! dtUpdate.isEqual(userEntity.getDtUpdate())) {
             throw new InvalidVersionException("invalid dtUpdate");
         }
         update(userEntity, user);

@@ -8,8 +8,8 @@ import by.itacademy.web.util.deserializers.UserStatusDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -32,7 +32,7 @@ public class UserCreateDto implements Serializable {
     private UserStatus status;
 
     @NotBlank(message = "password cannot be empty")
-    @Min(value = 5, message = "password must contain at least 5 characters")
+    @Size(min = 5, message = "password must contain at least 5 characters")
     private String password;
 
     public UserCreateDto() {
