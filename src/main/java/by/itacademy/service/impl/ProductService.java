@@ -10,6 +10,7 @@ import by.itacademy.repository.api.IProductRepository;
 import by.itacademy.repository.entity.ProductEntity;
 import by.itacademy.service.api.IProductService;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,12 +22,14 @@ public class ProductService implements IProductService {
 
     private final IProductRepository productRepository;
     private final ConversionService conversionService;
+    private final Converter<Page<ProductEntity>, PageDto<PageProductDto>> converter;
 
     public ProductService(IProductRepository productRepository,
-                          ConversionService conversionService) {
+                          ConversionService conversionService,
+                          Converter<Page<ProductEntity>, PageDto<PageProductDto>> converter) {
         this.productRepository = productRepository;
         this.conversionService = conversionService;
-
+        this.converter = converter;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class ProductService implements IProductService {
             throw new NullPointerException("pageable must be not null");
         }
         Page<ProductEntity> products = productRepository.findAll(pageable);
-        return conversionService.convert(products, PageDto.class);
+        return converter.convert(products);
     }
 
     @Override
