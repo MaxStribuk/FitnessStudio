@@ -15,6 +15,7 @@ import by.itacademy.repository.entity.RecipeEntity;
 import by.itacademy.service.api.IProductService;
 import by.itacademy.service.api.IRecipeService;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -29,13 +30,17 @@ public class RecipeService implements IRecipeService {
     private final ConversionService conversionService;
     private final IRecipeRepository recipeRepository;
     private final IProductService productService;
+    private final Converter<Page<RecipeEntity>, PageDto<PageRecipeDto>> recipePageDtoConverter;
 
-    public RecipeService(ConversionService conversionService,
-                         IRecipeRepository recipeRepository,
-                         IProductService productService) {
+    public RecipeService(
+            ConversionService conversionService,
+            IRecipeRepository recipeRepository,
+            IProductService productService,
+            Converter<Page<RecipeEntity>, PageDto<PageRecipeDto>> recipePageDtoConverter) {
         this.conversionService = conversionService;
         this.recipeRepository = recipeRepository;
         this.productService = productService;
+        this.recipePageDtoConverter = recipePageDtoConverter;
     }
 
 
@@ -56,7 +61,7 @@ public class RecipeService implements IRecipeService {
             throw new NullPointerException("pageable must be not null");
         }
         Page<RecipeEntity> recipes = recipeRepository.findAll(pageable);
-        return conversionService.convert(recipes, PageDto.class);
+        return recipePageDtoConverter.convert(recipes);
     }
 
     @Override
