@@ -14,8 +14,8 @@ public class UserEntityPageDtoConverter implements Converter<UserEntity, PageUse
                 user.getDtUpdate(),
                 user.getMail(),
                 user.getFio(),
-                user.getRole(),
-                user.getStatus()
+                user.getRole().getRole(),
+                user.getStatus().getStatus()
         );
     }
 }

@@ -4,6 +4,8 @@ import by.itacademy.core.enums.UserRole;
 import by.itacademy.core.enums.UserStatus;
 import by.itacademy.core.dto.request.UserRegistrationDto;
 import by.itacademy.repository.entity.UserEntity;
+import by.itacademy.repository.entity.UserRoleEntity;
+import by.itacademy.repository.entity.UserStatusEntity;
 import org.springframework.core.convert.converter.Converter;
 
 public class UserRegistrarionDtoEntityConverter implements Converter<UserRegistrationDto, UserEntity> {
@@ -13,8 +15,8 @@ public class UserRegistrarionDtoEntityConverter implements Converter<UserRegistr
         return new UserEntity(
                 user.getMail(),
                 user.getFio(),
-                UserRole.USER,
-                UserStatus.WAITING_ACTIVATION,
+                new UserRoleEntity(UserRole.USER),
+                new UserStatusEntity(UserStatus.WAITING_ACTIVATION),
                 user.getPassword()
         );
     }

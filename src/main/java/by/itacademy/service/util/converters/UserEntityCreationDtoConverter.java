@@ -11,8 +11,8 @@ public class UserEntityCreationDtoConverter implements Converter<UserEntity, Use
         return new UserCreateDto(
                 user.getMail(),
                 user.getFio(),
-                user.getRole(),
-                user.getStatus(),
+                user.getRole().getRole(),
+                user.getStatus().getStatus(),
                 user.getPassword()
         );
     }

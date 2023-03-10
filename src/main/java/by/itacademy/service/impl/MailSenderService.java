@@ -5,6 +5,7 @@ import by.itacademy.core.enums.UserStatus;
 import by.itacademy.repository.api.IMailRepository;
 import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.repository.entity.UserEntity;
+import by.itacademy.repository.entity.UserStatusEntity;
 import by.itacademy.service.api.IAdminService;
 import by.itacademy.service.api.ISenderService;
 import by.itacademy.service.util.EmailSendingThread;
@@ -108,7 +109,7 @@ public class MailSenderService implements ISenderService {
 
     @Override
     public void deactivateUser(UserEntity user) {
-        user.setStatus(UserStatus.DEACTIVATED);
+        user.setStatus(new UserStatusEntity(UserStatus.DEACTIVATED));
         adminService.update(
                 user.getUuid(),
                 user.getDtUpdate(),

@@ -12,6 +12,7 @@ import by.itacademy.core.exceptions.VerificationException;
 import by.itacademy.repository.api.IUserRepository;
 import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.repository.entity.UserEntity;
+import by.itacademy.repository.entity.UserStatusEntity;
 import by.itacademy.service.api.ISenderService;
 import by.itacademy.service.api.IUserService;
 import org.springframework.core.convert.ConversionService;
@@ -54,7 +55,7 @@ public class UserService implements IUserService {
         if (mail == null) {
             throw new VerificationException("verification error");
         } else {
-            userEntity.setStatus(UserStatus.ACTIVATED);
+            userEntity.setStatus(new UserStatusEntity(UserStatus.ACTIVATED));
             userRepository.save(userEntity);
             senderService.addRegistrationCompleteMail(userEntity);
         }
@@ -68,7 +69,7 @@ public class UserService implements IUserService {
         Optional<UserEntity> userEntityOptional = userRepository.findByMail(user.getMail());
         UserEntity userEntity = userEntityOptional.orElseThrow(
                 () -> new EntityNotFoundException("user with entered email not found"));
-        if (!userEntity.getStatus().equals(UserStatus.ACTIVATED)) {
+        if (!userEntity.getStatus().getStatus().equals(UserStatus.ACTIVATED)) {
             throw new AuthorizationException("user is not active");
         }
         if (userEntity.getPassword().equals(user.getPassword())) {

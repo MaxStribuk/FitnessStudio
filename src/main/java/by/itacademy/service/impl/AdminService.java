@@ -8,6 +8,8 @@ import by.itacademy.core.exceptions.EntityNotFoundException;
 import by.itacademy.core.exceptions.InvalidVersionException;
 import by.itacademy.repository.api.IAdminRepository;
 import by.itacademy.repository.entity.UserEntity;
+import by.itacademy.repository.entity.UserRoleEntity;
+import by.itacademy.repository.entity.UserStatusEntity;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
@@ -86,7 +88,7 @@ public class AdminService implements IAdminService {
         userEntity.setFio(user.getFio());
         userEntity.setMail(user.getMail());
         userEntity.setPassword(user.getPassword());
-        userEntity.setRole(user.getRole());
-        userEntity.setStatus(user.getStatus());
+        userEntity.setRole(new UserRoleEntity(user.getRole()));
+        userEntity.setStatus(new UserStatusEntity(user.getStatus()));
     }
 }

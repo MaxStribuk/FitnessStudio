@@ -1,16 +1,14 @@
 package by.itacademy.repository.entity;
 
-import by.itacademy.core.enums.UserRole;
-import by.itacademy.core.enums.UserStatus;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import java.io.Serializable;
@@ -42,13 +40,13 @@ public class UserEntity implements Serializable {
     @Column(name = "fio", nullable = false)
     private String fio;
 
-    @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+    @ManyToOne
+    @JoinColumn(name = "role")
+    private UserRoleEntity role;
 
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserStatus status;
+    @ManyToOne
+    @JoinColumn(name = "status")
+    private UserStatusEntity status;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -56,8 +54,8 @@ public class UserEntity implements Serializable {
     public UserEntity() {
     }
 
-    public UserEntity(String mail, String fio, UserRole role,
-                      UserStatus status, String password) {
+    public UserEntity(String mail, String fio, UserRoleEntity role,
+                      UserStatusEntity status, String password) {
         this.mail = mail;
         this.fio = fio;
         this.role = role;
@@ -85,11 +83,11 @@ public class UserEntity implements Serializable {
         return fio;
     }
 
-    public UserRole getRole() {
+    public UserRoleEntity getRole() {
         return role;
     }
 
-    public UserStatus getStatus() {
+    public UserStatusEntity getStatus() {
         return status;
     }
 
@@ -105,11 +103,11 @@ public class UserEntity implements Serializable {
         this.fio = fio;
     }
 
-    public void setRole(UserRole role) {
+    public void setRole(UserRoleEntity role) {
         this.role = role;
     }
 
-    public void setStatus(UserStatus status) {
+    public void setStatus(UserStatusEntity status) {
         this.status = status;
     }
 
@@ -127,8 +125,8 @@ public class UserEntity implements Serializable {
                 && Objects.equals(dtUpdate, that.dtUpdate)
                 && Objects.equals(mail, that.mail)
                 && Objects.equals(fio, that.fio)
-                && role == that.role
-                && status == that.status
+                && Objects.equals(role, that.role)
+                && Objects.equals(status, that.status)
                 && Objects.equals(password, that.password);
     }
 

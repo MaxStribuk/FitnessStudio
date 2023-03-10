@@ -10,6 +10,31 @@ CREATE DATABASE fitness
 
 CREATE SCHEMA IF NOT EXISTS app;
 
+CREATE TABLE IF NOT EXISTS app.user_role
+(
+    id smallserial NOT NULL,
+    role character(20) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT user_role_pkey PRIMARY KEY (id),
+    CONSTRAINT user_role_role_key UNIQUE (role)
+)
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS app.user_role
+    OWNER to postgres;
+
+CREATE TABLE IF NOT EXISTS app.user_status
+(
+    id smallserial NOT NULL,
+    status character(20) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT user_status_pkey PRIMARY KEY (id)
+)
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS app.user_status
+    OWNER to postgres;
+
 CREATE TABLE IF NOT EXISTS app.users
 (
     uuid uuid NOT NULL,
@@ -17,11 +42,21 @@ CREATE TABLE IF NOT EXISTS app.users
     dt_update timestamp(3) without time zone NOT NULL,
     mail text COLLATE pg_catalog."default" NOT NULL,
     fio text COLLATE pg_catalog."default" NOT NULL,
-    role text COLLATE pg_catalog."default" NOT NULL,
-    status text COLLATE pg_catalog."default" NOT NULL,
+    role smallint NOT NULL,
+    status smallint NOT NULL,
     password text COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (uuid),
-    CONSTRAINT users_mail_key UNIQUE (mail)
+    CONSTRAINT users_mail_key UNIQUE (mail),
+    CONSTRAINT users_role_fkey FOREIGN KEY (role)
+        REFERENCES app.user_role (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT users_status_fkey FOREIGN KEY (status)
+        REFERENCES app.user_status (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
 )
 
     TABLESPACE pg_default;
