@@ -33,7 +33,7 @@ public class EmailSendingThread implements Runnable {
     public void run() {
         List<MailEntity> emails =
                 mailRepository.findFirst10ByStatusIsAndDeparturesAfterOrderByDtCreate(
-                        MailStatus.WAITING, 0);
+                        new MailStatusEntity(MailStatus.WAITING), 0);
         int countExceptions = 0;
         for (MailEntity email : emails) {
             email.setStatus(new MailStatusEntity(MailStatus.SENT));
