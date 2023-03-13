@@ -1,13 +1,10 @@
 package by.itacademy.repository.entity;
 
-import by.itacademy.core.enums.MailStatus;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -47,9 +44,9 @@ public class MailEntity implements Serializable {
     @Column(name = "departures", nullable = false)
     private int departures;
 
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private MailStatus status;
+    @ManyToOne
+    @JoinColumn(name = "status")
+    private MailStatusEntity status;
 
     @Type(type = "pg-uuid")
     @Column(name = "code", length = 36)
@@ -58,7 +55,7 @@ public class MailEntity implements Serializable {
     public MailEntity() {
     }
 
-    public MailEntity(UserEntity user, MailStatus status) {
+    public MailEntity(UserEntity user, MailStatusEntity status) {
         this.user = user;
         this.status = status;
     }
@@ -91,7 +88,7 @@ public class MailEntity implements Serializable {
         return departures;
     }
 
-    public MailStatus getStatus() {
+    public MailStatusEntity getStatus() {
         return status;
     }
 
@@ -103,7 +100,7 @@ public class MailEntity implements Serializable {
         this.departures = departures;
     }
 
-    public void setStatus(MailStatus status) {
+    public void setStatus(MailStatusEntity status) {
         this.status = status;
     }
 
@@ -123,7 +120,7 @@ public class MailEntity implements Serializable {
                 && Objects.equals(dtUpdate, that.dtUpdate)
                 && Objects.equals(verificationCode, that.verificationCode)
                 && Objects.equals(subject, that.subject)
-                && status == that.status;
+                && Objects.equals(status, that.status);
     }
 
     @Override

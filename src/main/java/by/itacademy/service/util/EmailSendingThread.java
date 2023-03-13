@@ -3,6 +3,7 @@ package by.itacademy.service.util;
 import by.itacademy.repository.api.IMailRepository;
 import by.itacademy.core.enums.MailStatus;
 import by.itacademy.repository.entity.MailEntity;
+import by.itacademy.repository.entity.MailStatusEntity;
 import by.itacademy.service.api.ISenderService;
 import org.springframework.mail.MailSendException;
 
@@ -35,7 +36,7 @@ public class EmailSendingThread implements Runnable {
                         MailStatus.WAITING, 0);
         int countExceptions = 0;
         for (MailEntity email : emails) {
-            email.setStatus(MailStatus.SENT);
+            email.setStatus(new MailStatusEntity(MailStatus.SENT));
             email.setDepartures(email.getDepartures() - 1);
             mailRepository.save(email);
             final MailEntity mail = mailRepository.findById(email.getUuid());
@@ -43,20 +44,20 @@ public class EmailSendingThread implements Runnable {
                 executorService.submit(() -> {
                     try {
                         senderService.send(mail);
-                        mail.setStatus(MailStatus.SUCCESS);
+                        mail.setStatus(new MailStatusEntity(MailStatus.SUCCESS));
                     } catch (MailSendException e) {
                         Exception[] exceptions = e.getMessageExceptions();
                         for (Exception exception : exceptions) {
                             if (exception instanceof SendFailedException) {
-                                mail.setStatus(MailStatus.ERROR);
+                                mail.setStatus(new MailStatusEntity(MailStatus.ERROR));
                                 senderService.deactivateUser(mail.getUser());
                                 throw new RuntimeException(e);
                             }
                         }
-                        mail.setStatus(MailStatus.WAITING);
+                        mail.setStatus(new MailStatusEntity(MailStatus.WAITING));
                         throw new RuntimeException(e);
                     } catch (MessagingException e) {
-                        mail.setStatus(MailStatus.WAITING);
+                        mail.setStatus(new MailStatusEntity(MailStatus.WAITING));
                         throw new RuntimeException(e);
                     } finally {
                         mailRepository.save(mail);

@@ -50,18 +50,29 @@ CREATE TABLE IF NOT EXISTS app.users
     CONSTRAINT users_role_fkey FOREIGN KEY (role)
         REFERENCES app.user_role (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
+        ON DELETE NO ACTION,
     CONSTRAINT users_status_fkey FOREIGN KEY (status)
         REFERENCES app.user_status (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-        NOT VALID
 )
 
     TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS app.users
+    OWNER to postgres;
+
+
+CREATE TABLE IF NOT EXISTS app.mail_status
+(
+    id smallserial NOT NULL,
+    status character(20) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT mail_status_pkey PRIMARY KEY (id)
+)
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS app.mail_status
     OWNER to postgres;
 
 CREATE TABLE IF NOT EXISTS app.mails
@@ -72,11 +83,15 @@ CREATE TABLE IF NOT EXISTS app.mails
     dt_update timestamp(3) without time zone NOT NULL,
     subject text COLLATE pg_catalog."default" NOT NULL,
     departures integer NOT NULL,
-    status text COLLATE pg_catalog."default" NOT NULL,
+    status smallint NOT NULL,
     code uuid,
     CONSTRAINT mails_pkey PRIMARY KEY (uuid),
     CONSTRAINT mails_user_id_fkey FOREIGN KEY (user_id)
         REFERENCES app.users (uuid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT mails_status_fkey FOREIGN KEY (status)
+        REFERENCES app.mail_status (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )

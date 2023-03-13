@@ -13,13 +13,11 @@ CREATE TABLE IF NOT EXISTS app.users
     CONSTRAINT users_role_fkey FOREIGN KEY (role)
         REFERENCES app.user_role (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
+        ON DELETE NO ACTION,
     CONSTRAINT users_status_fkey FOREIGN KEY (status)
         REFERENCES app.user_status (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-        NOT VALID
 )
 
     TABLESPACE pg_default;

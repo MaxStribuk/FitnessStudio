@@ -6,11 +6,15 @@ CREATE TABLE IF NOT EXISTS app.mails
     dt_update timestamp(3) without time zone NOT NULL,
     subject text COLLATE pg_catalog."default" NOT NULL,
     departures integer NOT NULL,
-    status text COLLATE pg_catalog."default" NOT NULL,
+    status smallint NOT NULL,
     code uuid,
     CONSTRAINT mails_pkey PRIMARY KEY (uuid),
     CONSTRAINT mails_user_id_fkey FOREIGN KEY (user_id)
         REFERENCES app.users (uuid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT mails_status_fkey FOREIGN KEY (status)
+        REFERENCES app.mail_status (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
