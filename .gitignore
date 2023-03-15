@@ -3,6 +3,7 @@
 *.iws
 *.iml
 *.ipr
+*.mvn
 out/
 
 ### Java ###
@@ -21,7 +22,17 @@ out/
 *.tar.gz
 *.rar
 target/
+HELP.md
 
 # Properties #
-*.properties
-!application_template.properties
+application.yml
+
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
