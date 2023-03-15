@@ -1,7 +1,7 @@
 package by.itacademy.core.dto.request;
 
-import by.itacademy.service.util.validators.Uuid;
-import by.itacademy.web.util.deserializers.UuidDeserializer;
+import by.itacademy.service.util.validator.Uuid;
+import by.itacademy.web.util.deserializer.UuidDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.io.Serializable;

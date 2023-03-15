@@ -1,7 +1,7 @@
 package by.itacademy.core.dto.response;
 
-import by.itacademy.web.util.serializers.DateSerializer;
-import by.itacademy.web.util.serializers.DoubleSerializer;
+import by.itacademy.web.util.serializer.DateSerializer;
+import by.itacademy.web.util.serializer.DoubleSerializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

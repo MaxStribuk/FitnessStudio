@@ -5,7 +5,7 @@ import by.itacademy.core.enums.UserStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import by.itacademy.web.util.serializers.DateSerializer;
+import by.itacademy.web.util.serializer.DateSerializer;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

@@ -1,14 +1,14 @@
 package by.itacademy.web.util;
 
-import by.itacademy.core.dto.errors.ErrorDto;
-import by.itacademy.core.dto.errors.MultipleErrorDto;
-import by.itacademy.core.dto.errors.SingleErrorDto;
+import by.itacademy.core.dto.error.ErrorDto;
+import by.itacademy.core.dto.error.MultipleErrorDto;
+import by.itacademy.core.dto.error.SingleErrorDto;
 import by.itacademy.core.enums.ErrorType;
-import by.itacademy.core.exceptions.AuthorizationException;
-import by.itacademy.core.exceptions.DtoNullPointerException;
-import by.itacademy.core.exceptions.EntityNotFoundException;
-import by.itacademy.core.exceptions.InvalidVersionException;
-import by.itacademy.core.exceptions.VerificationException;
+import by.itacademy.core.exception.AuthorizationException;
+import by.itacademy.core.exception.DtoNullPointerException;
+import by.itacademy.core.exception.EntityNotFoundException;
+import by.itacademy.core.exception.InvalidVersionException;
+import by.itacademy.core.exception.VerificationException;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;

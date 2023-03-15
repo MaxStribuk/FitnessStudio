@@ -2,9 +2,9 @@ package by.itacademy.core.dto.request;
 
 import by.itacademy.core.enums.UserRole;
 import by.itacademy.core.enums.UserStatus;
-import by.itacademy.service.util.validators.Enum;
-import by.itacademy.web.util.deserializers.UserRoleDeserializer;
-import by.itacademy.web.util.deserializers.UserStatusDeserializer;
+import by.itacademy.service.util.validator.Enum;
+import by.itacademy.web.util.deserializer.UserRoleDeserializer;
+import by.itacademy.web.util.deserializer.UserStatusDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.validation.constraints.Email;

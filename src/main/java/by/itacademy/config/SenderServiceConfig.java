@@ -4,7 +4,7 @@ import by.itacademy.repository.api.IMailRepository;
 import by.itacademy.service.api.IAdminService;
 import by.itacademy.service.api.ISenderService;
 import by.itacademy.service.impl.MailSenderService;
-import by.itacademy.web.listeners.MailSendLoaderListener;
+import by.itacademy.web.listener.MailSendLoaderListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
