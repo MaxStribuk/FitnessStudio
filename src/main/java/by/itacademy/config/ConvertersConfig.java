@@ -18,17 +18,19 @@ import by.itacademy.service.util.converters.ProductCreateDtoEntityConverter;
 import by.itacademy.service.util.converters.ProductEntityPageDtoConverter;
 import by.itacademy.service.util.converters.RecipeCreateDtoEntityConverter;
 import by.itacademy.service.util.converters.RecipeEntityPageDtoConverter;
-import by.itacademy.web.util.converters.StringLocalDateTimeConverter;
-import by.itacademy.web.util.converters.StringUuidConverter;
 import by.itacademy.service.util.converters.UserCreateDtoEntityConverter;
 import by.itacademy.service.util.converters.UserEntityCreationDtoConverter;
 import by.itacademy.service.util.converters.UserEntityMailEntityConverter;
-import by.itacademy.service.util.converters.UserRegistrarionDtoEntityConverter;
 import by.itacademy.service.util.converters.UserEntityPageDtoConverter;
+import by.itacademy.service.util.converters.UserEntityUserDetailsConverter;
+import by.itacademy.service.util.converters.UserRegistrarionDtoEntityConverter;
+import by.itacademy.web.util.converters.StringLocalDateTimeConverter;
+import by.itacademy.web.util.converters.StringUuidConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -113,5 +115,10 @@ public class ConvertersConfig  {
     public Converter<RecipeEntity, PageRecipeDto> recipeEntityPageRecipeDtoConverter(
             Converter<ProductEntity, PageProductDto> converter) {
         return new RecipeEntityPageDtoConverter(converter);
+    }
+
+    @Bean
+    public Converter<UserEntity, UserDetails> userEntityUserDetailsConverter() {
+        return new UserEntityUserDetailsConverter();
     }
 }
