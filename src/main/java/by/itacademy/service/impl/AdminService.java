@@ -1,8 +1,8 @@
 package by.itacademy.service.impl;
 
 import by.itacademy.core.dto.request.UserCreateDto;
-import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.core.dto.response.PageDto;
+import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.core.exceptions.DtoNullPointerException;
 import by.itacademy.core.exceptions.EntityNotFoundException;
 import by.itacademy.core.exceptions.InvalidVersionException;
@@ -10,11 +10,12 @@ import by.itacademy.repository.api.IAdminRepository;
 import by.itacademy.repository.entity.UserEntity;
 import by.itacademy.repository.entity.UserRoleEntity;
 import by.itacademy.repository.entity.UserStatusEntity;
+import by.itacademy.service.api.IAdminService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import by.itacademy.service.api.IAdminService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -25,13 +26,16 @@ public class AdminService implements IAdminService {
     private final IAdminRepository adminRepository;
     private final ConversionService conversionService;
     private final Converter<Page<UserEntity>, PageDto<PageUserDto>> userPageDtoConverter;
+    private final PasswordEncoder encoder;
 
     public AdminService(IAdminRepository adminRepository,
                         ConversionService conversionService,
-                        Converter<Page<UserEntity>, PageDto<PageUserDto>> userPageDtoConverter) {
+                        Converter<Page<UserEntity>, PageDto<PageUserDto>> userPageDtoConverter,
+                        PasswordEncoder encoder) {
         this.adminRepository = adminRepository;
         this.conversionService = conversionService;
         this.userPageDtoConverter = userPageDtoConverter;
+        this.encoder = encoder;
     }
 
     @Override
@@ -40,6 +44,7 @@ public class AdminService implements IAdminService {
             throw new DtoNullPointerException("userCreateDto must not be null");
         }
         UserEntity userEntity = conversionService.convert(user, UserEntity.class);
+        userEntity.setPassword(encoder.encode(user.getPassword()));
         adminRepository.save(userEntity);
     }
 
@@ -87,7 +92,7 @@ public class AdminService implements IAdminService {
     private void update(UserEntity userEntity, UserCreateDto user) {
         userEntity.setFio(user.getFio());
         userEntity.setMail(user.getMail());
-        userEntity.setPassword(user.getPassword());
+        userEntity.setPassword(encoder.encode(user.getPassword()));
         userEntity.setRole(new UserRoleEntity(user.getRole()));
         userEntity.setStatus(new UserStatusEntity(user.getStatus()));
     }

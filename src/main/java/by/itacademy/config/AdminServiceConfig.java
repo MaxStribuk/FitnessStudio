@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class AdminServiceConfig {
@@ -19,9 +20,11 @@ public class AdminServiceConfig {
     public IAdminService adminService(
             IAdminRepository adminRepository,
             ConversionService conversionService,
-            Converter<Page<UserEntity>, PageDto<PageUserDto>> userPageDtoConverter) {
+            Converter<Page<UserEntity>, PageDto<PageUserDto>> userPageDtoConverter,
+            PasswordEncoder encoder) {
         return new AdminService(adminRepository,
                 conversionService,
-                userPageDtoConverter);
+                userPageDtoConverter,
+                encoder);
     }
 }
