@@ -4,6 +4,7 @@ import by.itacademy.core.dto.request.UserLoginDto;
 import by.itacademy.core.dto.request.UserRegistrationDto;
 import by.itacademy.core.dto.request.UserVerificationDto;
 import by.itacademy.core.dto.response.PageUserDto;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface IUserService {
 
@@ -11,7 +12,9 @@ public interface IUserService {
 
     void verification(UserVerificationDto user);
 
-    void login(UserLoginDto user);
+    String login(UserLoginDto user);
 
     PageUserDto get();
+
+    UserDetails loadUserByMail(String mail);
 }

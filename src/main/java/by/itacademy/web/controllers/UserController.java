@@ -51,8 +51,9 @@ public class UserController {
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody @Validated UserLoginDto user) {
-        userService.login(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.login(user));
     }
 
     @GetMapping(path = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
