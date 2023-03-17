@@ -1,3 +1,5 @@
+\c fitness;
+
 INSERT INTO app.user_role(role) VALUES ('USER');
 INSERT INTO app.user_role(role) VALUES ('ADMIN');
 
@@ -14,7 +16,7 @@ INSERT INTO app.users
 VALUES ('00000000-0000-0000-0000-000000000000',
         '2023-01-01 00:00:00.000',
         '2023-01-01 00:00:00.000',
-        'maximus747@mail.ru',
+        'maxstr@mail.ru',
         'Max',
         2,
         1,

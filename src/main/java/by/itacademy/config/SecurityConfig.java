@@ -1,26 +1,22 @@
 package by.itacademy.config;
 
 import by.itacademy.web.filter.JwtFilter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
-    private final JwtFilter filter;
-
-    public SecurityConfig(JwtFilter filter) {
-        this.filter = filter;
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter filter)
+            throws Exception {
         http = http
                 .cors()
                 .and()
@@ -35,11 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http = http
                 .exceptionHandling()
                 .authenticationEntryPoint(
-                        (request, response, e) -> response.sendError(
-                                HttpServletResponse.SC_UNAUTHORIZED,
-                                e.getMessage()
-                        )
+                        (request, response, e) -> response.setStatus(
+                                HttpServletResponse.SC_UNAUTHORIZED)
                 )
+                .accessDeniedHandler((request, response, e) -> response.setStatus(
+                        HttpServletResponse.SC_FORBIDDEN
+                ))
                 .and();
 
         http.authorizeRequests()
@@ -63,5 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 filter,
                 UsernamePasswordAuthenticationFilter.class
         );
+        return http.build();
     }
 }
