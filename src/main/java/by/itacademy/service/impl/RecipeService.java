@@ -1,10 +1,12 @@
 package by.itacademy.service.impl;
 
+import by.itacademy.aop.api.Auditable;
 import by.itacademy.core.dto.request.IngredientDto;
 import by.itacademy.core.dto.request.RecipeCreateDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageProductDto;
 import by.itacademy.core.dto.response.PageRecipeDto;
+import by.itacademy.core.enums.EssenceType;
 import by.itacademy.core.exception.DtoNullPointerException;
 import by.itacademy.core.exception.EntityNotFoundException;
 import by.itacademy.core.exception.InvalidVersionException;
@@ -45,6 +47,7 @@ public class RecipeService implements IRecipeService {
 
 
     @Override
+    @Auditable(value = "added new recipe", type = EssenceType.RECIPE)
     public void add(RecipeCreateDto recipe) {
         if (recipe == null) {
             throw new DtoNullPointerException("recipeCreateDto must not be null");
@@ -65,6 +68,7 @@ public class RecipeService implements IRecipeService {
     }
 
     @Override
+    @Auditable(value = "updated recipe information", type = EssenceType.RECIPE)
     public void update(UUID uuid, LocalDateTime dtUpdate, RecipeCreateDto recipe) {
         if (uuid == null) {
             throw new EntityNotFoundException("invalid uuid");
