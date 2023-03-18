@@ -1,7 +1,3 @@
-CREATE DATABASE fitness;
-
-\c fitness;
-
 CREATE SCHEMA IF NOT EXISTS app;
 
 CREATE TABLE IF NOT EXISTS app.user_role
