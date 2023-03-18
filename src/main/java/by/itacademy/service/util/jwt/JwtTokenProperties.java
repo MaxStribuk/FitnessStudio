@@ -1,4 +1,4 @@
-package by.itacademy.service.util;
+package by.itacademy.service.util.jwt;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
