@@ -26,7 +26,7 @@ HELP.md
 
 # Properties #
 application.yml
-
+docker-compose.yml
 
 ### STS ###
 .apt_generated
