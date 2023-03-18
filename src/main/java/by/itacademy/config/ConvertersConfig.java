@@ -1,17 +1,22 @@
 package by.itacademy.config;
 
+import by.itacademy.core.dto.request.AuditCreateDto;
 import by.itacademy.core.dto.request.ProductCreateDto;
 import by.itacademy.core.dto.request.RecipeCreateDto;
 import by.itacademy.core.dto.request.UserCreateDto;
 import by.itacademy.core.dto.request.UserRegistrationDto;
+import by.itacademy.core.dto.response.PageAuditDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageProductDto;
 import by.itacademy.core.dto.response.PageRecipeDto;
 import by.itacademy.core.dto.response.PageUserDto;
+import by.itacademy.repository.entity.AuditEntity;
 import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.repository.entity.ProductEntity;
 import by.itacademy.repository.entity.RecipeEntity;
 import by.itacademy.repository.entity.UserEntity;
+import by.itacademy.service.util.converter.AuditCreateDtoEntityConverter;
+import by.itacademy.service.util.converter.AuditEntityPageDtoConverter;
 import by.itacademy.service.util.converter.EntityPageDtoConverter;
 import by.itacademy.service.util.converter.PageProductDtoEntityConverter;
 import by.itacademy.service.util.converter.ProductCreateDtoEntityConverter;
@@ -53,6 +58,12 @@ public class ConvertersConfig  {
     @Bean
     public Converter<Page<RecipeEntity>, PageDto<PageRecipeDto>> recipeEntityPageDtoConverter(
             Converter<RecipeEntity, PageRecipeDto> converter) {
+        return new EntityPageDtoConverter<>(converter);
+    }
+
+    @Bean
+    public Converter<Page<AuditEntity>, PageDto<PageAuditDto>> auditEntityPageDtoConverter(
+            Converter<AuditEntity, PageAuditDto> converter) {
         return new EntityPageDtoConverter<>(converter);
     }
 
@@ -120,5 +131,15 @@ public class ConvertersConfig  {
     @Bean
     public Converter<UserEntity, UserDetails> userEntityUserDetailsConverter() {
         return new UserEntityUserDetailsConverter();
+    }
+
+    @Bean
+    public Converter<AuditEntity, PageAuditDto> auditEntityPageAuditDtoConverter() {
+        return new AuditEntityPageDtoConverter();
+    }
+
+    @Bean
+    public Converter<AuditCreateDto, AuditEntity> auditCreateDtoEntityConverter() {
+        return new AuditCreateDtoEntityConverter();
     }
 }

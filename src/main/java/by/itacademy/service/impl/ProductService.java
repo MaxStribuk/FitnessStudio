@@ -1,8 +1,10 @@
 package by.itacademy.service.impl;
 
+import by.itacademy.aop.api.Auditable;
 import by.itacademy.core.dto.request.ProductCreateDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageProductDto;
+import by.itacademy.core.enums.EssenceType;
 import by.itacademy.core.exception.DtoNullPointerException;
 import by.itacademy.core.exception.EntityNotFoundException;
 import by.itacademy.core.exception.InvalidVersionException;
@@ -33,6 +35,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Auditable(value = "added new product", type = EssenceType.PRODUCT)
     public void add(ProductCreateDto product) {
         if (product == null) {
             throw new DtoNullPointerException("productCreateDto must not be null");
@@ -51,6 +54,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Auditable(value = "updated product information", type = EssenceType.PRODUCT)
     public void update(UUID uuid, LocalDateTime dtUpdate, ProductCreateDto product) {
         if (uuid == null) {
             throw new EntityNotFoundException("invalid uuid");

@@ -1,5 +1,6 @@
 package by.itacademy.service.util.converter;
 
+import by.itacademy.core.dto.response.CurrentUserDto;
 import by.itacademy.core.enums.UserRole;
 import by.itacademy.core.enums.UserStatus;
 import by.itacademy.repository.entity.UserEntity;
@@ -13,7 +14,7 @@ public class UserEntityUserDetailsConverter implements Converter<UserEntity, Use
 
     @Override
     public UserDetails convert(UserEntity user) {
-        return User.builder()
+        UserDetails userDetails = User.builder()
                 .username(user.getMail())
                 .password(user.getPassword())
                 .disabled(user.getStatus()
@@ -22,6 +23,11 @@ public class UserEntityUserDetailsConverter implements Converter<UserEntity, Use
                 .roles(getRoles(user)
                         .toArray(String[]::new))
                 .build();
+        CurrentUserDto currentUserDto = new CurrentUserDto(userDetails);
+        currentUserDto.setFio(user.getFio());
+        currentUserDto.setUuid(user.getUuid());
+        currentUserDto.setRole(user.getRole().getRole());
+        return currentUserDto;
     }
 
     private List<String> getRoles(UserEntity user) {
