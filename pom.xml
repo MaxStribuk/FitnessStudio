@@ -13,8 +13,12 @@
     <groupId>by.itacademy</groupId>
     <artifactId>FitnessStudio</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>FitnessStudio</name>
     <description>FitnessStudio</description>
+    <modules>
+        <module>fitnesStudioModul</module>
+    </modules>
 
     <properties>
         <java.version>11</java.version>
