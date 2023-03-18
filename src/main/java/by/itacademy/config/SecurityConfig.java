@@ -54,6 +54,8 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/v1/recipe/").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/v1/recipe/**").authenticated()
 
+                .antMatchers(HttpMethod.GET, "/api/v1/audit/**").hasRole("ADMIN")
+
                 .anyRequest().authenticated();
 
         http.addFilterBefore(
