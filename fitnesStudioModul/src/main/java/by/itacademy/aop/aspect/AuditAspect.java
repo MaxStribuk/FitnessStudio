@@ -21,9 +21,7 @@ public class AuditAspect {
         this.auditService = auditService;
     }
 
-    @AfterReturning("@annotation(auditable) " +
-            "&& (by.itacademy.aop.pointcut.AuditPointcuts.allAddMethods() " +
-            "|| by.itacademy.aop.pointcut.AuditPointcuts.allUpdateMethods())")
+    @AfterReturning("@annotation(auditable)")
     public void afterReturningAddOrUpdateEssenceAdvice(Auditable auditable) {
         CurrentUserDto user = (CurrentUserDto) holder.getUser();
         AuditCreateDto auditCreateDto = new AuditCreateDto(
