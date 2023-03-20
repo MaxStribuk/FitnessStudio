@@ -126,3 +126,41 @@ CREATE TABLE IF NOT EXISTS app.audit
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
+
+CREATE TABLE IF NOT EXISTS app.report_status
+(
+    id smallserial NOT NULL,
+    status text NOT NULL,
+    CONSTRAINT report_status_pkey PRIMARY KEY (id),
+    CONSTRAINT report_status_status_key UNIQUE (status)
+);
+
+CREATE TABLE IF NOT EXISTS app.report_type
+(
+    id smallserial NOT NULL,
+    type text NOT NULL,
+    CONSTRAINT report_type_pkey PRIMARY KEY (id),
+    CONSTRAINT report_type_type_key UNIQUE (type)
+);
+
+CREATE TABLE IF NOT EXISTS app.reports
+(
+    uuid uuid NOT NULL,
+    dt_create timestamp(3) without time zone NOT NULL,
+    dt_update timestamp(3) without time zone NOT NULL,
+    status smallint NOT NULL,
+    type smallint NOT NULL,
+    description text NOT NULL,
+    user_id uuid NOT NULL,
+    from_ date NOT NULL,
+    to_ date NOT NULL,
+    CONSTRAINT reports_pkey PRIMARY KEY (uuid),
+    CONSTRAINT reports_status_fkey FOREIGN KEY (status)
+        REFERENCES app.report_status (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT reports_type_fkey FOREIGN KEY (type)
+        REFERENCES app.report_type (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
