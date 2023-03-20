@@ -17,8 +17,8 @@ import java.util.Objects;
 @Table(name = "user_role", schema = "app")
 public class UserRoleEntity implements Serializable {
     @Id
-    @GeneratedValue(generator = "role_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "role_seq", sequenceName = "user_role_id_seq",
+    @GeneratedValue(generator = "user_role_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "user_role_seq", sequenceName = "user_role_id_seq",
             schema = "app", allocationSize = 1)
     private Short id;
 

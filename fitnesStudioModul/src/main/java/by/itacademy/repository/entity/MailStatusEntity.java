@@ -18,8 +18,8 @@ import java.util.Objects;
 public class MailStatusEntity implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "status_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "status_seq", sequenceName = "mail_status_id_seq",
+    @GeneratedValue(generator = "mail_status_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "mail_status_seq", sequenceName = "mail_status_id_seq",
             schema = "app", allocationSize = 1)
     private Short id;
 

@@ -17,8 +17,8 @@ import java.util.Objects;
 @Table(name = "user_status", schema = "app")
 public class UserStatusEntity implements Serializable {
     @Id
-    @GeneratedValue(generator = "status_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "status_seq", sequenceName = "user_status_id_seq",
+    @GeneratedValue(generator = "user_status_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "user_status_seq", sequenceName = "user_status_id_seq",
             schema = "app", allocationSize = 1)
     private Short id;
 
