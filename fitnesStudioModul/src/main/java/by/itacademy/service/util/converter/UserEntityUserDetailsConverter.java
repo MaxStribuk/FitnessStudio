@@ -27,6 +27,7 @@ public class UserEntityUserDetailsConverter implements Converter<UserEntity, Use
         currentUserDto.setFio(user.getFio());
         currentUserDto.setUuid(user.getUuid());
         currentUserDto.setRole(user.getRole().getRole());
+        currentUserDto.setStatus(user.getStatus().getStatus());
         return currentUserDto;
     }
 

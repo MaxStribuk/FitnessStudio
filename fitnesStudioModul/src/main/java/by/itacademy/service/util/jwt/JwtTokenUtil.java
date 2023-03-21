@@ -1,5 +1,6 @@
 package by.itacademy.service.util.jwt;
 
+import by.itacademy.config.properties.JwtTokenProperties;
 import by.itacademy.core.dto.response.CurrentUserDto;
 import by.itacademy.core.enums.UserRole;
 import by.itacademy.service.api.IJwtTokenUtil;

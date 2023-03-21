@@ -3,6 +3,7 @@ package by.itacademy.service.impl;
 import by.itacademy.core.dto.request.UserLoginDto;
 import by.itacademy.core.dto.request.UserRegistrationDto;
 import by.itacademy.core.dto.request.UserVerificationDto;
+import by.itacademy.core.dto.response.CurrentUserDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.core.enums.UserStatus;
 import by.itacademy.core.exception.AuthorizationException;
@@ -85,7 +86,12 @@ public class UserService implements IUserService {
             throw new AuthorizationException(
                     "username and password combination was entered incorrectly");
         }
-        return jwtTokenUtil.generateAccessToken(userDetails);
+        CurrentUserDto currentUser = (CurrentUserDto) userDetails;
+        if (currentUser.getStatus().equals(UserStatus.ACTIVATED)) {
+            return jwtTokenUtil.generateAccessToken(userDetails);
+        } else {
+            throw new AuthorizationException("user must be activated");
+        }
     }
 
     @Override

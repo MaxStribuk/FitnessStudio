@@ -5,16 +5,24 @@ import by.itacademy.core.dto.request.ReportCreateDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageReportDto;
 import by.itacademy.core.enums.EssenceType;
+import by.itacademy.core.enums.ReportStatus;
 import by.itacademy.core.exception.DtoNullPointerException;
+import by.itacademy.core.exception.EntityNotFoundException;
 import by.itacademy.repository.api.IReportRepository;
 import by.itacademy.repository.entity.ReportEntity;
+import by.itacademy.repository.entity.ReportStatusEntity;
 import by.itacademy.service.api.IAdminService;
 import by.itacademy.service.api.IReportService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ReportService implements IReportService {
@@ -26,7 +34,7 @@ public class ReportService implements IReportService {
 
     public ReportService(
             IReportRepository reportRepository,
-            ConversionService conversionService,
+            @Qualifier("mvcConversionService") ConversionService conversionService,
             IAdminService adminService,
             Converter<Page<ReportEntity>, PageDto<PageReportDto>> reportPageDtoConverter) {
         this.reportRepository = reportRepository;
@@ -47,11 +55,36 @@ public class ReportService implements IReportService {
     }
 
     @Override
+    public void add(ReportEntity report) {
+        if (report == null) {
+            throw new EntityNotFoundException("report must not be null");
+        }
+        reportRepository.save(report);
+    }
+
+    @Override
     public PageDto<PageReportDto> getAll(Pageable pageable) {
         if (pageable == null) {
             throw new NullPointerException("pageable must be not null");
         }
         Page<ReportEntity> reports = reportRepository.findAll(pageable);
         return reportPageDtoConverter.convert(reports);
+    }
+
+    @Override
+    public List<ReportEntity> getUnsent() {
+        return reportRepository.findFirst10ByStatusIsOrderByDtCreate(
+            new ReportStatusEntity(ReportStatus.LOADED)
+        );
+    }
+
+    @Override
+    public ReportEntity get(UUID uuid) {
+        if (uuid == null) {
+            throw new EntityNotFoundException("invalid uuid");
+        }
+        Optional<ReportEntity> reportEntityOptional = reportRepository.findById(uuid);
+        return reportEntityOptional.orElseThrow(
+                () -> new EntityNotFoundException("product with uuid " + uuid + " not found"));
     }
 }

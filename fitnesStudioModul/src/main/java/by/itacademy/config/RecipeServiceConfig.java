@@ -7,6 +7,7 @@ import by.itacademy.repository.entity.RecipeEntity;
 import by.itacademy.service.api.IProductService;
 import by.itacademy.service.api.IRecipeService;
 import by.itacademy.service.impl.RecipeService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
@@ -18,7 +19,7 @@ public class RecipeServiceConfig {
 
     @Bean
     public IRecipeService recipeService(
-            ConversionService conversionService,
+            @Qualifier("mvcConversionService") ConversionService conversionService,
             IRecipeRepository recipeRepository,
             IProductService productService,
             Converter<Page<RecipeEntity>, PageDto<PageRecipeDto>> recipePageDtoConverter) {

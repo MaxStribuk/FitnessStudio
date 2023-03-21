@@ -55,6 +55,10 @@ public class ReportEntity implements Serializable {
     @Column(name = "to_", nullable = false)
     private LocalDate to;
 
+    public void setStatus(ReportStatusEntity status) {
+        this.status = status;
+    }
+
     public ReportEntity() {
     }
 

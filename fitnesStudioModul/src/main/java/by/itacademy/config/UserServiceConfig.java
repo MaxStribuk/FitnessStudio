@@ -6,6 +6,7 @@ import by.itacademy.service.api.ISenderService;
 import by.itacademy.service.api.IUserService;
 import by.itacademy.service.impl.UserService;
 import by.itacademy.service.util.UserHolder;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
@@ -19,7 +20,7 @@ public class UserServiceConfig {
     public IUserService userService(
             IUserRepository userRepository,
             ISenderService senderService,
-            ConversionService conversionService,
+            @Qualifier("mvcConversionService") ConversionService conversionService,
             PasswordEncoder encoder,
             UserHolder holder,
             IJwtTokenUtil jwtTokenUtil) {

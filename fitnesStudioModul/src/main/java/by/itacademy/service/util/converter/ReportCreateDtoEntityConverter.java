@@ -17,7 +17,7 @@ public class ReportCreateDtoEntityConverter implements Converter<ReportCreateDto
     @Override
     public ReportEntity convert(ReportCreateDto report) {
         return new ReportEntity(
-                new ReportStatusEntity(ReportStatus.PROGRESS),
+                new ReportStatusEntity(ReportStatus.LOADED),
                 new ReportTypeEntity(report.getReportType()),
                 createDescription(report),
                 report.getUser(),

@@ -6,6 +6,7 @@ import by.itacademy.repository.api.IAdminRepository;
 import by.itacademy.repository.entity.UserEntity;
 import by.itacademy.service.api.IAdminService;
 import by.itacademy.service.impl.AdminService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
@@ -19,7 +20,7 @@ public class AdminServiceConfig {
     @Bean
     public IAdminService adminService(
             IAdminRepository adminRepository,
-            ConversionService conversionService,
+            @Qualifier("mvcConversionService") ConversionService conversionService,
             Converter<Page<UserEntity>, PageDto<PageUserDto>> userPageDtoConverter,
             PasswordEncoder encoder) {
         return new AdminService(adminRepository,

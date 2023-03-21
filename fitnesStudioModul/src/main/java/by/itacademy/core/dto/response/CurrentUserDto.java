@@ -1,6 +1,7 @@
 package by.itacademy.core.dto.response;
 
 import by.itacademy.core.enums.UserRole;
+import by.itacademy.core.enums.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,8 @@ public class CurrentUserDto extends User {
 
     private UserRole role;
 
+    private UserStatus status;
+
     public CurrentUserDto(String username, String password,
                           Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
@@ -30,7 +33,7 @@ public class CurrentUserDto extends User {
                 credentialsNonExpired, accountNonLocked, authorities);
     }
 
-    public CurrentUserDto(UserDetails user){
+    public CurrentUserDto(UserDetails user) {
         super(user.getUsername(),
                 user.getPassword(),
                 user.isEnabled(),
@@ -64,6 +67,14 @@ public class CurrentUserDto extends User {
         this.role = role;
     }
 
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -72,12 +83,13 @@ public class CurrentUserDto extends User {
         CurrentUserDto that = (CurrentUserDto) o;
         return Objects.equals(uuid, that.uuid)
                 && Objects.equals(fio, that.fio)
-                && role == that.role;
+                && role == that.role
+                && status == that.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), uuid, fio, role);
+        return Objects.hash(super.hashCode(), uuid, fio, role, status);
     }
 
     @Override
@@ -86,6 +98,7 @@ public class CurrentUserDto extends User {
                 "uuid=" + uuid +
                 ", fio='" + fio + '\'' +
                 ", role=" + role +
+                ", status=" + status +
                 '}';
     }
 }
