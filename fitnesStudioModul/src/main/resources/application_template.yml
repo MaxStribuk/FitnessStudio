@@ -39,6 +39,25 @@ mail:
           class: "javax.net.ssl.SSLSocketFactory"
           fallback: false
 
+ftp:
+  host: "localhost"
+  port: 21
+  username: "root"
+  password: "root"
+  clientMode: 2
+  bufferSize: 100000
+
+excel:
+  columnUuid: "uuid"
+  columnDtCreate: "dt_create"
+  columnDtUpdate: "dt_update"
+  columnMail: "user_mail"
+  columnFio: "user_fio"
+  columnRole: "user_role"
+  columnText: "text"
+  columnType: "type"
+  columnId: "id"
+
 jwt:
   secret: ""
   issuer: ""

@@ -40,6 +40,37 @@ services:
       - "80:80"
     networks:
       - fitness_ntwrk
+  ftp:
+    build: ftp
+    image: ftp:1.0.0
+    environment:
+      - FTP_USER=
+      - FTP_PASS=
+      - PASV_ADDRESS_RESOLVE=YES
+      - PASV_ADDR_RESOLVE=YES
+      - PASV_MIN_PORT=21100
+      - PASV_MAX_PORT=21110
+      - PASV_ADDRESS_ENABLE=YES
+      - PASV_ENABLE=YES
+      - LOG_STDOUT=1
+    volumes:
+      - ./support/vsftpd:/home/vsftpd
+    ports:
+      - "20:20"
+      - "21:21"
+      - "21100:21100"
+      - "21101:21101"
+      - "21102:21102"
+      - "21103:21103"
+      - "21104:21104"
+      - "21105:21105"
+      - "21106:21106"
+      - "21107:21107"
+      - "21108:21108"
+      - "21109:21109"
+      - "21110:21110"
+    networks:
+      - fitness_ntwrk
 networks:
   fitness_ntwrk:
     name: fitness_ntwrk
