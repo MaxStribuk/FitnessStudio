@@ -1,0 +1,1 @@
+INSERT INTO app.report_type(type) VALUES ('JOURNAL_AUDIT');

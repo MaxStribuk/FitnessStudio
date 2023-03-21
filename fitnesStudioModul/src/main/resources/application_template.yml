@@ -1,0 +1,63 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ""
+    username: ""
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_schema: "app"
+
+mail:
+  username: ""
+  password: ""
+  host: "smtp.mail.ru"
+  port: 465
+  protocol: "smtp"
+  default-encoding: "UTF-8"
+  properties:
+    mail:
+      host: "smtp.mail.ru"
+      from: ""
+      debug: true
+      smtp:
+        auth: true
+        port: 465
+        starttls:
+          enable: true
+          required: true
+        socketFactory:
+          port: 465
+          class: "javax.net.ssl.SSLSocketFactory"
+          fallback: false
+
+ftp:
+  host: "localhost"
+  port: 21
+  username: "root"
+  password: "root"
+  clientMode: 2
+  bufferSize: 100000
+
+excel:
+  columnUuid: "uuid"
+  columnDtCreate: "dt_create"
+  columnDtUpdate: "dt_update"
+  columnMail: "user_mail"
+  columnFio: "user_fio"
+  columnRole: "user_role"
+  columnText: "text"
+  columnType: "type"
+  columnId: "id"
+
+jwt:
+  secret: ""
+  issuer: ""
