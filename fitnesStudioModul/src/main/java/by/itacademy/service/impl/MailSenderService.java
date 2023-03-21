@@ -1,14 +1,16 @@
 package by.itacademy.service.impl;
 
 import by.itacademy.core.dto.request.UserCreateDto;
+import by.itacademy.core.enums.MailStatus;
 import by.itacademy.core.enums.UserStatus;
+import by.itacademy.core.exception.EntityNotFoundException;
 import by.itacademy.repository.api.IMailRepository;
 import by.itacademy.repository.entity.MailEntity;
+import by.itacademy.repository.entity.MailStatusEntity;
 import by.itacademy.repository.entity.UserEntity;
 import by.itacademy.repository.entity.UserStatusEntity;
 import by.itacademy.service.api.IAdminService;
 import by.itacademy.service.api.ISenderService;
-import by.itacademy.service.util.EmailSendingThread;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -20,10 +22,9 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class MailSenderService implements ISenderService {
 
@@ -31,13 +32,11 @@ public class MailSenderService implements ISenderService {
     private final IAdminService adminService;
     private final JavaMailSender mailSender;
     private final Configuration freemarkerConfig;
-    private final ScheduledExecutorService executorService;
     private final ConversionService conversionService;
     private static final String SUBJECT_VERIFICATION = "Email address verification";
     private static final String SUBJECT_REGISTRATION = "Registration successfully completed";
     private static final int MAX_SENDS_VERIFICATION_MAIL = 2;
     private static final int MAX_SENDS_REGISTRATION_MAIL = 3;
-    private static final long INTERVAL_BETWEEN_SHIPMENTS = 10L;
     private static final String MAIL_TEXT_TYPE = "text/html; charset=utf-8";
     private static final String VERIFICATION_MAIL_TEMPLATE_FILE_NAME = "verification-mail.ftl";
     private static final String REGISTRATION_SUCCESS_MAIL_TEMPLATE_FILE_NAME = "registration-mail.ftl";
@@ -50,28 +49,12 @@ public class MailSenderService implements ISenderService {
                              IAdminService adminService,
                              JavaMailSender mailSender,
                              Configuration freemarkerConfig,
-                             ScheduledExecutorService executorService,
                              ConversionService conversionService) {
         this.mailRepository = mailRepository;
         this.adminService = adminService;
         this.mailSender = mailSender;
         this.freemarkerConfig = freemarkerConfig;
-        this.executorService = executorService;
         this.conversionService = conversionService;
-    }
-
-    @Override
-    public void initialize() {
-        this.executorService.scheduleWithFixedDelay(
-                new EmailSendingThread(executorService, mailRepository, this),
-                INTERVAL_BETWEEN_SHIPMENTS,
-                INTERVAL_BETWEEN_SHIPMENTS,
-                TimeUnit.SECONDS);
-    }
-
-    @Override
-    public void stop() {
-        this.executorService.shutdown();
     }
 
     @Override
@@ -92,6 +75,22 @@ public class MailSenderService implements ISenderService {
         registrationCompleteMail.setSubject(SUBJECT_REGISTRATION);
         registrationCompleteMail.setDepartures(MAX_SENDS_REGISTRATION_MAIL);
         mailRepository.save(registrationCompleteMail);
+    }
+
+    @Override
+    public void add(MailEntity mail) {
+        if (mail == null) {
+            throw new EntityNotFoundException("mail cannot be null");
+        }
+        mailRepository.save(mail);
+    }
+
+    @Override
+    public MailEntity get(UUID uuid) {
+        if (uuid == null) {
+            throw new EntityNotFoundException("uuid cannot be null");
+        }
+        return mailRepository.findById(uuid);
     }
 
     @Override
@@ -119,6 +118,12 @@ public class MailSenderService implements ISenderService {
     @Override
     public MailEntity getMail(UserEntity user, UUID verificationCode) {
         return mailRepository.findByUserAndVerificationCode(user, verificationCode);
+    }
+
+    @Override
+    public List<MailEntity> getUnsentEmails() {
+        return mailRepository.findFirst10ByStatusIsAndDeparturesAfterOrderByDtCreate(
+                new MailStatusEntity(MailStatus.WAITING), 0);
     }
 
     private String createTemplateText(MailEntity mail) {
