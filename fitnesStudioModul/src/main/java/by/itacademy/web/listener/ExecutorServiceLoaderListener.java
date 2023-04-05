@@ -19,8 +19,8 @@ public class ExecutorServiceLoaderListener {
 
     public ExecutorServiceLoaderListener(
             ScheduledExecutorService executorService,
-            @Qualifier("emailSendingThread") Runnable mailSendingThread,
-            @Qualifier("ftpFileUploader") Runnable ftpFileUploader) {
+            @Qualifier("emailSender") Runnable mailSendingThread,
+            @Qualifier("fileUploader") Runnable ftpFileUploader) {
         this.executorService = executorService;
         this.mailSendingThread = mailSendingThread;
         this.ftpFileUploader = ftpFileUploader;
