@@ -14,15 +14,15 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class EmailSendingThread implements Runnable {
+public class EmailSender implements Runnable {
 
     private final ScheduledExecutorService executorService;
     private final ISenderService senderService;
     private static final long PAUSE_SENDING_EMAIL = 60L;
     private static final long MILLISECONDS_TO_SEND_EMAIL = 300L;
 
-    public EmailSendingThread(ScheduledExecutorService executorService,
-                              ISenderService senderService) {
+    public EmailSender(ScheduledExecutorService executorService,
+                       ISenderService senderService) {
         this.executorService = executorService;
         this.senderService = senderService;
     }
