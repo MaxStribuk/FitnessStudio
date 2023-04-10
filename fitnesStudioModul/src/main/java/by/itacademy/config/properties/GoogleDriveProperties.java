@@ -17,6 +17,7 @@ public class GoogleDriveProperties {
     private int port;
     private String host;
     private String userId;
+    private String fileAttachment;
 
     public String getFolderId() {
         return folderId;
@@ -96,5 +97,13 @@ public class GoogleDriveProperties {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getFileAttachment() {
+        return fileAttachment;
+    }
+
+    public void setFileAttachment(String fileAttachment) {
+        this.fileAttachment = fileAttachment;
     }
 }
