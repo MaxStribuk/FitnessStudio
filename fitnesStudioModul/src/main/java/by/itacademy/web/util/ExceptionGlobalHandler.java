@@ -7,6 +7,7 @@ import by.itacademy.core.enums.ErrorType;
 import by.itacademy.core.exception.AuthorizationException;
 import by.itacademy.core.exception.DtoNullPointerException;
 import by.itacademy.core.exception.EntityNotFoundException;
+import by.itacademy.core.exception.FileDownloadException;
 import by.itacademy.core.exception.InvalidVersionException;
 import by.itacademy.core.exception.VerificationException;
 import org.springframework.core.NestedExceptionUtils;
@@ -91,7 +92,8 @@ public class ExceptionGlobalHandler {
                     EntityNotFoundException.class,
                     DtoNullPointerException.class,
                     VerificationException.class,
-                    AuthorizationException.class})
+                    AuthorizationException.class,
+                    FileDownloadException.class})
     public ResponseEntity<List<SingleErrorDto>> handleInvalidDataException(
             RuntimeException e) {
 
