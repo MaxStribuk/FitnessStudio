@@ -1,12 +1,15 @@
 package by.itacademy.web.controller;
 
+import by.itacademy.config.properties.GoogleDriveProperties;
 import by.itacademy.core.dto.request.ReportCreateDto;
 import by.itacademy.core.dto.response.PageReportDto;
 import by.itacademy.core.enums.ReportType;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.service.api.IReportService;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +19,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/report")
@@ -28,9 +33,11 @@ import javax.validation.constraints.PositiveOrZero;
 public class ReportController {
 
     private final IReportService reportService;
+    private final GoogleDriveProperties properties;
 
-    public ReportController(IReportService reportService) {
+    public ReportController(IReportService reportService, GoogleDriveProperties properties) {
         this.reportService = reportService;
+        this.properties = properties;
     }
 
     @PostMapping(path = "/{type}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -53,5 +60,30 @@ public class ReportController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(pageReport);
+    }
+
+    @GetMapping(path = "/{uuid}/export")
+    public ResponseEntity<Resource> get(@PathVariable(name = "uuid") UUID uuid) {
+        boolean isAvailableReport = reportService.checkAvailability(uuid);
+        if (isAvailableReport) {
+            Resource file = reportService.export(uuid);
+            String headerValue = properties.getFileAttachment() + uuid + properties.getFileExtension();
+            return ResponseEntity
+                    .ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
+                    .contentType(MediaType.parseMediaType(properties.getContentType()))
+                    .body(file);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(method = RequestMethod.HEAD, path = "/{uuid}/export")
+    public ResponseEntity<?> checkAvailability(
+            @PathVariable(name = "uuid") UUID uuid) {
+        boolean isAvailableReport = reportService.checkAvailability(uuid);
+        HttpStatus httpStatus = isAvailableReport
+                ? HttpStatus.OK
+                : HttpStatus.NO_CONTENT;
+        return new ResponseEntity<>(httpStatus);
     }
 }
