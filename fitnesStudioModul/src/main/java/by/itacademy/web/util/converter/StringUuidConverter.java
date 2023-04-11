@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class StringUuidConverter implements Converter<String, UUID> {
 
-    private static final String UUID_REGEX =
+    public static final String UUID_REGEX =
             "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[89abAB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}";
 
     @Override

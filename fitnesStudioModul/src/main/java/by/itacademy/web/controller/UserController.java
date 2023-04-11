@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import by.itacademy.service.api.IUserService;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
 @RestController
@@ -33,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/registration", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> add(@RequestBody @Validated UserRegistrationDto user) {
+    public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationDto user) {
         userService.add(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -42,22 +41,20 @@ public class UserController {
     public ResponseEntity<?> verification(
             @RequestParam(name = "code") UUID code,
             @RequestParam(name = "mail")
-            @Email(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-                    message = "invalid email")
-            @NotBlank(message = "email cannot be empty") String mail) {
+            @Email(regexp = UserRegistrationDto.EMAIL_PATTERN,
+                    message = "invalid email") String mail) {
         userService.verification(new UserVerificationDto(code, mail));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> login(@RequestBody @Validated UserLoginDto user) {
+    public ResponseEntity<String> login(@RequestBody @Valid UserLoginDto user) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.login(user));
     }
 
     @GetMapping(path = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<PageUserDto> get() {
         return ResponseEntity
                 .status(HttpStatus.OK)
