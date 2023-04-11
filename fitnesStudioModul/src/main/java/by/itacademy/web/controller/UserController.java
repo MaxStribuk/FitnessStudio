@@ -32,32 +32,32 @@ public class UserController {
     }
 
     @PostMapping(path = "/registration", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> add(@RequestBody @Valid UserRegistrationDto user) {
-        userService.add(user);
+    public ResponseEntity<?> create(@RequestBody @Valid UserRegistrationDto user) {
+        this.userService.create(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/verification")
-    public ResponseEntity<?> verification(
+    public ResponseEntity<?> verify(
             @RequestParam(name = "code") UUID code,
             @RequestParam(name = "mail")
             @Email(regexp = UserRegistrationDto.EMAIL_PATTERN,
                     message = "invalid email") String mail) {
-        userService.verification(new UserVerificationDto(code, mail));
+        this.userService.verify(new UserVerificationDto(code, mail));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> login(@RequestBody @Valid UserLoginDto user) {
+    public ResponseEntity<String> logIn(@RequestBody @Valid UserLoginDto user) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.login(user));
+                .body(this.userService.logIn(user));
     }
 
     @GetMapping(path = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageUserDto> get() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.get());
+                .body(this.userService.get());
     }
 }

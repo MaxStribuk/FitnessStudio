@@ -5,7 +5,6 @@ import by.itacademy.core.dto.request.ProductCreateDto;
 import by.itacademy.core.dto.request.RecipeCreateDto;
 import by.itacademy.core.dto.request.ReportCreateDto;
 import by.itacademy.core.dto.request.UserCreateDto;
-import by.itacademy.core.dto.request.UserRegistrationDto;
 import by.itacademy.core.dto.response.PageAuditDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageProductDto;
@@ -32,9 +31,6 @@ import by.itacademy.service.util.converter.ReportEntityPageDtoConverter;
 import by.itacademy.service.util.converter.UserCreateDtoEntityConverter;
 import by.itacademy.service.util.converter.UserEntityCreationDtoConverter;
 import by.itacademy.service.util.converter.UserEntityMailEntityConverter;
-import by.itacademy.service.util.converter.UserEntityPageDtoConverter;
-import by.itacademy.service.util.converter.UserEntityUserDetailsConverter;
-import by.itacademy.service.util.converter.UserRegistrarionDtoEntityConverter;
 import by.itacademy.web.util.converter.StringLocalDateTimeConverter;
 import by.itacademy.web.util.converter.StringReportTypeConverter;
 import by.itacademy.web.util.converter.StringUuidConverter;
@@ -42,7 +38,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -81,18 +76,8 @@ public class ConvertersConfig  {
     }
 
     @Bean
-    public Converter<UserEntity, PageUserDto> userEntityPageDtoConverter() {
-        return new UserEntityPageDtoConverter();
-    }
-
-    @Bean
     public Converter<UserCreateDto, UserEntity> userCreateDtoEntityConverter() {
         return new UserCreateDtoEntityConverter();
-    }
-
-    @Bean
-    public Converter<UserRegistrationDto, UserEntity> userRegistrarionDtoEntityConverter() {
-        return new UserRegistrarionDtoEntityConverter();
     }
 
     @Bean
@@ -144,11 +129,6 @@ public class ConvertersConfig  {
     public Converter<RecipeEntity, PageRecipeDto> recipeEntityPageRecipeDtoConverter(
             Converter<ProductEntity, PageProductDto> converter) {
         return new RecipeEntityPageDtoConverter(converter);
-    }
-
-    @Bean
-    public Converter<UserEntity, UserDetails> userEntityUserDetailsConverter() {
-        return new UserEntityUserDetailsConverter();
     }
 
     @Bean

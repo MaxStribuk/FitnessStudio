@@ -6,8 +6,8 @@ import java.util.UUID;
 
 public class UserVerificationDto implements Serializable {
 
-    private UUID uuid;
-    private String mail;
+    private final UUID uuid;
+    private final String mail;
 
     public UUID getUuid() {
         return uuid;
@@ -15,9 +15,6 @@ public class UserVerificationDto implements Serializable {
 
     public String getMail() {
         return mail;
-    }
-
-    public UserVerificationDto() {
     }
 
     public UserVerificationDto(UUID uuid, String mail) {

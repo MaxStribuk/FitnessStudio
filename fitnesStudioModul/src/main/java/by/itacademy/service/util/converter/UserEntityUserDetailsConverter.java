@@ -7,9 +7,9 @@ import by.itacademy.repository.entity.UserEntity;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-
+@Component
 public class UserEntityUserDetailsConverter implements Converter<UserEntity, UserDetails> {
 
     @Override
@@ -17,11 +17,8 @@ public class UserEntityUserDetailsConverter implements Converter<UserEntity, Use
         UserDetails userDetails = User.builder()
                 .username(user.getMail())
                 .password(user.getPassword())
-                .disabled(user.getStatus()
-                        .getStatus()
-                        .equals(UserStatus.ACTIVATED))
-                .roles(getRoles(user)
-                        .toArray(String[]::new))
+                .disabled(user.getStatus().getStatus().equals(UserStatus.ACTIVATED))
+                .roles(getRoles(user))
                 .build();
         CurrentUserDto currentUserDto = new CurrentUserDto(userDetails);
         currentUserDto.setFio(user.getFio());
@@ -31,13 +28,9 @@ public class UserEntityUserDetailsConverter implements Converter<UserEntity, Use
         return currentUserDto;
     }
 
-    private List<String> getRoles(UserEntity user) {
-        if (user.getRole().getRole().equals(UserRole.USER)) {
-            return List.of(UserRole.USER.name());
-        } else {
-            return List.of(
-                    UserRole.USER.name(),
-                    UserRole.ADMIN.name());
-        }
+    private String[] getRoles(UserEntity user) {
+        return user.getRole().getRole().equals(UserRole.USER)
+                ? new String[] {UserRole.USER.name()}
+                : new String[] {UserRole.USER.name(), UserRole.ADMIN.name()};
     }
 }

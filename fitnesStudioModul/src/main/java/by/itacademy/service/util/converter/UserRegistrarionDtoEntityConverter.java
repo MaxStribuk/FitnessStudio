@@ -7,7 +7,9 @@ import by.itacademy.repository.entity.UserEntity;
 import by.itacademy.repository.entity.UserRoleEntity;
 import by.itacademy.repository.entity.UserStatusEntity;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserRegistrarionDtoEntityConverter implements Converter<UserRegistrationDto, UserEntity> {
 
     @Override
