@@ -51,24 +51,24 @@ public class FileStorageConfig {
     private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT)
             throws IOException {
         String credentialsFilePath = properties.getCredentialsFilePath();
-        InputStream in = FileStorageConfig.class.getResourceAsStream(credentialsFilePath);
-        if (in == null) {
-            throw new FileNotFoundException("Resource not found: " + credentialsFilePath);
+        try (InputStream in = FileStorageConfig.class.getResourceAsStream(credentialsFilePath)) {
+            if (in == null) {
+                throw new FileNotFoundException("Resource not found: " + credentialsFilePath);
+            }
+            GoogleClientSecrets clientSecrets =
+                    GoogleClientSecrets.load(jsonFactory(), new InputStreamReader(in));
+            GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+                    HTTP_TRANSPORT, jsonFactory(), clientSecrets, SCOPES)
+                    .setDataStoreFactory(new FileDataStoreFactory(
+                            new java.io.File(properties.getTokensDirectoryPath())))
+                    .setAccessType(properties.getAccessType())
+                    .build();
+            LocalServerReceiver receiver = new LocalServerReceiver.Builder()
+                    .setPort(properties.getPort())
+                    .setHost(properties.getHost())
+                    .build();
+            return new AuthorizationCodeInstalledApp(flow, receiver)
+                    .authorize(properties.getUserId());
         }
-        GoogleClientSecrets clientSecrets =
-                GoogleClientSecrets.load(jsonFactory(), new InputStreamReader(in));
-
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, jsonFactory(), clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(
-                        new java.io.File(properties.getTokensDirectoryPath())))
-                .setAccessType(properties.getAccessType())
-                .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder()
-                .setPort(properties.getPort())
-                .setHost(properties.getHost())
-                .build();
-        return new AuthorizationCodeInstalledApp(flow, receiver)
-                .authorize(properties.getUserId());
     }
 }
