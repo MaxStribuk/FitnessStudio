@@ -1,5 +1,6 @@
 package by.itacademy.service.api;
 
+import by.itacademy.core.dto.response.MailDto;
 import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.repository.entity.UserEntity;
 
@@ -21,7 +22,7 @@ public interface ISenderService {
 
     void deactivateUser(UserEntity user);
 
-    MailEntity getMail(UserEntity user, UUID verificationCode);
+    MailDto getMail(UserEntity user, UUID verificationCode);
 
     List<MailEntity> getUnsentEmails();
 }

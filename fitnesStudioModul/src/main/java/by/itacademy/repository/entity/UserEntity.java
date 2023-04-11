@@ -1,5 +1,6 @@
 package by.itacademy.repository.entity;
 
+import by.itacademy.core.dto.request.UserRegistrationDto;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 
@@ -11,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -35,9 +38,11 @@ public class UserEntity implements Serializable {
     private LocalDateTime dtUpdate;
 
     @Column(name = "mail", nullable = false, unique = true)
+    @Email(regexp = UserRegistrationDto.EMAIL_PATTERN, message = "invalid email")
     private String mail;
 
     @Column(name = "fio", nullable = false)
+    @NotBlank(message = "fio cannot be empty")
     private String fio;
 
     @ManyToOne
@@ -49,6 +54,7 @@ public class UserEntity implements Serializable {
     private UserStatusEntity status;
 
     @Column(name = "password", nullable = false)
+    @NotBlank(message = "password cannot be empty")
     private String password;
 
     public UserEntity() {
@@ -134,18 +140,5 @@ public class UserEntity implements Serializable {
     public int hashCode() {
         return Objects.hash(uuid, dtCreate, dtUpdate,
                 mail, fio, role, status, password);
-    }
-
-    @Override
-    public String toString() {
-        return "UserEntity{" +
-                "uuid=" + uuid +
-                ", dtCreate=" + dtCreate +
-                ", dtUpdate=" + dtUpdate +
-                ", mail='" + mail + '\'' +
-                ", fio='" + fio + '\'' +
-                ", role=" + role +
-                ", status=" + status +
-                '}';
     }
 }

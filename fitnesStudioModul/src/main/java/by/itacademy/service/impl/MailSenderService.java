@@ -1,6 +1,7 @@
 package by.itacademy.service.impl;
 
 import by.itacademy.core.dto.request.UserCreateDto;
+import by.itacademy.core.dto.response.MailDto;
 import by.itacademy.core.enums.MailStatus;
 import by.itacademy.core.enums.UserStatus;
 import by.itacademy.core.exception.EntityNotFoundException;
@@ -116,8 +117,14 @@ public class MailSenderService implements ISenderService {
     }
 
     @Override
-    public MailEntity getMail(UserEntity user, UUID verificationCode) {
-        return mailRepository.findByUserAndVerificationCode(user, verificationCode);
+    public MailDto getMail(UserEntity user, UUID verificationCode) {
+        MailEntity mail = mailRepository
+                .findByUserAndVerificationCode(user, verificationCode)
+                .orElse(null);
+        if (mail == null) {
+            return null;
+        }
+        return conversionService.convert(mail, MailDto.class);
     }
 
     @Override
