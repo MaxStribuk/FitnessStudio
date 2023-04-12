@@ -1,5 +1,6 @@
 package by.itacademy.web.controller;
 
+import by.itacademy.core.Constants;
 import by.itacademy.core.dto.request.UserCreateDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.core.dto.response.PageDto;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import by.itacademy.service.api.IAdminService;
 
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
@@ -57,7 +59,8 @@ public class AdminController {
 
     @GetMapping(path = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageUserDto> get(
-            @PathVariable(name = "uuid") UUID uuid) {
+            @PathVariable(name = "uuid")
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID uuid) {
         PageUserDto pageUser = adminService.get(uuid);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -67,7 +70,8 @@ public class AdminController {
     @PutMapping(path = "{uuid}/dt_update/{dt_update}",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(
-            @PathVariable(name = "uuid") UUID uuid,
+            @PathVariable(name = "uuid")
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID uuid,
             @PathVariable(name = "dt_update")
             @Past(message = "invalid dtUpdate") LocalDateTime dtUpdate,
             @Validated @RequestBody UserCreateDto user) {

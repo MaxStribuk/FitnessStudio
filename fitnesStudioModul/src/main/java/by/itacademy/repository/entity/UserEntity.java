@@ -1,6 +1,6 @@
 package by.itacademy.repository.entity;
 
-import by.itacademy.core.dto.request.UserRegistrationDto;
+import by.itacademy.core.Constants;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 
@@ -38,7 +38,7 @@ public class UserEntity implements Serializable {
     private LocalDateTime dtUpdate;
 
     @Column(name = "mail", nullable = false, unique = true)
-    @Email(regexp = UserRegistrationDto.EMAIL_PATTERN, message = "invalid email")
+    @Email(regexp = Constants.EMAIL_PATTERN, message = "invalid email")
     private String mail;
 
     @Column(name = "fio", nullable = false)

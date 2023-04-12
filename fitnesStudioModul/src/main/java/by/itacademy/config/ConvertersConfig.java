@@ -33,14 +33,12 @@ import by.itacademy.service.util.converter.UserEntityCreationDtoConverter;
 import by.itacademy.service.util.converter.UserEntityMailEntityConverter;
 import by.itacademy.web.util.converter.StringLocalDateTimeConverter;
 import by.itacademy.web.util.converter.StringReportTypeConverter;
-import by.itacademy.web.util.converter.StringUuidConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Configuration
 public class ConvertersConfig  {
@@ -103,11 +101,6 @@ public class ConvertersConfig  {
     @Bean
     public Converter<String, LocalDateTime> stringLocalDateTimeConverter() {
         return new StringLocalDateTimeConverter();
-    }
-
-    @Bean
-    public Converter<String, UUID> stringUuidConverter() {
-        return new StringUuidConverter();
     }
 
     @Bean

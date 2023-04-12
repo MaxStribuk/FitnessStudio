@@ -1,5 +1,6 @@
 package by.itacademy.web.controller;
 
+import by.itacademy.core.Constants;
 import by.itacademy.core.dto.request.UserLoginDto;
 import by.itacademy.core.dto.request.UserRegistrationDto;
 import by.itacademy.core.dto.request.UserVerificationDto;
@@ -18,6 +19,7 @@ import by.itacademy.service.api.IUserService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 @RestController
@@ -39,10 +41,10 @@ public class UserController {
 
     @GetMapping(path = "/verification")
     public ResponseEntity<?> verify(
-            @RequestParam(name = "code") UUID code,
+            @RequestParam(name = "code")
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID code,
             @RequestParam(name = "mail")
-            @Email(regexp = UserRegistrationDto.EMAIL_PATTERN,
-                    message = "invalid email") String mail) {
+            @Email(regexp = Constants.EMAIL_PATTERN, message = "invalid email") String mail) {
         this.userService.verify(new UserVerificationDto(code, mail));
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -1,6 +1,7 @@
 package by.itacademy.web.controller;
 
 import by.itacademy.config.properties.GoogleDriveProperties;
+import by.itacademy.core.Constants;
 import by.itacademy.core.dto.request.ReportCreateDto;
 import by.itacademy.core.dto.response.PageReportDto;
 import by.itacademy.core.enums.ReportType;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.UUID;
@@ -63,7 +65,9 @@ public class ReportController {
     }
 
     @GetMapping(path = "/{uuid}/export")
-    public ResponseEntity<Resource> get(@PathVariable(name = "uuid") UUID uuid) {
+    public ResponseEntity<Resource> get(
+            @PathVariable(name = "uuid")
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID uuid) {
         boolean isAvailableReport = reportService.checkAvailability(uuid);
         if (isAvailableReport) {
             Resource file = reportService.export(uuid);
@@ -79,7 +83,8 @@ public class ReportController {
 
     @RequestMapping(method = RequestMethod.HEAD, path = "/{uuid}/export")
     public ResponseEntity<?> checkAvailability(
-            @PathVariable(name = "uuid") UUID uuid) {
+            @PathVariable(name = "uuid")
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID uuid) {
         boolean isAvailableReport = reportService.checkAvailability(uuid);
         HttpStatus httpStatus = isAvailableReport
                 ? HttpStatus.OK

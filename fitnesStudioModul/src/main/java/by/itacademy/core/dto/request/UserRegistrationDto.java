@@ -1,5 +1,7 @@
 package by.itacademy.core.dto.request;
 
+import by.itacademy.core.Constants;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -8,11 +10,7 @@ import java.util.Objects;
 
 public class UserRegistrationDto implements Serializable {
 
-    public static final String EMAIL_PATTERN = "[a-z0-9!#$%&'*+/=?^_`{|}~-]" +
-            "+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)" +
-            "+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
-
-    @Email(regexp = EMAIL_PATTERN, message = "invalid email")
+    @Email(regexp = Constants.EMAIL_PATTERN, message = "invalid email")
     private String mail;
 
     @NotBlank(message = "name cannot be empty")

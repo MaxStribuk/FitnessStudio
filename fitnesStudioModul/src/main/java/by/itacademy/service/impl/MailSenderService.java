@@ -17,6 +17,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.mail.Message;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
+@Service
 public class MailSenderService implements ISenderService {
 
     private final IMailRepository mailRepository;

@@ -1,5 +1,6 @@
 package by.itacademy.web.controller;
 
+import by.itacademy.core.Constants;
 import by.itacademy.core.dto.response.PageAuditDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.service.api.IAuditService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.UUID;
@@ -45,7 +47,8 @@ public class AuditController {
 
     @GetMapping(path = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageAuditDto> get(
-            @PathVariable(name = "uuid") UUID uuid) {
+            @PathVariable(name = "uuid")
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID uuid) {
         PageAuditDto pageAudit = auditService.get(uuid);
         return ResponseEntity
                 .status(HttpStatus.OK)

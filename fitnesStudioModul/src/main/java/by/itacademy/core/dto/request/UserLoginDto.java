@@ -1,5 +1,7 @@
 package by.itacademy.core.dto.request;
 
+import by.itacademy.core.Constants;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -8,7 +10,7 @@ import java.util.Objects;
 
 public class UserLoginDto implements Serializable {
 
-    @Email(regexp = UserRegistrationDto.EMAIL_PATTERN, message = "invalid email")
+    @Email(regexp = Constants.EMAIL_PATTERN, message = "invalid email")
     private String mail;
 
     @NotBlank(message = "password cannot be empty")

@@ -1,5 +1,6 @@
 package by.itacademy.web.controller;
 
+import by.itacademy.core.Constants;
 import by.itacademy.core.dto.request.ProductCreateDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageProductDto;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
@@ -58,7 +60,8 @@ public class ProductController {
     @PutMapping(path = "{uuid}/dt_update/{dt_update}",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(
-            @PathVariable(name = "uuid") UUID uuid,
+            @PathVariable(name = "uuid")
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID uuid,
             @PathVariable(name = "dt_update")
             @Past(message = "invalid dtUpdate") LocalDateTime dtUpdate,
             @Validated @RequestBody ProductCreateDto product) {
