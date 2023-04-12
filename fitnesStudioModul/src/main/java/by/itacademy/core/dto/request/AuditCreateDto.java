@@ -1,10 +1,10 @@
 package by.itacademy.core.dto.request;
 
 
+import by.itacademy.core.Constants;
 import by.itacademy.core.enums.EssenceType;
 import by.itacademy.core.enums.UserRole;
 import by.itacademy.service.util.validator.Enum;
-import by.itacademy.service.util.validator.Uuid;
 import by.itacademy.web.util.deserializer.EssenceTypeDeserializer;
 import by.itacademy.web.util.deserializer.UserRoleDeserializer;
 import by.itacademy.web.util.deserializer.UuidDeserializer;
@@ -12,13 +12,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 public class AuditCreateDto implements Serializable {
 
-    @Uuid
+    @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid")
     @JsonDeserialize(using = UuidDeserializer.class)
     private UUID userUuid;
 

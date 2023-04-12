@@ -48,7 +48,7 @@ public class AuditController {
     @GetMapping(path = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageAuditDto> get(
             @PathVariable(name = "uuid")
-            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID uuid) {
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") UUID uuid) {
         PageAuditDto pageAudit = auditService.get(uuid);
         return ResponseEntity
                 .status(HttpStatus.OK)

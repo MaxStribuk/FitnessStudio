@@ -60,7 +60,7 @@ public class AdminController {
     @GetMapping(path = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageUserDto> get(
             @PathVariable(name = "uuid")
-            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID uuid) {
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") UUID uuid) {
         PageUserDto pageUser = adminService.get(uuid);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -71,7 +71,7 @@ public class AdminController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(
             @PathVariable(name = "uuid")
-            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID uuid,
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") UUID uuid,
             @PathVariable(name = "dt_update")
             @Past(message = "invalid dtUpdate") LocalDateTime dtUpdate,
             @Validated @RequestBody UserCreateDto user) {

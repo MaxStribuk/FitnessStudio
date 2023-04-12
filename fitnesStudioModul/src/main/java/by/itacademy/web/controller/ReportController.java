@@ -67,7 +67,7 @@ public class ReportController {
     @GetMapping(path = "/{uuid}/export")
     public ResponseEntity<Resource> get(
             @PathVariable(name = "uuid")
-            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID uuid) {
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") UUID uuid) {
         boolean isAvailableReport = reportService.checkAvailability(uuid);
         if (isAvailableReport) {
             Resource file = reportService.export(uuid);
@@ -84,7 +84,7 @@ public class ReportController {
     @RequestMapping(method = RequestMethod.HEAD, path = "/{uuid}/export")
     public ResponseEntity<?> checkAvailability(
             @PathVariable(name = "uuid")
-            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID uuid) {
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") UUID uuid) {
         boolean isAvailableReport = reportService.checkAvailability(uuid);
         HttpStatus httpStatus = isAvailableReport
                 ? HttpStatus.OK
