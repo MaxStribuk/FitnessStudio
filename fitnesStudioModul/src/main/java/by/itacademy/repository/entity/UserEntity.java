@@ -69,6 +69,17 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
+    public UserEntity(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate,
+                      String mail, String fio, UserRoleEntity role, UserStatusEntity status) {
+        this.uuid = uuid;
+        this.dtCreate = dtCreate;
+        this.dtUpdate = dtUpdate;
+        this.mail = mail;
+        this.fio = fio;
+        this.role = role;
+        this.status = status;
+    }
+
     public UUID getUuid() {
         return uuid;
     }

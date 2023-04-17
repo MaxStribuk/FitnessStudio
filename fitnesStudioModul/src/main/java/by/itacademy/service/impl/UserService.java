@@ -6,6 +6,7 @@ import by.itacademy.core.dto.request.UserVerificationDto;
 import by.itacademy.core.dto.response.CurrentUserDto;
 import by.itacademy.core.dto.response.MailDto;
 import by.itacademy.core.dto.response.PageUserDto;
+import by.itacademy.core.enums.EmailSubject;
 import by.itacademy.core.enums.UserStatus;
 import by.itacademy.core.exception.AuthorizationException;
 import by.itacademy.core.exception.EntityNotFoundException;
@@ -49,10 +50,13 @@ public class UserService implements IUserService {
 
     @Override
     public void create(UserRegistrationDto user) {
-        UserEntity userEntity = this.conversionService.convert(user, UserEntity.class);
+        UserEntity userEntity = this.conversionService
+                .convert(user, UserEntity.class);
         userEntity.setPassword(this.encoder.encode(user.getPassword()));
         userEntity = this.userRepository.save(userEntity);
-        this.senderService.addVerificationMail(userEntity);
+        PageUserDto pageUserDto = this.conversionService
+                .convert(userEntity, PageUserDto.class);
+        this.senderService.create(pageUserDto, EmailSubject.VERIFICATION.toString());
     }
 
     @Override
@@ -66,7 +70,9 @@ public class UserService implements IUserService {
         } else {
             userEntity.setStatus(new UserStatusEntity(UserStatus.ACTIVATED));
             this.userRepository.save(userEntity);
-            this.senderService.addRegistrationCompleteMail(userEntity);
+            PageUserDto pageUserDto = this.conversionService
+                    .convert(userEntity, PageUserDto.class);
+            this.senderService.create(pageUserDto, EmailSubject.REGISTRATION.toString());
         }
     }
 
