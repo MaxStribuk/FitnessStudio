@@ -69,7 +69,7 @@ public class AdminService implements IAdminService {
         Optional<UserEntity> userEntityOptional = this.adminRepository.findById(uuid);
         UserEntity userEntity = userEntityOptional.orElseThrow(
                 () -> new EntityNotFoundException("user not found: " + uuid));
-        if (! dtUpdate.isEqual(userEntity.getDtUpdate())) {
+        if (!dtUpdate.isEqual(userEntity.getDtUpdate())) {
             throw new InvalidVersionException("invalid dtUpdate");
         }
         update(userEntity, user);

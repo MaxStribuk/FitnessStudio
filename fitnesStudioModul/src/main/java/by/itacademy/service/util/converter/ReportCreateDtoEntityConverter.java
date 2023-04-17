@@ -6,10 +6,13 @@ import by.itacademy.repository.entity.ReportEntity;
 import by.itacademy.repository.entity.ReportStatusEntity;
 import by.itacademy.repository.entity.ReportTypeEntity;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import java.time.format.DateTimeFormatter;
 
-public class ReportCreateDtoEntityConverter implements Converter<ReportCreateDto, ReportEntity> {
+@Component
+public class ReportCreateDtoEntityConverter
+        implements Converter<ReportCreateDto, ReportEntity> {
 
     private static final String DESCRIPTION = "log for ";
     private static final String DATE_PATTERN = "dd.MM.yyyy";
@@ -27,15 +30,19 @@ public class ReportCreateDtoEntityConverter implements Converter<ReportCreateDto
     }
 
     private String createDescription(ReportCreateDto report) {
-        String reportType = report.getReportType()
+        StringBuilder builder = new StringBuilder(
+                report.getReportType()
                 .name()
                 .toLowerCase()
-                .split("_")[1];
-        return reportType
-                + "s "
-                + DESCRIPTION
-                + report.getFrom().format(DateTimeFormatter.ofPattern(DATE_PATTERN))
-                + " - "
-                + report.getTo().format(DateTimeFormatter.ofPattern(DATE_PATTERN));
+                .split("_")[1]
+        );
+        return builder.append("s ")
+                .append(DESCRIPTION)
+                .append(report.getFrom()
+                        .format(DateTimeFormatter.ofPattern(DATE_PATTERN)))
+                .append(" - ")
+                .append(report.getTo()
+                        .format(DateTimeFormatter.ofPattern(DATE_PATTERN)))
+                .toString();
     }
 }

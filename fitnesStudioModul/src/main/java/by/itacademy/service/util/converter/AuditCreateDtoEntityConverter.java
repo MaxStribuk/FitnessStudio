@@ -5,7 +5,9 @@ import by.itacademy.repository.entity.AuditEntity;
 import by.itacademy.repository.entity.EssenceTypeEntity;
 import by.itacademy.repository.entity.UserRoleEntity;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AuditCreateDtoEntityConverter implements Converter<AuditCreateDto, AuditEntity> {
 
     @Override

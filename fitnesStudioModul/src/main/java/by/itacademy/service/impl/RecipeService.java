@@ -7,7 +7,6 @@ import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageProductDto;
 import by.itacademy.core.dto.response.PageRecipeDto;
 import by.itacademy.core.enums.EssenceType;
-import by.itacademy.core.exception.DtoNullPointerException;
 import by.itacademy.core.exception.EntityNotFoundException;
 import by.itacademy.core.exception.InvalidVersionException;
 import by.itacademy.repository.api.IRecipeRepository;
@@ -51,44 +50,29 @@ public class RecipeService implements IRecipeService {
     @Override
     @Auditable(value = "added new recipe", type = EssenceType.RECIPE)
     public void add(RecipeCreateDto recipe) {
-        if (recipe == null) {
-            throw new DtoNullPointerException("recipeCreateDto must not be null");
-        }
-        RecipeEntity recipeEntity = conversionService.convert(recipe, RecipeEntity.class);
+        RecipeEntity recipeEntity = this.conversionService.convert(recipe, RecipeEntity.class);
         List<IngredientEntity> ingredients = getIngredients(recipe);
         recipeEntity.setProducts(ingredients);
-        recipeRepository.save(recipeEntity);
+        this.recipeRepository.save(recipeEntity);
     }
 
     @Override
     public PageDto<PageRecipeDto> getAll(Pageable pageable) {
-        if (pageable == null) {
-            throw new NullPointerException("pageable must be not null");
-        }
-        Page<RecipeEntity> recipes = recipeRepository.findAll(pageable);
-        return recipePageDtoConverter.convert(recipes);
+        Page<RecipeEntity> recipes = this.recipeRepository.findAll(pageable);
+        return this.recipePageDtoConverter.convert(recipes);
     }
 
     @Override
     @Auditable(value = "updated recipe information", type = EssenceType.RECIPE)
     public void update(UUID uuid, LocalDateTime dtUpdate, RecipeCreateDto recipe) {
-        if (uuid == null) {
-            throw new EntityNotFoundException("invalid uuid");
-        }
-        if (recipe == null) {
-            throw new DtoNullPointerException("recipeCreateDto must not be null");
-        }
-        if (dtUpdate == null) {
-            throw new InvalidVersionException("invalid dtUpdate");
-        }
-        Optional<RecipeEntity> recipeEntityOptional = recipeRepository.findById(uuid);
+        Optional<RecipeEntity> recipeEntityOptional = this.recipeRepository.findById(uuid);
         RecipeEntity recipeEntity = recipeEntityOptional.orElseThrow(
-                () -> new EntityNotFoundException("recipe with uuid " + uuid + " not found"));
+                () -> new EntityNotFoundException("recipe not found: " + uuid));
         if (!dtUpdate.isEqual(recipeEntity.getDtUpdate())) {
             throw new InvalidVersionException("invalid dtUpdate");
         }
         update(recipeEntity, recipe);
-        recipeRepository.save(recipeEntity);
+        this.recipeRepository.save(recipeEntity);
     }
 
     private void update(RecipeEntity recipeEntity, RecipeCreateDto recipe) {
@@ -105,9 +89,9 @@ public class RecipeService implements IRecipeService {
 
     private IngredientEntity getIngredient(IngredientDto ingredient) {
         UUID uuid = ingredient.getProduct().getUuid();
-        PageProductDto pageProductDto = productService.get(uuid);
-        ProductEntity product = conversionService.convert(
-                pageProductDto, ProductEntity.class);
+        PageProductDto pageProductDto = this.productService.get(uuid);
+        ProductEntity product = this.conversionService
+                .convert(pageProductDto, ProductEntity.class);
         return new IngredientEntity(product, ingredient.getWeight());
     }
 }

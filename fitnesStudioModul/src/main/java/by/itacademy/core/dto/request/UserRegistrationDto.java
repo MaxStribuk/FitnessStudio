@@ -32,6 +32,9 @@ public class UserRegistrationDto implements Serializable {
         return password;
     }
 
+    public UserRegistrationDto() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

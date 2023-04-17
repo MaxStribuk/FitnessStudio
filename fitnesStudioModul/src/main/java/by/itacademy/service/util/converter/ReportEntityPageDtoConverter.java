@@ -4,7 +4,9 @@ import by.itacademy.core.dto.response.PageReportDto;
 import by.itacademy.core.dto.response.ReportParamDto;
 import by.itacademy.repository.entity.ReportEntity;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ReportEntityPageDtoConverter implements Converter<ReportEntity, PageReportDto> {
 
     @Override

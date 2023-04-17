@@ -23,7 +23,7 @@ public class AuditAspect {
 
     @AfterReturning("@annotation(auditable)")
     public void afterReturningAddOrUpdateEssenceAdvice(Auditable auditable) {
-        CurrentUserDto user = (CurrentUserDto) holder.getCurrentUser();
+        CurrentUserDto user = (CurrentUserDto) this.holder.getCurrentUser();
         AuditCreateDto auditCreateDto = new AuditCreateDto(
                 user.getUuid(),
                 user.getUsername(),
@@ -32,6 +32,6 @@ public class AuditAspect {
                 auditable.value(),
                 auditable.type()
         );
-        auditService.add(auditCreateDto);
+        this.auditService.add(auditCreateDto);
     }
 }

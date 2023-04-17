@@ -17,6 +17,9 @@ public class UserLoginDto implements Serializable {
     @Size(min = 5, message = "password must contain at least 5 characters")
     private String password;
 
+    public UserLoginDto() {
+    }
+
     public String getMail() {
         return mail;
     }
