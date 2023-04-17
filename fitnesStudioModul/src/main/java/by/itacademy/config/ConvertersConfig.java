@@ -27,25 +27,25 @@ public class ConvertersConfig  {
     }
 
     @Bean
-    public Converter<Page<ProductEntity>, PageDto<PageProductDto>> productEntityPageDtoConverter(
+    public Converter<Page<ProductEntity>, PageDto<PageProductDto>> productEntityPagesDtoConverter(
             Converter<ProductEntity, PageProductDto> converter) {
         return new EntityPageDtoConverter<>(converter);
     }
 
     @Bean
-    public Converter<Page<RecipeEntity>, PageDto<PageRecipeDto>> recipeEntityPageDtoConverter(
+    public Converter<Page<RecipeEntity>, PageDto<PageRecipeDto>> recipeEntityPagesDtoConverter(
             Converter<RecipeEntity, PageRecipeDto> converter) {
         return new EntityPageDtoConverter<>(converter);
     }
 
     @Bean
-    public Converter<Page<AuditEntity>, PageDto<PageAuditDto>> auditEntityPageDtoConverter(
+    public Converter<Page<AuditEntity>, PageDto<PageAuditDto>> auditEntityPagesDtoConverter(
             Converter<AuditEntity, PageAuditDto> converter) {
         return new EntityPageDtoConverter<>(converter);
     }
 
     @Bean
-    public Converter<Page<ReportEntity>, PageDto<PageReportDto>> reportEntityPageDtoConverter(
+    public Converter<Page<ReportEntity>, PageDto<PageReportDto>> reportEntityPagesDtoConverter(
             Converter<ReportEntity, PageReportDto> converter) {
         return new EntityPageDtoConverter<>(converter);
     }

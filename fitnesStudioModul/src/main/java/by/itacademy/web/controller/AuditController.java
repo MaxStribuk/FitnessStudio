@@ -39,7 +39,7 @@ public class AuditController {
             @RequestParam(name = "size", required = false, defaultValue = "20")
             @Positive(message = "size must be greater than 0") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        PageDto<PageAuditDto> pageAudit = auditService.getAll(pageable);
+        PageDto<PageAuditDto> pageAudit = this.auditService.getAll(pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(pageAudit);
@@ -48,8 +48,8 @@ public class AuditController {
     @GetMapping(path = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageAuditDto> get(
             @PathVariable(name = "uuid")
-            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") UUID uuid) {
-        PageAuditDto pageAudit = auditService.get(uuid);
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") String uuid) {
+        PageAuditDto pageAudit = this.auditService.get(UUID.fromString(uuid));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(pageAudit);

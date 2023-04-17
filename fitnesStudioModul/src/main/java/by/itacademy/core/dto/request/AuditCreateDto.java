@@ -1,6 +1,5 @@
 package by.itacademy.core.dto.request;
 
-
 import by.itacademy.core.Constants;
 import by.itacademy.core.enums.EssenceType;
 import by.itacademy.core.enums.UserRole;
@@ -23,8 +22,7 @@ public class AuditCreateDto implements Serializable {
     @JsonDeserialize(using = UuidDeserializer.class)
     private UUID userUuid;
 
-    @Email(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-            message = "invalid email")
+    @Email(regexp = Constants.EMAIL_PATTERN, message = "invalid email")
     @NotBlank(message = "email cannot be empty")
     private String mail;
 
