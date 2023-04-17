@@ -1,7 +1,7 @@
-package by.itacademy.service.util.jwt;
+package by.itacademy.service.util;
 
 import by.itacademy.config.properties.JwtTokenProperties;
-import by.itacademy.core.dto.response.CurrentUserDto;
+import by.itacademy.core.dto.CurrentUserDto;
 import by.itacademy.service.api.IJwtTokenUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

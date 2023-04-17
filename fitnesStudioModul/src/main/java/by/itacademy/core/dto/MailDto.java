@@ -1,4 +1,4 @@
-package by.itacademy.core.dto.response;
+package by.itacademy.core.dto;
 
 import by.itacademy.repository.entity.MailStatusEntity;
 import by.itacademy.repository.entity.UserEntity;

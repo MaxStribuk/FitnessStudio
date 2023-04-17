@@ -1,6 +1,6 @@
 package by.itacademy.service.util.converter;
 
-import by.itacademy.core.dto.response.CurrentUserDto;
+import by.itacademy.core.dto.CurrentUserDto;
 import by.itacademy.core.enums.UserRole;
 import by.itacademy.core.enums.UserStatus;
 import by.itacademy.repository.entity.UserEntity;

@@ -1,7 +1,7 @@
 package by.itacademy.aop.aspect;
 
 import by.itacademy.core.dto.request.AuditCreateDto;
-import by.itacademy.core.dto.response.CurrentUserDto;
+import by.itacademy.core.dto.CurrentUserDto;
 import by.itacademy.service.api.IUserHolder;
 import by.itacademy.service.impl.AuditService;
 import by.itacademy.aop.api.Auditable;

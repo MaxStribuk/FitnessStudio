@@ -4,16 +4,13 @@ import by.itacademy.core.dto.request.AuditCreateDto;
 import by.itacademy.core.dto.request.ProductCreateDto;
 import by.itacademy.core.dto.request.RecipeCreateDto;
 import by.itacademy.core.dto.request.ReportCreateDto;
-import by.itacademy.core.dto.request.UserCreateDto;
 import by.itacademy.core.dto.response.PageAuditDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageProductDto;
 import by.itacademy.core.dto.response.PageRecipeDto;
 import by.itacademy.core.dto.response.PageReportDto;
 import by.itacademy.core.dto.response.PageUserDto;
-import by.itacademy.core.enums.ReportType;
 import by.itacademy.repository.entity.AuditEntity;
-import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.repository.entity.ProductEntity;
 import by.itacademy.repository.entity.RecipeEntity;
 import by.itacademy.repository.entity.ReportEntity;
@@ -28,17 +25,10 @@ import by.itacademy.service.util.converter.RecipeCreateDtoEntityConverter;
 import by.itacademy.service.util.converter.RecipeEntityPageDtoConverter;
 import by.itacademy.service.util.converter.ReportCreateDtoEntityConverter;
 import by.itacademy.service.util.converter.ReportEntityPageDtoConverter;
-import by.itacademy.service.util.converter.UserCreateDtoEntityConverter;
-import by.itacademy.service.util.converter.UserEntityCreationDtoConverter;
-import by.itacademy.service.util.converter.UserEntityMailEntityConverter;
-import by.itacademy.web.util.converter.StringLocalDateTimeConverter;
-import by.itacademy.web.util.converter.StringReportTypeConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
-
-import java.time.LocalDateTime;
 
 @Configuration
 public class ConvertersConfig  {
@@ -74,21 +64,6 @@ public class ConvertersConfig  {
     }
 
     @Bean
-    public Converter<UserCreateDto, UserEntity> userCreateDtoEntityConverter() {
-        return new UserCreateDtoEntityConverter();
-    }
-
-    @Bean
-    public Converter<UserEntity, MailEntity> userEntityMailEntityConverter() {
-        return new UserEntityMailEntityConverter();
-    }
-
-    @Bean
-    public Converter<UserEntity, UserCreateDto> userEntityCreationDtoConverter() {
-        return new UserEntityCreationDtoConverter();
-    }
-
-    @Bean
     public Converter<ProductCreateDto, ProductEntity> productCreateDtoEntityConverter() {
         return new ProductCreateDtoEntityConverter();
     }
@@ -96,16 +71,6 @@ public class ConvertersConfig  {
     @Bean
     public Converter<ProductEntity, PageProductDto> productEntityPageProductDtoConverter() {
         return new ProductEntityPageDtoConverter();
-    }
-
-    @Bean
-    public Converter<String, LocalDateTime> stringLocalDateTimeConverter() {
-        return new StringLocalDateTimeConverter();
-    }
-
-    @Bean
-    public Converter<String, ReportType> stringReportTypeConverter() {
-        return new StringReportTypeConverter();
     }
 
     @Bean

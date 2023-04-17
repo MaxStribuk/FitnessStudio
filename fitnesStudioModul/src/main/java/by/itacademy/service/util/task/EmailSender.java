@@ -1,4 +1,4 @@
-package by.itacademy.service.util.tasks;
+package by.itacademy.service.util.task;
 
 import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.service.api.ISenderService;
