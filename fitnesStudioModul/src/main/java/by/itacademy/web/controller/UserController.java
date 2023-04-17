@@ -42,10 +42,10 @@ public class UserController {
     @GetMapping(path = "/verification")
     public ResponseEntity<?> verify(
             @RequestParam(name = "code")
-            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") UUID code,
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") String code,
             @RequestParam(name = "mail")
             @Email(regexp = Constants.EMAIL_PATTERN, message = "invalid email") String mail) {
-        this.userService.verify(new UserVerificationDto(code, mail));
+        this.userService.verify(new UserVerificationDto(UUID.fromString(code), mail));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -12,10 +12,12 @@ public class MailEntityDtoConverter implements Converter<MailEntity, MailDto> {
     public MailDto convert(MailEntity mail) {
         return new MailDto(
                 mail.getUuid(),
+                mail.getUser(),
                 mail.getDtCreate(),
                 mail.getDtUpdate(),
                 mail.getSubject(),
                 mail.getDepartures(),
+                mail.getStatus(),
                 mail.getVerificationCode()
         );
     }

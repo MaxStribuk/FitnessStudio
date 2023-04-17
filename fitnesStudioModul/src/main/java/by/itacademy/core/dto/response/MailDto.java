@@ -1,5 +1,8 @@
 package by.itacademy.core.dto.response;
 
+import by.itacademy.repository.entity.MailStatusEntity;
+import by.itacademy.repository.entity.UserEntity;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -9,28 +12,39 @@ public class MailDto implements Serializable {
 
     private final UUID uuid;
 
+    private final UserEntity user;
+
     private final LocalDateTime dtCreate;
 
     private final LocalDateTime dtUpdate;
 
-    private final String subject;
+    private String subject;
 
-    private final int departures;
+    private int departures;
 
-    private final UUID verificationCode;
+    private MailStatusEntity status;
 
-    public MailDto(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate,
-                   String subject, int departures, UUID verificationCode) {
+    private UUID verificationCode;
+
+    public MailDto(UUID uuid, UserEntity user, LocalDateTime dtCreate,
+                   LocalDateTime dtUpdate, String subject, int departures,
+                   MailStatusEntity status, UUID verificationCode) {
         this.uuid = uuid;
+        this.user = user;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
         this.subject = subject;
         this.departures = departures;
+        this.status = status;
         this.verificationCode = verificationCode;
     }
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public UserEntity getUser() {
+        return user;
     }
 
     public LocalDateTime getDtCreate() {
@@ -49,8 +63,28 @@ public class MailDto implements Serializable {
         return departures;
     }
 
+    public MailStatusEntity getStatus() {
+        return status;
+    }
+
     public UUID getVerificationCode() {
         return verificationCode;
+    }
+
+    public void setDepartures(int departures) {
+        this.departures = departures;
+    }
+
+    public void setStatus(MailStatusEntity status) {
+        this.status = status;
+    }
+
+    public void setVerificationCode(UUID verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     @Override
@@ -60,15 +94,18 @@ public class MailDto implements Serializable {
         MailDto mailDto = (MailDto) o;
         return departures == mailDto.departures
                 && Objects.equals(uuid, mailDto.uuid)
+                && Objects.equals(user, mailDto.user)
                 && Objects.equals(dtCreate, mailDto.dtCreate)
                 && Objects.equals(dtUpdate, mailDto.dtUpdate)
                 && Objects.equals(subject, mailDto.subject)
+                && Objects.equals(status, mailDto.status)
                 && Objects.equals(verificationCode, mailDto.verificationCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, dtCreate, dtUpdate, subject, departures, verificationCode);
+        return Objects.hash(uuid, user, dtCreate, dtUpdate, subject,
+                departures, status, verificationCode);
     }
 
     @Override
@@ -79,6 +116,7 @@ public class MailDto implements Serializable {
                 ", dtUpdate=" + dtUpdate +
                 ", subject='" + subject + '\'' +
                 ", departures=" + departures +
+                ", status=" + status.getStatus() +
                 ", verificationCode=" + verificationCode +
                 '}';
     }

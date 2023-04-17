@@ -11,15 +11,6 @@ public enum ErrorType {
         this.description = description;
     }
 
-    public static ErrorType getErrorDescription(String description) {
-        for (ErrorType mailStatus : ErrorType.values()) {
-            if (mailStatus.description.equals(description)) {
-                return mailStatus;
-            }
-        }
-        return null;
-    }
-
     @Override
     public String toString() {
         return description;
