@@ -12,7 +12,6 @@ import by.itacademy.core.exception.FileDownloadException;
 import by.itacademy.repository.api.IReportRepository;
 import by.itacademy.repository.entity.ReportEntity;
 import by.itacademy.repository.entity.ReportStatusEntity;
-import by.itacademy.service.api.IAdminService;
 import by.itacademy.service.api.IFileHandlingService;
 import by.itacademy.service.api.IReportService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,19 +32,16 @@ public class ReportService implements IReportService {
 
     private final IReportRepository reportRepository;
     private final ConversionService conversionService;
-    private final IAdminService adminService;
     private final Converter<Page<ReportEntity>, PageDto<PageReportDto>> reportPageDtoConverter;
     private final IFileHandlingService fileHandlingService;
 
     public ReportService(
             IReportRepository reportRepository,
             @Qualifier("mvcConversionService") ConversionService conversionService,
-            IAdminService adminService,
             Converter<Page<ReportEntity>, PageDto<PageReportDto>> reportPageDtoConverter,
             IFileHandlingService fileHandlingService) {
         this.reportRepository = reportRepository;
         this.conversionService = conversionService;
-        this.adminService = adminService;
         this.reportPageDtoConverter = reportPageDtoConverter;
         this.fileHandlingService = fileHandlingService;
     }
@@ -56,7 +52,6 @@ public class ReportService implements IReportService {
         if (report == null) {
             throw new DtoNullPointerException("reportParamDto must not be null");
         }
-        adminService.get(report.getUser());
         ReportEntity reportEntity = conversionService.convert(report, ReportEntity.class);
         reportRepository.save(reportEntity);
     }

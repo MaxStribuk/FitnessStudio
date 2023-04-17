@@ -50,12 +50,10 @@ public class UserService implements IUserService {
 
     @Override
     public void create(UserRegistrationDto user) {
-        UserEntity userEntity = this.conversionService
-                .convert(user, UserEntity.class);
+        UserEntity userEntity = this.conversionService.convert(user, UserEntity.class);
         userEntity.setPassword(this.encoder.encode(user.getPassword()));
         userEntity = this.userRepository.save(userEntity);
-        PageUserDto pageUserDto = this.conversionService
-                .convert(userEntity, PageUserDto.class);
+        PageUserDto pageUserDto = this.conversionService.convert(userEntity, PageUserDto.class);
         this.senderService.create(pageUserDto, EmailSubject.VERIFICATION.toString());
     }
 
@@ -70,8 +68,7 @@ public class UserService implements IUserService {
         } else {
             userEntity.setStatus(new UserStatusEntity(UserStatus.ACTIVATED));
             this.userRepository.save(userEntity);
-            PageUserDto pageUserDto = this.conversionService
-                    .convert(userEntity, PageUserDto.class);
+            PageUserDto pageUserDto = this.conversionService.convert(userEntity, PageUserDto.class);
             this.senderService.create(pageUserDto, EmailSubject.REGISTRATION.toString());
         }
     }
