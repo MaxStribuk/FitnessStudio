@@ -13,15 +13,6 @@ public enum MailStatus {
         this.description = description;
     }
 
-    public static MailStatus getEmailStatus(String description) {
-        for (MailStatus mailStatus : MailStatus.values()){
-            if (mailStatus.description.equals(description)) {
-                return mailStatus;
-            }
-        }
-        return null;
-    }
-
     @Override
     public String toString() {
         return description;

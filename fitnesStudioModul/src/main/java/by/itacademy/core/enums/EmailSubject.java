@@ -1,13 +1,13 @@
 package by.itacademy.core.enums;
 
-public enum ErrorType {
+public enum EmailSubject {
 
-    ERROR("error"),
-    STRUCTURED_ERROR("structured_error");
+    VERIFICATION("Email address verification"),
+    REGISTRATION("Registration successfully completed");
 
     private final String description;
 
-    ErrorType(String description) {
+    EmailSubject(String description) {
         this.description = description;
     }
 

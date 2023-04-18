@@ -6,6 +6,7 @@ import by.itacademy.repository.entity.UserEntity;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface IMailRepository extends Repository<MailEntity, UUID> {
@@ -15,7 +16,7 @@ public interface IMailRepository extends Repository<MailEntity, UUID> {
     List<MailEntity> findFirst10ByStatusIsAndDeparturesAfterOrderByDtCreate(
             MailStatusEntity status, int departures);
 
-    MailEntity findByUserAndVerificationCode(UserEntity user, UUID verificationCode);
+    Optional<MailEntity> findByUserAndVerificationCode(UserEntity user, UUID verificationCode);
 
     MailEntity findById(UUID uuid);
 }

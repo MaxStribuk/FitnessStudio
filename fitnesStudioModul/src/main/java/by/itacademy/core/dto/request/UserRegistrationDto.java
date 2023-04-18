@@ -1,5 +1,7 @@
 package by.itacademy.core.dto.request;
 
+import by.itacademy.core.Constants;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -8,9 +10,7 @@ import java.util.Objects;
 
 public class UserRegistrationDto implements Serializable {
 
-    @Email(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-            message = "invalid email")
-    @NotBlank(message = "email cannot be empty")
+    @Email(regexp = Constants.EMAIL_PATTERN, message = "invalid email")
     private String mail;
 
     @NotBlank(message = "name cannot be empty")
@@ -19,9 +19,6 @@ public class UserRegistrationDto implements Serializable {
     @NotBlank(message = "password cannot be empty")
     @Size(min = 5, message = "password must contain at least 5 characters")
     private String password;
-
-    public UserRegistrationDto() {
-    }
 
     public String getMail() {
         return mail;
@@ -33,6 +30,9 @@ public class UserRegistrationDto implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public UserRegistrationDto() {
     }
 
     @Override

@@ -8,11 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface IUserService {
 
-    void add(UserRegistrationDto user);
+    void create(UserRegistrationDto user);
 
-    void verification(UserVerificationDto user);
+    void verify(UserVerificationDto user);
 
-    String login(UserLoginDto user);
+    String logIn(UserLoginDto user);
 
     PageUserDto get();
 

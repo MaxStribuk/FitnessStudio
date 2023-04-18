@@ -8,18 +8,21 @@ import by.itacademy.core.enums.EssenceType;
 import by.itacademy.core.enums.ReportStatus;
 import by.itacademy.core.exception.DtoNullPointerException;
 import by.itacademy.core.exception.EntityNotFoundException;
+import by.itacademy.core.exception.FileDownloadException;
 import by.itacademy.repository.api.IReportRepository;
 import by.itacademy.repository.entity.ReportEntity;
 import by.itacademy.repository.entity.ReportStatusEntity;
-import by.itacademy.service.api.IAdminService;
+import by.itacademy.service.api.IFileHandlingService;
 import by.itacademy.service.api.IReportService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,18 +32,18 @@ public class ReportService implements IReportService {
 
     private final IReportRepository reportRepository;
     private final ConversionService conversionService;
-    private final IAdminService adminService;
     private final Converter<Page<ReportEntity>, PageDto<PageReportDto>> reportPageDtoConverter;
+    private final IFileHandlingService fileHandlingService;
 
     public ReportService(
             IReportRepository reportRepository,
             @Qualifier("mvcConversionService") ConversionService conversionService,
-            IAdminService adminService,
-            Converter<Page<ReportEntity>, PageDto<PageReportDto>> reportPageDtoConverter) {
+            Converter<Page<ReportEntity>, PageDto<PageReportDto>> reportPageDtoConverter,
+            IFileHandlingService fileHandlingService) {
         this.reportRepository = reportRepository;
         this.conversionService = conversionService;
-        this.adminService = adminService;
         this.reportPageDtoConverter = reportPageDtoConverter;
+        this.fileHandlingService = fileHandlingService;
     }
 
     @Override
@@ -49,7 +52,6 @@ public class ReportService implements IReportService {
         if (report == null) {
             throw new DtoNullPointerException("reportParamDto must not be null");
         }
-        adminService.get(report.getUser());
         ReportEntity reportEntity = conversionService.convert(report, ReportEntity.class);
         reportRepository.save(reportEntity);
     }
@@ -86,5 +88,30 @@ public class ReportService implements IReportService {
         Optional<ReportEntity> reportEntityOptional = reportRepository.findById(uuid);
         return reportEntityOptional.orElseThrow(
                 () -> new EntityNotFoundException("product with uuid " + uuid + " not found"));
+    }
+
+    @Override
+    public boolean checkAvailability(UUID uuid) {
+        if (uuid == null) {
+            throw new EntityNotFoundException("invalid uuid");
+        }
+        Optional<ReportEntity> reportEntityOptional = reportRepository.findById(uuid);
+        ReportEntity reportEntity = reportEntityOptional.orElseThrow(
+                () -> new EntityNotFoundException("report with uuid " + uuid + " not found"));
+        return reportEntity.getStatus().getStatus().equals(ReportStatus.DONE);
+    }
+
+    @Override
+    public Resource export(UUID uuid) {
+        boolean isAvailableReport = checkAvailability(uuid);
+        if (isAvailableReport) {
+            try {
+                return fileHandlingService.download(uuid.toString());
+            } catch (IOException e) {
+                throw new FileDownloadException(e);
+            }
+        } else {
+            throw new FileDownloadException("File not found: " + uuid);
+        }
     }
 }

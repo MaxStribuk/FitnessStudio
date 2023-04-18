@@ -41,14 +41,15 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        final String token = header.split(" ")[1].trim();
+        final String token = header
+                .split(" ")[1]
+                .trim();
         if (!jwtTokenUtil.validate(token)) {
             chain.doFilter(request, response);
             return;
         }
 
-        UserDetails userDetails = userService
-                .loadUserByMail(jwtTokenUtil.getUsername(token));
+        UserDetails userDetails = userService.loadUserByMail(jwtTokenUtil.getUsername(token));
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(

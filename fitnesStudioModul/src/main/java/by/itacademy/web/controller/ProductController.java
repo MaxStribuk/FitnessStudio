@@ -1,5 +1,6 @@
 package by.itacademy.web.controller;
 
+import by.itacademy.core.Constants;
 import by.itacademy.core.dto.request.ProductCreateDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageProductDto;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
@@ -37,8 +40,8 @@ public class ProductController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> add(@Validated @RequestBody ProductCreateDto product) {
-        productService.add(product);
+    public ResponseEntity<?> add(@RequestBody @Valid ProductCreateDto product) {
+        this.productService.add(product);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -49,7 +52,7 @@ public class ProductController {
             @RequestParam(name = "size", required = false, defaultValue = "20")
             @Positive(message = "size must be greater than 0") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        PageDto<PageProductDto> pageProducts = productService.getAll(pageable);
+        PageDto<PageProductDto> pageProducts = this.productService.getAll(pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(pageProducts);
@@ -58,11 +61,12 @@ public class ProductController {
     @PutMapping(path = "{uuid}/dt_update/{dt_update}",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(
-            @PathVariable(name = "uuid") UUID uuid,
+            @PathVariable(name = "uuid")
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") String uuid,
             @PathVariable(name = "dt_update")
             @Past(message = "invalid dtUpdate") LocalDateTime dtUpdate,
-            @Validated @RequestBody ProductCreateDto product) {
-        productService.update(uuid, dtUpdate, product);
+            @RequestBody @Valid ProductCreateDto product) {
+        this.productService.update(UUID.fromString(uuid), dtUpdate, product);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

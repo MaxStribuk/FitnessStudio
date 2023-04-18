@@ -7,10 +7,12 @@ import by.itacademy.repository.entity.IngredientEntity;
 import by.itacademy.repository.entity.ProductEntity;
 import by.itacademy.repository.entity.RecipeEntity;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class RecipeEntityPageDtoConverter
         implements Converter<RecipeEntity, PageRecipeDto> {
 

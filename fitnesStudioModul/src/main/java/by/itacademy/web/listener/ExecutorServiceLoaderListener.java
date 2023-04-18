@@ -14,29 +14,30 @@ public class ExecutorServiceLoaderListener {
 
     private final ScheduledExecutorService executorService;
     private final Runnable mailSendingThread;
-    private final Runnable ftpFileUploader;
-    private static final long INTERVAL_BETWEEN_SHIPMENTS = 10L;
+    private final Runnable fileUploadThread;
+    private static final long DELAY_BETWEEN_SHIPMENTS = 10L;
+    private static final long INITIAL_DELAY = 10L;
 
     public ExecutorServiceLoaderListener(
             ScheduledExecutorService executorService,
             @Qualifier("emailSender") Runnable mailSendingThread,
-            @Qualifier("fileUploader") Runnable ftpFileUploader) {
+            @Qualifier("fileUploader") Runnable fileUploadThread) {
         this.executorService = executorService;
         this.mailSendingThread = mailSendingThread;
-        this.ftpFileUploader = ftpFileUploader;
+        this.fileUploadThread = fileUploadThread;
     }
 
     @EventListener(ContextRefreshedEvent.class)
     public void contextInitialized() {
         executorService.scheduleWithFixedDelay(
                 mailSendingThread,
-                INTERVAL_BETWEEN_SHIPMENTS,
-                INTERVAL_BETWEEN_SHIPMENTS,
+                INITIAL_DELAY,
+                DELAY_BETWEEN_SHIPMENTS,
                 TimeUnit.SECONDS);
         executorService.scheduleWithFixedDelay(
-                ftpFileUploader,
-                INTERVAL_BETWEEN_SHIPMENTS,
-                INTERVAL_BETWEEN_SHIPMENTS,
+                fileUploadThread,
+                INITIAL_DELAY,
+                DELAY_BETWEEN_SHIPMENTS,
                 TimeUnit.SECONDS);
     }
 

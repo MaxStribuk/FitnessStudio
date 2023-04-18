@@ -1,6 +1,6 @@
 package by.itacademy.service.impl;
 
-import by.itacademy.config.properties.ExcelFileProperties;
+import by.itacademy.config.properties.ExcelProperties;
 import by.itacademy.repository.entity.AuditEntity;
 import by.itacademy.service.api.IExcelFileWriter;
 import org.apache.poi.ss.usermodel.Row;
@@ -18,10 +18,10 @@ import java.util.List;
 @Service
 public class ExcelFileWriterService implements IExcelFileWriter {
 
-    private final ExcelFileProperties properties;
+    private final ExcelProperties properties;
     public final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public ExcelFileWriterService(ExcelFileProperties properties) {
+    public ExcelFileWriterService(ExcelProperties properties) {
         this.properties = properties;
     }
 

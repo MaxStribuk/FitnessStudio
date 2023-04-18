@@ -1,4 +1,4 @@
-package by.itacademy.service.util.tasks;
+package by.itacademy.service.util.task;
 
 import by.itacademy.core.enums.ReportStatus;
 import by.itacademy.repository.entity.AuditEntity;

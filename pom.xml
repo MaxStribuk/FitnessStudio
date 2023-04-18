@@ -49,7 +49,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -107,7 +106,6 @@
             <artifactId>google-api-services-drive</artifactId>
             <version>v3-rev20230212-2.0.0</version>
         </dependency>
-
     </dependencies>
 
     <build>

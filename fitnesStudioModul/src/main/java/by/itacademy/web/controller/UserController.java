@@ -1,5 +1,6 @@
 package by.itacademy.web.controller;
 
+import by.itacademy.core.Constants;
 import by.itacademy.core.dto.request.UserLoginDto;
 import by.itacademy.core.dto.request.UserRegistrationDto;
 import by.itacademy.core.dto.request.UserVerificationDto;
@@ -13,12 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import by.itacademy.service.api.IUserService;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 @RestController
@@ -33,34 +34,32 @@ public class UserController {
     }
 
     @PostMapping(path = "/registration", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> add(@RequestBody @Validated UserRegistrationDto user) {
-        userService.add(user);
+    public ResponseEntity<?> create(@RequestBody @Valid UserRegistrationDto user) {
+        this.userService.create(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/verification")
-    public ResponseEntity<?> verification(
-            @RequestParam(name = "code") UUID code,
+    public ResponseEntity<?> verify(
+            @RequestParam(name = "code")
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid code") String code,
             @RequestParam(name = "mail")
-            @Email(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-                    message = "invalid email")
-            @NotBlank(message = "email cannot be empty") String mail) {
-        userService.verification(new UserVerificationDto(code, mail));
+            @Email(regexp = Constants.EMAIL_PATTERN, message = "invalid email") String mail) {
+        this.userService.verify(new UserVerificationDto(UUID.fromString(code), mail));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> login(@RequestBody @Validated UserLoginDto user) {
+    public ResponseEntity<String> logIn(@RequestBody @Valid UserLoginDto user) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.login(user));
+                .body(this.userService.logIn(user));
     }
 
     @GetMapping(path = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<PageUserDto> get() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.get());
+                .body(this.userService.get());
     }
 }

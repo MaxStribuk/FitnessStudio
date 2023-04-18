@@ -4,7 +4,6 @@ import by.itacademy.core.dto.request.UserCreateDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.core.enums.EssenceType;
-import by.itacademy.core.exception.DtoNullPointerException;
 import by.itacademy.core.exception.EntityNotFoundException;
 import by.itacademy.core.exception.InvalidVersionException;
 import by.itacademy.repository.api.IAdminRepository;
@@ -18,11 +17,15 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
+@Transactional
 public class AdminService implements IAdminService {
 
     private final IAdminRepository adminRepository;
@@ -43,60 +46,42 @@ public class AdminService implements IAdminService {
     @Override
     @Auditable(value = "added new user", type = EssenceType.USER)
     public void add(UserCreateDto user) {
-        if (user == null) {
-            throw new DtoNullPointerException("userCreateDto must not be null");
-        }
-        UserEntity userEntity = conversionService.convert(user, UserEntity.class);
-        userEntity.setPassword(encoder.encode(user.getPassword()));
-        adminRepository.save(userEntity);
+        UserEntity userEntity = this.conversionService.convert(user, UserEntity.class);
+        userEntity.setPassword(this.encoder.encode(user.getPassword()));
+        this.adminRepository.save(userEntity);
     }
 
     @Override
     public PageDto<PageUserDto> getAll(Pageable pageable) {
-        if (pageable == null) {
-            throw new NullPointerException("pageable must be not null");
-        }
-        Page<UserEntity> users = adminRepository.findAll(pageable);
-        return userPageDtoConverter.convert(users);
+        Page<UserEntity> users = this.adminRepository.findAll(pageable);
+        return this.userPageDtoConverter.convert(users);
     }
 
     @Override
     public PageUserDto get(UUID uuid) {
-        if (uuid == null) {
-            throw new EntityNotFoundException("invalid uuid");
-        }
-        Optional<UserEntity> userEntityOptional = adminRepository.findById(uuid);
+        Optional<UserEntity> userEntityOptional = this.adminRepository.findById(uuid);
         UserEntity userEntity = userEntityOptional.orElseThrow(
-                () -> new EntityNotFoundException("user with uuid " + uuid + " not found"));
-        return conversionService.convert(userEntity, PageUserDto.class);
+                () -> new EntityNotFoundException("user not found: " + uuid));
+        return this.conversionService.convert(userEntity, PageUserDto.class);
     }
 
     @Override
     @Auditable(value = "updated user information", type = EssenceType.USER)
     public void update(UUID uuid, LocalDateTime dtUpdate, UserCreateDto user) {
-        if (uuid == null) {
-            throw new EntityNotFoundException("invalid uuid");
-        }
-        if (user == null) {
-            throw new DtoNullPointerException("userCreateDto must not be null");
-        }
-        if (dtUpdate == null) {
-            throw new InvalidVersionException("invalid dtUpdate");
-        }
-        Optional<UserEntity> userEntityOptional = adminRepository.findById(uuid);
+        Optional<UserEntity> userEntityOptional = this.adminRepository.findById(uuid);
         UserEntity userEntity = userEntityOptional.orElseThrow(
-                () -> new EntityNotFoundException("user with uuid " + uuid + " not found"));
-        if (! dtUpdate.isEqual(userEntity.getDtUpdate())) {
+                () -> new EntityNotFoundException("user not found: " + uuid));
+        if (!dtUpdate.isEqual(userEntity.getDtUpdate())) {
             throw new InvalidVersionException("invalid dtUpdate");
         }
         update(userEntity, user);
-        adminRepository.save(userEntity);
+        this.adminRepository.save(userEntity);
     }
 
     private void update(UserEntity userEntity, UserCreateDto user) {
         userEntity.setFio(user.getFio());
         userEntity.setMail(user.getMail());
-        userEntity.setPassword(encoder.encode(user.getPassword()));
+        userEntity.setPassword(this.encoder.encode(user.getPassword()));
         userEntity.setRole(new UserRoleEntity(user.getRole()));
         userEntity.setStatus(new UserStatusEntity(user.getStatus()));
     }

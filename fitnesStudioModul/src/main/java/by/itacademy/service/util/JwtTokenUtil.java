@@ -1,8 +1,7 @@
-package by.itacademy.service.util.jwt;
+package by.itacademy.service.util;
 
 import by.itacademy.config.properties.JwtTokenProperties;
-import by.itacademy.core.dto.response.CurrentUserDto;
-import by.itacademy.core.enums.UserRole;
+import by.itacademy.core.dto.CurrentUserDto;
 import by.itacademy.service.api.IJwtTokenUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -31,6 +29,7 @@ public class JwtTokenUtil implements IJwtTokenUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put("fio", currentUser.getFio());
         claims.put("role", currentUser.getRole());
+        claims.put("status", currentUser.getStatus());
         return Jwts.builder()
                 .setSubject(currentUser.getUsername())
                 .setIssuer(properties.getIssuer())
@@ -40,7 +39,6 @@ public class JwtTokenUtil implements IJwtTokenUtil {
                 .setExpiration(new Date(System.currentTimeMillis()
                         + TimeUnit.DAYS.toMillis(7)))
                 .signWith(SignatureAlgorithm.HS512, properties.getSecret())
-
                 .compact();
     }
 
@@ -52,36 +50,6 @@ public class JwtTokenUtil implements IJwtTokenUtil {
                 .getBody();
 
         return claims.getSubject();
-    }
-
-    @Override
-    public String getFio(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(properties.getSecret())
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.get("fio", String.class);
-    }
-
-    @Override
-    public UUID getUuid(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(properties.getSecret())
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.get("uuid", UUID.class);
-    }
-
-    @Override
-    public UserRole getUserRole(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(properties.getSecret())
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.get("role", UserRole.class);
     }
 
     @Override

@@ -4,7 +4,9 @@ import by.itacademy.core.dto.response.PageAuditDto;
 import by.itacademy.core.dto.response.UserAuditDto;
 import by.itacademy.repository.entity.AuditEntity;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AuditEntityPageDtoConverter implements Converter<AuditEntity, PageAuditDto> {
 
     @Override

@@ -38,15 +38,6 @@ public class UserCreateDto implements Serializable {
     public UserCreateDto() {
     }
 
-    public UserCreateDto(String mail, String fio,
-                         UserRole role, UserStatus status, String password) {
-        this.mail = mail;
-        this.fio = fio;
-        this.role = role;
-        this.status = status;
-        this.password = password;
-    }
-
     public String getMail() {
         return mail;
     }

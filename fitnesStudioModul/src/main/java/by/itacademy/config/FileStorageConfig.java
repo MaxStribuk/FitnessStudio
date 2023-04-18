@@ -28,8 +28,7 @@ import java.util.List;
 public class FileStorageConfig {
 
     private final GoogleDriveProperties properties;
-    private final List<String> SCOPES =
-            Collections.singletonList(DriveScopes.DRIVE_FILE);
+    private final List<String> scopes = Collections.singletonList(DriveScopes.DRIVE_FILE);
 
     public FileStorageConfig(GoogleDriveProperties properties) {
         this.properties = properties;
@@ -43,32 +42,34 @@ public class FileStorageConfig {
     @Bean
     public Drive drive() throws IOException, GeneralSecurityException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        return new Drive.Builder(HTTP_TRANSPORT, jsonFactory(), getCredentials(HTTP_TRANSPORT))
+        return new Drive
+                .Builder(HTTP_TRANSPORT, jsonFactory(), getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(properties.getApplicationName())
                 .build();
     }
 
     private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT)
             throws IOException {
-        String credentialsFilePath = properties.getCredentialsFilePath();
-        InputStream in = FileStorageConfig.class.getResourceAsStream(credentialsFilePath);
-        if (in == null) {
-            throw new FileNotFoundException("Resource not found: " + credentialsFilePath);
+        String credentialsFilePath = this.properties.getCredentialsFilePath();
+        try (InputStream in = FileStorageConfig.class.getResourceAsStream(credentialsFilePath)) {
+            if (in == null) {
+                throw new FileNotFoundException("Resource not found: " + credentialsFilePath);
+            }
+            GoogleClientSecrets clientSecrets =
+                    GoogleClientSecrets.load(jsonFactory(), new InputStreamReader(in));
+            GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow
+                    .Builder(HTTP_TRANSPORT, jsonFactory(), clientSecrets, this.scopes)
+                    .setDataStoreFactory(new FileDataStoreFactory(
+                            new java.io.File(this.properties.getTokensDirectoryPath())))
+                    .setAccessType(this.properties.getAccessType())
+                    .build();
+            LocalServerReceiver receiver = new LocalServerReceiver
+                    .Builder()
+                    .setPort(this.properties.getPort())
+                    .setHost(this.properties.getHost())
+                    .build();
+            return new AuthorizationCodeInstalledApp(flow, receiver)
+                    .authorize(this.properties.getUserId());
         }
-        GoogleClientSecrets clientSecrets =
-                GoogleClientSecrets.load(jsonFactory(), new InputStreamReader(in));
-
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, jsonFactory(), clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(
-                        new java.io.File(properties.getTokensDirectoryPath())))
-                .setAccessType(properties.getAccessType())
-                .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder()
-                .setPort(properties.getPort())
-                .setHost(properties.getHost())
-                .build();
-        return new AuthorizationCodeInstalledApp(flow, receiver)
-                .authorize(properties.getUserId());
     }
 }

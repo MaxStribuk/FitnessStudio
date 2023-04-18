@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConfigurationProperties(prefix = "excel")
-public class ExcelFileProperties {
+public class ExcelProperties {
 
     private String columnUuid;
     private String columnDtCreate;

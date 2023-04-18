@@ -1,5 +1,6 @@
 package by.itacademy.web.controller;
 
+import by.itacademy.core.Constants;
 import by.itacademy.core.dto.request.UserCreateDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.core.dto.response.PageDto;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import by.itacademy.service.api.IAdminService;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
@@ -37,8 +40,8 @@ public class AdminController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> add(@Validated @RequestBody UserCreateDto user) {
-        adminService.add(user);
+    public ResponseEntity<?> add(@RequestBody @Valid UserCreateDto user) {
+        this.adminService.add(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -49,7 +52,7 @@ public class AdminController {
             @RequestParam(name = "size", required = false, defaultValue = "20")
             @Positive(message = "size must be greater than 0") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        PageDto<PageUserDto> pageUsers = adminService.getAll(pageable);
+        PageDto<PageUserDto> pageUsers = this.adminService.getAll(pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(pageUsers);
@@ -57,8 +60,9 @@ public class AdminController {
 
     @GetMapping(path = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageUserDto> get(
-            @PathVariable(name = "uuid") UUID uuid) {
-        PageUserDto pageUser = adminService.get(uuid);
+            @PathVariable(name = "uuid")
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") String uuid) {
+        PageUserDto pageUser = this.adminService.get(UUID.fromString(uuid));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(pageUser);
@@ -67,11 +71,12 @@ public class AdminController {
     @PutMapping(path = "{uuid}/dt_update/{dt_update}",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(
-            @PathVariable(name = "uuid") UUID uuid,
+            @PathVariable(name = "uuid")
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") String uuid,
             @PathVariable(name = "dt_update")
             @Past(message = "invalid dtUpdate") LocalDateTime dtUpdate,
-            @Validated @RequestBody UserCreateDto user) {
-        adminService.update(uuid, dtUpdate, user);
+            @RequestBody @Valid UserCreateDto user) {
+        this.adminService.update(UUID.fromString(uuid), dtUpdate, user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

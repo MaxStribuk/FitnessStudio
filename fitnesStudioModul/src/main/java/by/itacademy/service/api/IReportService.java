@@ -4,6 +4,7 @@ import by.itacademy.core.dto.request.ReportCreateDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageReportDto;
 import by.itacademy.repository.entity.ReportEntity;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -20,4 +21,8 @@ public interface IReportService {
     List<ReportEntity> getUnsent();
 
     ReportEntity get(UUID uuid);
+
+    boolean checkAvailability(UUID uuid);
+
+    Resource export(UUID uuid);
 }

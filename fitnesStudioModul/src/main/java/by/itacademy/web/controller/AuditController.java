@@ -1,5 +1,6 @@
 package by.itacademy.web.controller;
 
+import by.itacademy.core.Constants;
 import by.itacademy.core.dto.response.PageAuditDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.service.api.IAuditService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.UUID;
@@ -37,7 +39,7 @@ public class AuditController {
             @RequestParam(name = "size", required = false, defaultValue = "20")
             @Positive(message = "size must be greater than 0") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        PageDto<PageAuditDto> pageAudit = auditService.getAll(pageable);
+        PageDto<PageAuditDto> pageAudit = this.auditService.getAll(pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(pageAudit);
@@ -45,8 +47,9 @@ public class AuditController {
 
     @GetMapping(path = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PageAuditDto> get(
-            @PathVariable(name = "uuid") UUID uuid) {
-        PageAuditDto pageAudit = auditService.get(uuid);
+            @PathVariable(name = "uuid")
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") String uuid) {
+        PageAuditDto pageAudit = this.auditService.get(UUID.fromString(uuid));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(pageAudit);
