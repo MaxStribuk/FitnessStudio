@@ -1,4 +1,4 @@
-package by.itacademy.core.dto;
+package by.itacademy.core.dto.transfer;
 
 import by.itacademy.repository.entity.MailStatusEntity;
 import by.itacademy.repository.entity.UserEntity;

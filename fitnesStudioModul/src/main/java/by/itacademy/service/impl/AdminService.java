@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Transactional
 public class AdminService implements IAdminService {
 
     private final IAdminRepository adminRepository;
@@ -44,6 +43,7 @@ public class AdminService implements IAdminService {
     }
 
     @Override
+    @Transactional
     @Auditable(value = "added new user", type = EssenceType.USER)
     public void add(UserCreateDto user) {
         UserEntity userEntity = this.conversionService.convert(user, UserEntity.class);
@@ -52,12 +52,14 @@ public class AdminService implements IAdminService {
     }
 
     @Override
+    @Transactional
     public PageDto<PageUserDto> getAll(Pageable pageable) {
         Page<UserEntity> users = this.adminRepository.findAll(pageable);
         return this.userPageDtoConverter.convert(users);
     }
 
     @Override
+    @Transactional
     public PageUserDto get(UUID uuid) {
         Optional<UserEntity> userEntityOptional = this.adminRepository.findById(uuid);
         UserEntity userEntity = userEntityOptional.orElseThrow(
@@ -66,6 +68,7 @@ public class AdminService implements IAdminService {
     }
 
     @Override
+    @Transactional
     @Auditable(value = "updated user information", type = EssenceType.USER)
     public void update(UUID uuid, LocalDateTime dtUpdate, UserCreateDto user) {
         Optional<UserEntity> userEntityOptional = this.adminRepository.findById(uuid);

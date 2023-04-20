@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Transactional
 public class ProductService implements IProductService {
 
     private final IProductRepository productRepository;
@@ -38,6 +37,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     @Auditable(value = "added new product", type = EssenceType.PRODUCT)
     public void add(ProductCreateDto product) {
         ProductEntity productEntity = this.conversionService.convert(product, ProductEntity.class);
@@ -45,12 +45,14 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public PageDto<PageProductDto> getAll(Pageable pageable) {
         Page<ProductEntity> products = this.productRepository.findAll(pageable);
         return this.productPageDtoConverter.convert(products);
     }
 
     @Override
+    @Transactional
     @Auditable(value = "updated product information", type = EssenceType.PRODUCT)
     public void update(UUID uuid, LocalDateTime dtUpdate, ProductCreateDto product) {
         Optional<ProductEntity> productEntityOptional = this.productRepository.findById(uuid);
@@ -64,6 +66,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public PageProductDto get(UUID uuid) {
         Optional<ProductEntity> productEntityOptional = this.productRepository.findById(uuid);
         ProductEntity productEntity = productEntityOptional.orElseThrow(

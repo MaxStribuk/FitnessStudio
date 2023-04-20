@@ -1,6 +1,6 @@
 package by.itacademy.service.util.converter;
 
-import by.itacademy.core.dto.MailDto;
+import by.itacademy.core.dto.transfer.MailDto;
 import by.itacademy.repository.entity.MailEntity;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

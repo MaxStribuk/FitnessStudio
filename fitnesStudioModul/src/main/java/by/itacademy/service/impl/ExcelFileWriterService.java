@@ -1,7 +1,7 @@
 package by.itacademy.service.impl;
 
 import by.itacademy.config.properties.ExcelProperties;
-import by.itacademy.repository.entity.AuditEntity;
+import by.itacademy.core.dto.transfer.AuditDto;
 import by.itacademy.service.api.IExcelFileWriter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -19,52 +19,82 @@ import java.util.List;
 public class ExcelFileWriterService implements IExcelFileWriter {
 
     private final ExcelProperties properties;
-    public final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public ExcelFileWriterService(ExcelProperties properties) {
         this.properties = properties;
     }
 
     @Override
-    public byte[] write(List<AuditEntity> audits) throws IOException {
+    public byte[] write(List<AuditDto> audits) throws IOException {
         try (Workbook workbook = new XSSFWorkbook();
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet();
-            createHeaderRow(sheet);
+            Row headerRow = sheet.createRow(0);
+            createHeadersRow(headerRow);
             int rowNum = 1;
-            for (AuditEntity audit : audits) {
+            for (AuditDto audit : audits) {
                 Row currentRow = sheet.createRow(++rowNum);
-                int columnNum = 0;
-                currentRow.createCell(columnNum).setCellValue(audit.getUuid().toString());
-                currentRow.createCell(++columnNum).setCellValue(format(audit.getDtCreate()));
-                currentRow.createCell(++columnNum).setCellValue(audit.getUserUuid().toString());
-                currentRow.createCell(++columnNum).setCellValue(audit.getMail());
-                currentRow.createCell(++columnNum).setCellValue(audit.getFio());
-                currentRow.createCell(++columnNum).setCellValue(audit.getRole().getRole().name());
-                currentRow.createCell(++columnNum).setCellValue(audit.getText());
-                currentRow.createCell(++columnNum).setCellValue(audit.getType().getType().name());
-                currentRow.createCell(++columnNum).setCellValue(audit.getType().getId());
+                fillRow(audit, currentRow);
             }
+            setAutosize(sheet);
             workbook.write(baos);
             return baos.toByteArray();
         }
     }
 
-    private void createHeaderRow(Sheet sheet) {
-        Row headerRow = sheet.createRow(0);
+    private void fillRow(AuditDto audit, Row currentRow) {
         int columnNum = 0;
-        headerRow.createCell(columnNum).setCellValue(properties.getColumnUuid());
-        headerRow.createCell(++columnNum).setCellValue(properties.getColumnDtCreate());
-        headerRow.createCell(++columnNum).setCellValue(properties.getColumnDtUpdate());
-        headerRow.createCell(++columnNum).setCellValue(properties.getColumnMail());
-        headerRow.createCell(++columnNum).setCellValue(properties.getColumnFio());
-        headerRow.createCell(++columnNum).setCellValue(properties.getColumnRole());
-        headerRow.createCell(++columnNum).setCellValue(properties.getColumnText());
-        headerRow.createCell(++columnNum).setCellValue(properties.getColumnType());
-        headerRow.createCell(++columnNum).setCellValue(properties.getColumnId());
+        currentRow.createCell(columnNum)
+                .setCellValue(audit.getUuid().toString());
+        currentRow.createCell(++columnNum)
+                .setCellValue(format(audit.getDtCreate()));
+        currentRow.createCell(++columnNum)
+                .setCellValue(audit.getUserUuid().toString());
+        currentRow.createCell(++columnNum)
+                .setCellValue(audit.getMail());
+        currentRow.createCell(++columnNum)
+                .setCellValue(audit.getFio());
+        currentRow.createCell(++columnNum)
+                .setCellValue(audit.getRole().name());
+        currentRow.createCell(++columnNum)
+                .setCellValue(audit.getText());
+        currentRow.createCell(++columnNum)
+                .setCellValue(audit.getType().name());
+        currentRow.createCell(++columnNum)
+                .setCellValue(audit.getType().ordinal() + 1);
+    }
+
+    private void createHeadersRow(Row headerRow) {
+        int columnNum = 0;
+        headerRow.createCell(columnNum)
+                .setCellValue(properties.getUuid());
+        headerRow.createCell(++columnNum)
+                .setCellValue(properties.getDtCreate());
+        headerRow.createCell(++columnNum)
+                .setCellValue(properties.getUserUuid());
+        headerRow.createCell(++columnNum)
+                .setCellValue(properties.getMail());
+        headerRow.createCell(++columnNum)
+                .setCellValue(properties.getFio());
+        headerRow.createCell(++columnNum)
+                .setCellValue(properties.getRole());
+        headerRow.createCell(++columnNum)
+                .setCellValue(properties.getText());
+        headerRow.createCell(++columnNum)
+                .setCellValue(properties.getType());
+        headerRow.createCell(++columnNum)
+                .setCellValue(properties.getTypeId());
     }
 
     private String format(LocalDateTime dateTime) {
         return FORMATTER.format(dateTime);
+    }
+
+    private void setAutosize(Sheet sheet) {
+        for (int i = 0; i < sheet.getRow(0).getLastCellNum(); i++) {
+            sheet.autoSizeColumn(i);
+        }
     }
 }
