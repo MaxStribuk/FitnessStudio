@@ -29,12 +29,12 @@ public class FileHandlingService implements IFileHandlingService {
     @Override
     public void upload(String fileName, byte[] bytes) throws IOException {
         File file = new File();
-        file.setParents(Collections.singletonList(properties.getFolderId()));
-        file.setName(fileName + properties.getFileExtension());
-        String contentType = properties.getContentType();
+        file.setParents(Collections.singletonList(this.properties.getFolderId()));
+        file.setName(fileName + this.properties.getFileExtension());
+        String contentType = this.properties.getContentType();
         try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
             InputStreamContent inputStreamContent = new InputStreamContent(contentType, inputStream);
-            drive.files()
+            this.drive.files()
                     .create(file, inputStreamContent)
                     .execute();
         }
@@ -42,9 +42,9 @@ public class FileHandlingService implements IFileHandlingService {
 
     @Override
     public Resource download(String fileName) throws IOException {
-        String query = "'" + properties.getFolderId() + "' in parents";
-        String fullFileName = fileName + properties.getFileExtension();
-        String id = drive.files()
+        String query = this.properties.getQueryForFileFolder();
+        String fullFileName = fileName + this.properties.getFileExtension();
+        String id = this.drive.files()
                 .list()
                 .setQ(query)
                 .execute()
@@ -52,10 +52,10 @@ public class FileHandlingService implements IFileHandlingService {
                 .stream()
                 .filter(file -> file.getName().equals(fullFileName))
                 .findFirst()
-                .orElseThrow(EntityNotFoundException::new)
+                .orElseThrow(() -> new EntityNotFoundException("file not found"))
                 .getId();
         return new InputStreamResource(
-                drive.files()
+                this.drive.files()
                         .get(id)
                         .executeMediaAsInputStream());
     }

@@ -18,6 +18,7 @@ public class GoogleDriveProperties {
     private String host;
     private String userId;
     private String fileAttachment;
+    private String queryForFileFolder;
 
     public String getFolderId() {
         return folderId;
@@ -105,5 +106,13 @@ public class GoogleDriveProperties {
 
     public void setFileAttachment(String fileAttachment) {
         this.fileAttachment = fileAttachment;
+    }
+
+    public String getQueryForFileFolder() {
+        return queryForFileFolder;
+    }
+
+    public void setQueryForFileFolder(String queryForFileFolder) {
+        this.queryForFileFolder = queryForFileFolder;
     }
 }

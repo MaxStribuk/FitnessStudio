@@ -1,6 +1,7 @@
 package by.itacademy.service.impl;
 
 import by.itacademy.config.properties.ExcelProperties;
+import by.itacademy.core.Constants;
 import by.itacademy.core.dto.transfer.AuditDto;
 import by.itacademy.service.api.IExcelFileWriter;
 import org.apache.poi.ss.usermodel.Row;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class ExcelFileWriterService implements IExcelFileWriter {
 
     private final ExcelProperties properties;
     public static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter.ofPattern(Constants.DATE_TIME_PATTERN);
 
     public ExcelFileWriterService(ExcelProperties properties) {
         this.properties = properties;
@@ -28,11 +29,13 @@ public class ExcelFileWriterService implements IExcelFileWriter {
 
     @Override
     public byte[] write(List<AuditDto> audits) throws IOException {
-        try (Workbook workbook = new XSSFWorkbook();
+        try (InputStream inputStream = getClass()
+                .getClassLoader()
+                .getResourceAsStream(this.properties.getExampleFileName());
+             Workbook workbook = new XSSFWorkbook(inputStream);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            Sheet sheet = workbook.createSheet();
-            Row headerRow = sheet.createRow(0);
-            createHeadersRow(headerRow);
+
+            Sheet sheet = workbook.getSheet(this.properties.getSheetName());
             int rowNum = 1;
             for (AuditDto audit : audits) {
                 Row currentRow = sheet.createRow(++rowNum);
@@ -49,7 +52,7 @@ public class ExcelFileWriterService implements IExcelFileWriter {
         currentRow.createCell(columnNum)
                 .setCellValue(audit.getUuid().toString());
         currentRow.createCell(++columnNum)
-                .setCellValue(format(audit.getDtCreate()));
+                .setCellValue(FORMATTER.format(audit.getDtCreate()));
         currentRow.createCell(++columnNum)
                 .setCellValue(audit.getUserUuid().toString());
         currentRow.createCell(++columnNum)
@@ -66,34 +69,11 @@ public class ExcelFileWriterService implements IExcelFileWriter {
                 .setCellValue(audit.getType().ordinal() + 1);
     }
 
-    private void createHeadersRow(Row headerRow) {
-        int columnNum = 0;
-        headerRow.createCell(columnNum)
-                .setCellValue(properties.getUuid());
-        headerRow.createCell(++columnNum)
-                .setCellValue(properties.getDtCreate());
-        headerRow.createCell(++columnNum)
-                .setCellValue(properties.getUserUuid());
-        headerRow.createCell(++columnNum)
-                .setCellValue(properties.getMail());
-        headerRow.createCell(++columnNum)
-                .setCellValue(properties.getFio());
-        headerRow.createCell(++columnNum)
-                .setCellValue(properties.getRole());
-        headerRow.createCell(++columnNum)
-                .setCellValue(properties.getText());
-        headerRow.createCell(++columnNum)
-                .setCellValue(properties.getType());
-        headerRow.createCell(++columnNum)
-                .setCellValue(properties.getTypeId());
-    }
-
-    private String format(LocalDateTime dateTime) {
-        return FORMATTER.format(dateTime);
-    }
-
     private void setAutosize(Sheet sheet) {
-        for (int i = 0; i < sheet.getRow(0).getLastCellNum(); i++) {
+        short lastCellNum = sheet
+                .getRow(0)
+                .getLastCellNum();
+        for (short i = 0; i < lastCellNum; i++) {
             sheet.autoSizeColumn(i);
         }
     }

@@ -44,7 +44,7 @@ public class FileStorageConfig {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         return new Drive
                 .Builder(HTTP_TRANSPORT, jsonFactory(), getCredentials(HTTP_TRANSPORT))
-                .setApplicationName(properties.getApplicationName())
+                .setApplicationName(this.properties.getApplicationName())
                 .build();
     }
 
