@@ -11,14 +11,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 public class AuditCreateDto implements Serializable {
 
-    @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid")
     @JsonDeserialize(using = UuidDeserializer.class)
     private UUID userUuid;
 

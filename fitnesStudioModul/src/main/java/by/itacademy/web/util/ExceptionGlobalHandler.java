@@ -5,7 +5,6 @@ import by.itacademy.core.dto.error.MultipleErrorDto;
 import by.itacademy.core.dto.error.SingleErrorDto;
 import by.itacademy.core.enums.ErrorType;
 import by.itacademy.core.exception.AuthorizationException;
-import by.itacademy.core.exception.DtoNullPointerException;
 import by.itacademy.core.exception.EntityNotFoundException;
 import by.itacademy.core.exception.FileDownloadException;
 import by.itacademy.core.exception.InvalidVersionException;
@@ -85,7 +84,6 @@ public class ExceptionGlobalHandler {
 
     @ExceptionHandler({InvalidVersionException.class,
             EntityNotFoundException.class,
-            DtoNullPointerException.class,
             VerificationException.class,
             AuthorizationException.class,
             FileDownloadException.class})
@@ -104,6 +102,7 @@ public class ExceptionGlobalHandler {
 
         SingleErrorDto error = new SingleErrorDto(
                 ErrorType.ERROR.toString(), DEFAULT_SERVER_ERROR_MESSAGE);
+        e.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(List.of(error));

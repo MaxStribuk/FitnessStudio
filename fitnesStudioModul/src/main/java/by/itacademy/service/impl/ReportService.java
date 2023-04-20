@@ -4,23 +4,26 @@ import by.itacademy.aop.api.Auditable;
 import by.itacademy.core.dto.request.ReportCreateDto;
 import by.itacademy.core.dto.response.PageDto;
 import by.itacademy.core.dto.response.PageReportDto;
+import by.itacademy.core.dto.transfer.AuditDto;
+import by.itacademy.core.dto.transfer.ReportDto;
 import by.itacademy.core.enums.EssenceType;
 import by.itacademy.core.enums.ReportStatus;
-import by.itacademy.core.exception.DtoNullPointerException;
 import by.itacademy.core.exception.EntityNotFoundException;
 import by.itacademy.core.exception.FileDownloadException;
 import by.itacademy.repository.api.IReportRepository;
 import by.itacademy.repository.entity.ReportEntity;
 import by.itacademy.repository.entity.ReportStatusEntity;
+import by.itacademy.service.api.IAuditService;
+import by.itacademy.service.api.IExcelFileWriter;
 import by.itacademy.service.api.IFileHandlingService;
 import by.itacademy.service.api.IReportService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,83 +35,87 @@ public class ReportService implements IReportService {
 
     private final IReportRepository reportRepository;
     private final ConversionService conversionService;
+    private final IAuditService auditService;
     private final Converter<Page<ReportEntity>, PageDto<PageReportDto>> reportPageDtoConverter;
     private final IFileHandlingService fileHandlingService;
+    private final IExcelFileWriter fileWriter;
 
     public ReportService(
             IReportRepository reportRepository,
-            @Qualifier("mvcConversionService") ConversionService conversionService,
+            ConversionService conversionService,
+            IAuditService auditService,
             Converter<Page<ReportEntity>, PageDto<PageReportDto>> reportPageDtoConverter,
-            IFileHandlingService fileHandlingService) {
+            IFileHandlingService fileHandlingService,
+            IExcelFileWriter fileWriter) {
         this.reportRepository = reportRepository;
         this.conversionService = conversionService;
+        this.auditService = auditService;
         this.reportPageDtoConverter = reportPageDtoConverter;
         this.fileHandlingService = fileHandlingService;
+        this.fileWriter = fileWriter;
     }
 
     @Override
+    @Transactional
     @Auditable(value = "added new report", type = EssenceType.REPORT)
     public void add(ReportCreateDto report) {
-        if (report == null) {
-            throw new DtoNullPointerException("reportParamDto must not be null");
-        }
-        ReportEntity reportEntity = conversionService.convert(report, ReportEntity.class);
-        reportRepository.save(reportEntity);
+        ReportEntity reportEntity = this.conversionService.convert(report, ReportEntity.class);
+        this.reportRepository.save(reportEntity);
     }
 
     @Override
-    public void add(ReportEntity report) {
-        if (report == null) {
-            throw new EntityNotFoundException("report must not be null");
-        }
-        reportRepository.save(report);
-    }
-
-    @Override
+    @Transactional
     public PageDto<PageReportDto> getAll(Pageable pageable) {
-        if (pageable == null) {
-            throw new NullPointerException("pageable must be not null");
-        }
-        Page<ReportEntity> reports = reportRepository.findAll(pageable);
-        return reportPageDtoConverter.convert(reports);
+        Page<ReportEntity> reports = this.reportRepository.findAll(pageable);
+        return this.reportPageDtoConverter.convert(reports);
     }
 
     @Override
+    @Transactional
     public List<ReportEntity> getUnsent() {
-        return reportRepository.findFirst10ByStatusIsOrderByDtCreate(
-            new ReportStatusEntity(ReportStatus.LOADED)
+        return this.reportRepository.findFirst10ByStatusIsOrderByDtCreate(
+                new ReportStatusEntity(ReportStatus.LOADED)
         );
     }
 
     @Override
-    public ReportEntity get(UUID uuid) {
-        if (uuid == null) {
-            throw new EntityNotFoundException("invalid uuid");
+    public void upload(ReportEntity report) {
+        report.setStatus(new ReportStatusEntity(ReportStatus.PROGRESS));
+        this.reportRepository.save(report);
+        try {
+            report = this.reportRepository
+                    .findById(report.getUuid())
+                    .get();
+            List<AuditDto> audits = this.auditService.getForReport(
+                    this.conversionService.convert(report, ReportDto.class));
+            byte[] bytes = this.fileWriter.write(audits);
+            this.fileHandlingService.upload(report.getUuid().toString(), bytes);
+            report.setStatus(new ReportStatusEntity(ReportStatus.DONE));
+        } catch (Exception e) {
+            report.setStatus(new ReportStatusEntity(ReportStatus.ERROR));
+        } finally {
+            this.reportRepository.save(report);
         }
-        Optional<ReportEntity> reportEntityOptional = reportRepository.findById(uuid);
-        return reportEntityOptional.orElseThrow(
-                () -> new EntityNotFoundException("product with uuid " + uuid + " not found"));
     }
 
     @Override
+    @Transactional
     public boolean checkAvailability(UUID uuid) {
-        if (uuid == null) {
-            throw new EntityNotFoundException("invalid uuid");
-        }
-        Optional<ReportEntity> reportEntityOptional = reportRepository.findById(uuid);
+        Optional<ReportEntity> reportEntityOptional = this.reportRepository.findById(uuid);
         ReportEntity reportEntity = reportEntityOptional.orElseThrow(
-                () -> new EntityNotFoundException("report with uuid " + uuid + " not found"));
+                () -> new EntityNotFoundException("report not found: " + uuid));
         return reportEntity.getStatus().getStatus().equals(ReportStatus.DONE);
     }
 
     @Override
+    @Transactional
     public Resource export(UUID uuid) {
         boolean isAvailableReport = checkAvailability(uuid);
         if (isAvailableReport) {
             try {
-                return fileHandlingService.download(uuid.toString());
+                return this.fileHandlingService.download(uuid.toString());
             } catch (IOException e) {
-                throw new FileDownloadException(e);
+                throw new FileDownloadException("File download failed", e);
             }
         } else {
             throw new FileDownloadException("File not found: " + uuid);

@@ -16,39 +16,32 @@ spring:
         format_sql: true
         default_schema: "app"
 
-mail:
-  username: "mymail@mail.ru" #example
-  password: "mysecretpassword" #example
-  host: "smtp.mail.ru"
-  port: 465
-  protocol: "smtp"
-  default-encoding: "UTF-8"
-  properties:
-    mail:
-      host: "smtp.mail.ru"
-      from: "mymail@mail.ru" #example
-      debug: true
-      smtp:
-        auth: true
-        port: 465
-        starttls:
-          enable: true
-          required: true
-        socketFactory:
+  mail:
+    username: "mymail@mail.ru" #example
+    password: "mysecretpassword" #example
+    host: "smtp.mail.ru"
+    port: 465
+    protocol: "smtp"
+    default-encoding: "UTF-8"
+    properties:
+      mail:
+        host: "smtp.mail.ru"
+        from: "mymail@mail.ru" #example
+        debug: true
+        smtp:
+          auth: true
           port: 465
-          class: "javax.net.ssl.SSLSocketFactory"
-          fallback: false
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            port: 465
+            class: "javax.net.ssl.SSLSocketFactory"
+            fallback: false
 
 excel:
-  columnUuid: "uuid"
-  columnDtCreate: "dt_create"
-  columnDtUpdate: "dt_update"
-  columnMail: "user_mail"
-  columnFio: "user_fio"
-  columnRole: "user_role"
-  columnText: "text"
-  columnType: "type"
-  columnId: "id"
+  exampleFileName: "templates/excelExample.xlsx"
+  sheetName: "Sheet0"
 
 jwt:
   secret: "YourSecret" #example
@@ -56,9 +49,10 @@ jwt:
 
 google:
   drive:
-    port: "8888"
+    port: 8888
     host: "localhost"
     folderId: "YourFolderId" #example
+    queryForFileFolder: "'YourFolderId' in parents" #example
     userId: "user" #example
     contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     fileExtension: ".xlsx"
@@ -67,3 +61,12 @@ google:
     credentialsFilePath: "/credentials.json"
     accessType: "offline"
     fileAttachment: "attachment; filename="
+
+email:
+  textType: "text/html; charset=utf-8"
+  verificationFileName: "verification-mail.ftl"
+  registrationFileName: "registration-mail.ftl"
+  userNameParamName: "name"
+  mailAdressParamName: "mail"
+  verificationCodeParamName: "code"
+  maxSend: 3

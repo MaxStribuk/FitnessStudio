@@ -1,4 +1,4 @@
-package by.itacademy.core.dto;
+package by.itacademy.core.dto.transfer;
 
 import by.itacademy.core.enums.UserRole;
 import by.itacademy.core.enums.UserStatus;

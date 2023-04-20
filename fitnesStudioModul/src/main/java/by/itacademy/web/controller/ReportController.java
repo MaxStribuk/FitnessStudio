@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -45,9 +46,9 @@ public class ReportController {
     @PostMapping(path = "/{type}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> add(
             @PathVariable(name = "type") ReportType type,
-            @Validated @RequestBody ReportCreateDto report) {
+            @RequestBody @Valid ReportCreateDto report) {
         report.setReportType(type);
-        reportService.add(report);
+        this.reportService.add(report);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -58,7 +59,7 @@ public class ReportController {
             @RequestParam(name = "size", required = false, defaultValue = "20")
             @Positive(message = "size must be greater than 0") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        PageDto<PageReportDto> pageReport = reportService.getAll(pageable);
+        PageDto<PageReportDto> pageReport = this.reportService.getAll(pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(pageReport);
@@ -67,15 +68,17 @@ public class ReportController {
     @GetMapping(path = "/{uuid}/export")
     public ResponseEntity<Resource> get(
             @PathVariable(name = "uuid")
-            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") UUID uuid) {
-        boolean isAvailableReport = reportService.checkAvailability(uuid);
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") String uuid) {
+        UUID id = UUID.fromString(uuid);
+        boolean isAvailableReport = this.reportService.checkAvailability(id);
         if (isAvailableReport) {
-            Resource file = reportService.export(uuid);
-            String headerValue = properties.getFileAttachment() + uuid + properties.getFileExtension();
+            Resource file = this.reportService.export(id);
+            String headerValue = this.properties.getFileAttachment() +
+                    uuid + this.properties.getFileExtension();
             return ResponseEntity
                     .ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
-                    .contentType(MediaType.parseMediaType(properties.getContentType()))
+                    .contentType(MediaType.parseMediaType(this.properties.getContentType()))
                     .body(file);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -84,8 +87,8 @@ public class ReportController {
     @RequestMapping(method = RequestMethod.HEAD, path = "/{uuid}/export")
     public ResponseEntity<?> checkAvailability(
             @PathVariable(name = "uuid")
-            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") UUID uuid) {
-        boolean isAvailableReport = reportService.checkAvailability(uuid);
+            @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid") String uuid) {
+        boolean isAvailableReport = this.reportService.checkAvailability(UUID.fromString(uuid));
         HttpStatus httpStatus = isAvailableReport
                 ? HttpStatus.OK
                 : HttpStatus.NO_CONTENT;

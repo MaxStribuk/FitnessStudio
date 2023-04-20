@@ -1,6 +1,6 @@
 package by.itacademy.service.api;
 
-import by.itacademy.core.dto.MailDto;
+import by.itacademy.core.dto.transfer.MailDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.repository.entity.UserEntity;

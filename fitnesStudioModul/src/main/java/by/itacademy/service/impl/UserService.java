@@ -3,8 +3,8 @@ package by.itacademy.service.impl;
 import by.itacademy.core.dto.request.UserLoginDto;
 import by.itacademy.core.dto.request.UserRegistrationDto;
 import by.itacademy.core.dto.request.UserVerificationDto;
-import by.itacademy.core.dto.CurrentUserDto;
-import by.itacademy.core.dto.MailDto;
+import by.itacademy.core.dto.transfer.CurrentUserDto;
+import by.itacademy.core.dto.transfer.MailDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.core.enums.EmailSubject;
 import by.itacademy.core.enums.UserStatus;
@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class UserService implements IUserService {
 
     private final IUserRepository userRepository;
@@ -49,6 +48,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public void create(UserRegistrationDto user) {
         UserEntity userEntity = this.conversionService.convert(user, UserEntity.class);
         userEntity.setPassword(this.encoder.encode(user.getPassword()));
@@ -58,6 +58,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public void verify(UserVerificationDto user) {
         UserEntity userEntity = this.userRepository
                 .findByMail(user.getMail())
@@ -74,6 +75,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public String logIn(UserLoginDto user) {
         UserDetails userDetails = this.loadUserByMail(user.getMail());
         if (userDetails == null
@@ -90,6 +92,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public PageUserDto get() {
         UserDetails user = this.holder.getCurrentUser();
         UserEntity userEntity = this.userRepository
@@ -100,6 +103,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByMail(String mail) {
         Optional<UserEntity> userEntityOptional = this.userRepository.findByMail(mail);
         if (userEntityOptional.isPresent()) {

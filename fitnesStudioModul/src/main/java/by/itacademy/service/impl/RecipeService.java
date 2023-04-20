@@ -29,7 +29,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class RecipeService implements IRecipeService {
 
     private final ConversionService conversionService;
@@ -50,6 +49,7 @@ public class RecipeService implements IRecipeService {
 
 
     @Override
+    @Transactional
     @Auditable(value = "added new recipe", type = EssenceType.RECIPE)
     public void add(RecipeCreateDto recipe) {
         RecipeEntity recipeEntity = this.conversionService.convert(recipe, RecipeEntity.class);
@@ -59,12 +59,14 @@ public class RecipeService implements IRecipeService {
     }
 
     @Override
+    @Transactional
     public PageDto<PageRecipeDto> getAll(Pageable pageable) {
         Page<RecipeEntity> recipes = this.recipeRepository.findAll(pageable);
         return this.recipePageDtoConverter.convert(recipes);
     }
 
     @Override
+    @Transactional
     @Auditable(value = "updated recipe information", type = EssenceType.RECIPE)
     public void update(UUID uuid, LocalDateTime dtUpdate, RecipeCreateDto recipe) {
         Optional<RecipeEntity> recipeEntityOptional = this.recipeRepository.findById(uuid);

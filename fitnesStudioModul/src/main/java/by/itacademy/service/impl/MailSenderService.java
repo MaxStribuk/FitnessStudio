@@ -1,7 +1,7 @@
 package by.itacademy.service.impl;
 
 import by.itacademy.config.properties.EmailProperties;
-import by.itacademy.core.dto.MailDto;
+import by.itacademy.core.dto.transfer.MailDto;
 import by.itacademy.core.dto.response.PageUserDto;
 import by.itacademy.core.enums.EmailSubject;
 import by.itacademy.core.enums.MailStatus;

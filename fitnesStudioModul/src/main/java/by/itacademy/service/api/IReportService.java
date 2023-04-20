@@ -14,15 +14,13 @@ public interface IReportService {
 
     void add(ReportCreateDto report);
 
-    void add(ReportEntity report);
-
     PageDto<PageReportDto> getAll(Pageable pageable);
-
-    List<ReportEntity> getUnsent();
-
-    ReportEntity get(UUID uuid);
 
     boolean checkAvailability(UUID uuid);
 
     Resource export(UUID uuid);
+
+    List<ReportEntity> getUnsent();
+
+    void upload(ReportEntity report);
 }
