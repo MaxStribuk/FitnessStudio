@@ -1,21 +1,18 @@
 package by.itacademy.core.dto.request;
 
-import by.itacademy.core.Constants;
 import by.itacademy.core.enums.ReportType;
 import by.itacademy.web.util.deserializer.LocalDateDeserializer;
 import by.itacademy.web.util.deserializer.UuidDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
-public class  ReportCreateDto implements Serializable {
+public class ReportCreateDto implements Serializable {
 
-    @Pattern(regexp = Constants.UUID_PATTERN, message = "invalid uuid")
     @JsonDeserialize(using = UuidDeserializer.class)
     private UUID user;
 

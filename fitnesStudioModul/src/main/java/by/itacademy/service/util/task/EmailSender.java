@@ -3,7 +3,6 @@ package by.itacademy.service.util.task;
 import by.itacademy.repository.entity.MailEntity;
 import by.itacademy.service.api.ISenderService;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
@@ -21,7 +20,6 @@ public class EmailSender implements Runnable {
     }
 
     @Override
-    @Transactional
     public void run() {
         List<MailEntity> emails = this.senderService.getUnsentEmails();
         for (MailEntity email : emails) {
